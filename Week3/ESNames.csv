@@ -1,0 +1,58 @@
+﻿CODE,countryname,Membership,EA20,AccYr,ColdWar
+EU27_2020,European Union,Group,No,,
+BE ,Belgium,EUMember_2020,Yes,1957,NATO
+BG ,Bulgaria,EUMember_2020,No,2007,WP
+CZ ,Czechia,EUMember_2020,No,2004,WP
+DK ,Denmark,EUMember_2020,No,1973,NATO
+DE ,Germany,EUMember_2020,Yes,1957,NATO
+EE ,Estonia,EUMember_2020,Yes,2004,WP
+IE ,Ireland,EUMember_2020,Yes,1973,Neutral
+EL ,Greece,EUMember_2020,Yes,1981,NATO
+ES ,Spain,EUMember_2020,Yes,1986,NATO
+FR ,France,EUMember_2020,Yes,1957,NATO
+HR ,Croatia,EUMember_2020,Yes,2013,Yugo
+IT ,Italy,EUMember_2020,Yes,1957,NATO
+CY ,Cyprus,EUMember_2020,Yes,2004,NATO
+LV ,Latvia,EUMember_2020,Yes,2004,WP
+LT ,Lithuania,EUMember_2020,Yes,2004,WP
+LU ,Luxembourg,EUMember_2020,Yes,1957,NATO
+HU ,Hungary,EUMember_2020,No,2004,WP
+MT ,Malta,EUMember_2020,Yes,2004,Neutral
+NL ,Netherlands,EUMember_2020,Yes,1957,NATO
+AT ,Austria,EUMember_2020,Yes,1995,Neutral
+PL ,Poland,EUMember_2020,No,2004,WP
+PT ,Portugal,EUMember_2020,Yes,1986,NATO
+RO ,Romania,EUMember_2020,No,2007,WP
+SI ,Slovenia,EUMember_2020,Yes,2004,Yugo
+SK ,Slovakia,EUMember_2020,Yes,2004,WP
+FI ,Finland,EUMember_2020,Yes,1995,Neutral
+SE ,Sweden,EUMember_2020,No,1995,Neutral
+UK ,United Kingdom,NonMember,No,,NATO
+IS ,Iceland,EFTA,No,,NATO
+LI ,Liechtenstein,EFTA,No,,Neutral
+NO ,Norway,EFTA,No,,NATO
+CH ,Switzerland,EFTA,No,,Neutral
+TR ,Turkey,EU_Candidate,No,,NATO
+IL ,Israel,NonMember,No,,Neutral
+RU ,Russia,NonMember,No,,WP
+AU ,Australia,NonMember,No,,
+BR ,Brazil,NonMember,No,,
+CA ,Canada,NonMember,No,,NATO
+CN_X_HK ,China (except Hong Kong),NonMember,No,,
+HK ,Hong Kong,NonMember,No,,
+IN ,India,NonMember,No,,
+JP ,Japan,NonMember,No,,
+MX ,Mexico,NonMember,No,,
+NZ ,New Zealand,NonMember,No,,
+SG ,Singapore,NonMember,No,,
+ZA ,South Africa,NonMember,No,,
+KR ,South Korea,NonMember,No,,
+TW ,Taiwan,NonMember,No,,
+US ,United States,NonMember,No,,NATO
+WORLD ,All countries of the world ,Group,No,,
+BA,Bosnia,EU_Candidate,No,,Yugo
+ME,Montenegro,EU_Candidate,No,,Yugo
+MK,North Macedonia,EU_Candidate,No,,Yugo
+RS,Serbia,EU_Candidate,No,,Yugo
+UA,Ukraine,EU_Candidate,No,,WP
+EA20,Euro Area,Group,No,,

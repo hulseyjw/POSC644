@@ -1,0 +1,178 @@
+---
+title: "R Assignment 1"
+output:
+  html_document:
+    df_print: paged
+  word_document:
+    reference_docx: rmarkdownwordtemplate.docx
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(knitr)
+#library(hrbrthemes)
+library(ggrepel)
+
+library(electoral)
+library(purrrlyr)
+
+
+```
+
+
+
+### Introduction
+
+In this assignment, we'll install R and R Studio and start working with R Markdown scripts to create analyses and presentations of data.  
+
+### Installing Software
+
+First, you need to install R and RStudio on to your computer. 
+
+- R is the software the does the analyses and produces the graphics.  You can download it from here: You'll need to choose the version for your operating system (MAC or Windows). 
+
+- R Studio is an IDE, which is a more user friendly overlay of R that makes it easier to use.  
+
+- Download and install the appropriate versions of R and R Studio from this page https://posit.co/download/rstudio-desktop/
+
+- Once you install both, you'll only ever open R Studio. Open R Studio and go to the next section. 
+
+### Basics of R Studio
+
+- Watch this video on the different panels in R Studio https://www.youtube.com/watch?v=FIrsOBy5k58
+
+*script* is a set of instructions that you run in R. For most of your assignments, you'll turn in your script as proof of the work you have done. One thing that makes R superior to something like Excel is that it forces you to use scripts to perform your work, instead of just pointing and clicking. This makes your work quickly reproducible, so that you know what you have done and can quickly do it again. This is especially important when you make a little mistake in an early step. With you a script, you can just go back and fix the early step and then run the script again, instead of having to go through the whole process again. 
+
+*console* the console shows the outputs from R.  So, you send commands from the script to the console and then get outputs. You can also directly enter commands into the console, but you shouldn't do this with important parts of your analysis. All of the important commands should be in the script. 
+
+*objects* and *variables* show up in the Environment tab when you create them (like x=1:100, which creates a the numbers 1 to 100 in a vector).
+
+The power in R comes from the use of *functions*, which perform actions on objects.  For example, the calculation of the median of y in the video median(y) is a function median(y) acting on an object y.  There are some pre-installed functions, but many more are added by installing *packages* and loading them using the library() function.  
+
+### Our first Analysis
+
+
+
+For this assignment, we're going to work with Municipal-level Data from from the Kantonal elections in Bosnia in 2018.  
+
+Download the file munkantonsper2018.csv from here https://hulseyjw.github.io/Izbori2018/munkantonsper2018.csv and place it in a new folder within the class folder you created for this class. So, something like "Documents\\POSC644\\Week1\\"  
+
+Then create a new R Quarto script and also save it into that folder.  
+
+### Some best practices
+
+Sometimes, R will carry over some loaded packages or data files from previous instances. So, it is a good idea to restart R and clear your environment before running your code from the beginning. To do so, go the Session Menu in RStudio and choose Clear Environment and Restart R.  
+
+
+### Packages and Libraries
+
+R comes with many functions built-in like *plot* and *read.csv* but most functions aren't built-in and have to be added as part of a package.  There are thousands of packages, which can extend R to perform a wide range of functions.  The first time that you want to use a package, you have to install the package. This usually only has to be done once.  However, every time you restart R, you have to load the packages that you want to use using the library() command.  
+
+We're going to start by installing the tidyverse set of packages, which includes many packages we'll use. 
+
+To install, copy *install.packages("tidyverse")* into the Console and press Enter. 
+
+Once you've installed the package, you can load it for use by using the library() command.  Normally, you'll have a list of packages that you'll use at the top of your R script. Add the library command for tidyverse to your script and run it.  
+
+```{r load libraries, echo=TRUE}
+library(tidyverse)
+
+```
+
+# Load the data
+
+The following code chunk:
+-sets the working directory to your new directory. You'll need to change the path in order to point to the folder where you've put the data file.    
+-read in the file you've just downloaded using read_csv. 
+-figuring out the path can be a challenge.  [This video may help.](https://www.youtube.com/watch?v=FzDGSLbULeE)
+
+```{r read in, echo=TRUE, warnings=FALSE}
+#setwd("~/Dropbox/Teaching/POSC399E/RAssignment1")
+setwd("E:/Dropbox/Teaching/POSC399E/RAssignment1")
+kper18 <- read.csv("munkantonsper2018.csv")
+```
+
+# Looking at your data
+
+If you have succeeded in loading the data, these two commands will show the size of the dataset and the first 
+
+```{r descriptive, echo=TRUE}
+dim(kper18)
+head(kper18)
+
+
+```
+You can also click on the dataset in your environment to the right in order to view it like a spreadsheet. 
+
+This is a dataset of the results for the Kantonal elections in the 2018 elections aggregated at the municipal level. We can see from the output that there are 79 rows and 85 columns.  There are 79 rows because there are 79 municipalities in the Federation (there are no Kantons in RS). There are 85 columns because there are 9 columns with information about the municipality like is numeric code (sifra), name(Municipality), Kanton (District), total number of Ballots, and the percentage of votes for each of the parties. There are 76 parties receiving votes in one of the 10 Kantonal elections.  It's a lot of parties.  This is too many for us to think about right now, so we're going to use some Tidyverse functions to trim things down. 
+
+The following lines take a few of the parties and information about the municipality and puts them in a new dataset called kper18_trimmed. The second one replaces all of the column names and replaces the party codes with acronyms for our three parties. *
+
+
+```{r trimdata, echo=TRUE}
+
+kper18_trimmed <- kper18 %>% 
+  select(sifra, Municipality, District, Ballots, p00090, p00008, p01182, p00877, p01698)
+
+names(kper18_trimmed) <- c("sifra", "Municipality", "District", "Ballots", "SDA", "SDP", "SBB", "NS", "DF")
+
+```
+
+
+So, now you can see how to select a few columns and rename columns.  Note that when you use this function, you have to give a name to all of the columns, even if you aren't changing all of them.  The c("sifra", "Municipality) form is of a list of names and the list of names must be equal to the list of columns in your dataset. 
+
+Now, we can look at the data using the same functions as before and see the changes. 
+
+```{r descriptive2, echo=TRUE}
+dim(kper18_trimmed)
+head(kper18_trimmed)
+
+
+```
+# Subsetting by values
+
+Using select() above, we learned how to choose columns. Another useful tool is to be able to subset the dataset by values of particular rows.  For example, we might want to see  just the municipalities from Kanton 1. To do that, we'll use the filter command.  
+
+```{r Filter1, echo=TRUE}
+kper18_trimmed %>% filter(District == "KANTON 1")
+
+
+```
+Note that we have to use ==  when we are doing a logical test and we have to use quotation marks when the value is characters as opposed to a number.  
+
+We could also use filter() to find only those municipalities where DF received more than 10 percent of the votes. 
+
+```{r Filter2, echo=TRUE}
+kper18_trimmed %>% filter(DF > 10)
+
+
+```
+-*Add commands to your script to see in how many municipalities SDA received more than 50 percent.  Add the answer as a comment under the command in your script.* 
+
+We can also chain these functions together using %>%. So, we can look for municipalities in Sarajevo Kanton (Kanton 9) where Nasa Stranka (NS) received more than ten percent of the vote and only include the results for NS.
+```{r Filter3, echo=TRUE}
+kper18_trimmed %>% filter(NS > 10) %>% filter(District =="KANTON 9") %>% select(Municipality, NS)
+                                            
+
+
+```
+
+# Summarizing by Category
+
+We often want to summarize information by a categorical variable.  For example, we might want to get the total number of ballots cast in each Kanton and the number of municipalities in each Kanton. To do so, we'd group by District, then create two variables that show the sum of the Ballots and the Number (n) of municipalities in each one. 
+```{r summarize, echo=TRUE}
+
+kper18_trimmed %>% group_by(District) %>% summarise(SDPvote = mean(SDP), Number = n())
+
+
+
+```
+
+- *Create your own summary that gives the mean() result for SDP and DF in each Kanton.  Note that this doesn't give us the accurate number percentage for the whole Kanton, since it would just take the average of the municipalities and not take into account the number of ballots.  As a comment say which Kanton has the highest average result for each party.*  
+- *Bonus question: Write a comment where you describe a strategy for getting the actual Kanton level percents using the information in this table.  You don't need to implement it.  *
+
+- *Submit your R Markdown script file to Canvas. *
+

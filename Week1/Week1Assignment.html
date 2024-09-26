@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Hulsey">
+
+<title>Assignment 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Week1Assignment_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Week1Assignment_files/libs/quarto-html/quarto.js"></script>
+<script src="Week1Assignment_files/libs/quarto-html/popper.min.js"></script>
+<script src="Week1Assignment_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Week1Assignment_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Week1Assignment_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Week1Assignment_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Week1Assignment_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Week1Assignment_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Week1Assignment_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Assignment 1</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>John Hulsey </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="how-r-works" class="level2">
+<h2 class="anchored" data-anchor-id="how-r-works">How R Works</h2>
+<p>R is a powerful tool for data analysis and visualization. It is a programming language that is designed for data analysis. Researchers and users contribute tools and functions.</p>
+<ul>
+<li><em>R</em> is a software program that you will need to install on your computer.</li>
+<li><em>RStudio</em> is an integrated development environment (IDE) that makes it easier to use R. You will rarely work with R without using RStudio.</li>
+<li>When you work in RStudio, you will write a code script that issues commands to R, which will read in data, perform the analysis and the produce outputs. In this class we’ll use .R scripts and Quarto (.qmd) documents. Quarto (.qmd) documents allow you to embed code and output within a text document so that you can produce reports, presentations and websites seamlessly. The document you are reading now is generated from a quarto document.</li>
+</ul>
+</section>
+<section id="working-in-r-studio" class="level2">
+<h2 class="anchored" data-anchor-id="working-in-r-studio">Working in R Studio</h2>
+<p>For almost everyting you do in R, you will create variables or objects, which are then passed to functions in order to perform the actions that you want, whether that is reading in data, changings the data (usually in a data frame), or producing output (usually in the form of a figure or a table.)</p>
+<p>While it is possible to work in R by using the Console directly (ie. without using a script), you should always work in a script because scripts make your work reproducible. You can save your script and rerun it at any time to reproduce your results. If you find a problem in you output, you can go back and change the script, then re-run it quickly. You can also re-use scripts with minor changes to incorporate new data or new analyses. In this class, most assignments will require you to submit your script (.R or .qmd) along with an output.</p>
+</section>
+<section id="literate-programming-using-quarto-and-.qmd-files" class="level2">
+<h2 class="anchored" data-anchor-id="literate-programming-using-quarto-and-.qmd-files">Literate Programming using Quarto and .qmd files</h2>
+<p>Literate programming is a way of mixing code and text in a single document. This allows you to explain your code and your results in the same document. Quarto is a package that allows you to create literate programming documents in R. You can use Quarto to create reports, presentations, and websites that include code, output, and text. This document is an example of a Quarto document.</p>
+<p>The body of the document that contains the text is written in Markdown, which is a simple way of formatting text. Markdown is a very simple formatting code that lets you create headings, lists and links as well as italicize and bold text. <a href="https://www.markdownguide.org/cheat-sheet/">Here is a sheet with the basics of Markdown formatting.</a></p>
+<p>The analysis is done by R code in <em>chunks</em> The code chunks are written in R, and they are surrounded by three backticks. The code chunks are executed by R, and the output is displayed in the document.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">+</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>You can set options within each chunk that determine whether and how it is shown in the document. For example, the chunks that contain code that prepare the data are run in R but are not shown in the final document, but the chunks that show the results and figures are shown. In this document, I am showing everything.</p>
+<p>You can (and should!) also add comments to your code. Comments are lines that start with a #. Comments are not executed by R, but they are useful for explaining what your code is doing. You can use this to explain your code to me, but most important is that it allows present you to communicate with future you about what you were doing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mynumber <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">+</span><span class="dv">2</span> <span class="co"># This line creates a variable called mynumber that is the sum of 2+2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It is a good practice to have a section at the beginning of your script that loads all the packages that you will use in the script.</p>
+<section id="our-first-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="our-first-analysis">Our first Analysis</h3>
+<p>For this assignment, we’re going to work with Municipal-level Data from from the Kantonal elections in Bosnia in 2018.</p>
+<p>Download the file munkantonsper2018.csv from here https://hulseyjw.github.io/Izbori2018/munkantonsper2018.csv and place it in a new folder within the class folder you created for this class. So, something like “Documents\POSC644\Week1\”</p>
+<p>Then save this .qmd file Week1Assignment.qmd from Canvas and save it into that folder as well. It is a good practice to have your script file (.qmd) and your data file(s) in a seperate folder for each project or assignment.</p>
+</section>
+<section id="some-best-practices" class="level3">
+<h3 class="anchored" data-anchor-id="some-best-practices">Some best practices</h3>
+<p>Sometimes, R will carry over some loaded packages or data files from previous instances. So, it is a good idea to restart R and clear your environment before running your code from the beginning. To do so, go the Session Menu in RStudio and choose Clear Environment and Restart R.</p>
+</section>
+<section id="packages-and-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="packages-and-libraries">Packages and Libraries</h3>
+<p>R comes with many functions built-in like <em>plot</em> and <em>read.csv</em> but most functions aren’t built-in and have to be added as part of a package. There are thousands of packages, which can extend R to perform a wide range of functions. The first time that you want to use a package, you have to install the package. This usually only has to be done once. However, every time you restart R, you have to load the packages that you want to use using the library() command.</p>
+<p>We’re going to start by installing the tidyverse set of packages, which includes many packages we’ll use.</p>
+<p>To install, copy <em>install.packages(“tidyverse”)</em> into the Console and press Enter.</p>
+<p>Once you’ve installed the package, you can load it for use by using the library() command. Normally, you’ll have a list of packages that you’ll use at the top of your R script. Add the library command for tidyverse to your script and run it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<p>In order to render .qmd documents into pdf, you’ll also need to install the <code>tinytex</code> package. You can install the package using the same method as above. Go ahead and use <em>install.packages</em> to install the <code>tinytex</code> package.</p>
+</section>
+</section>
+<section id="load-the-data" class="level1">
+<h1>Load the data</h1>
+<p>The following code chunk:</p>
+<p>-reads in the file you’ve just downloaded using read_csv.</p>
+<p>-figuring out the path can be a challenge. <a href="https://www.youtube.com/watch?v=FzDGSLbULeE">This video may help.</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>kper18 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"~/Dropbox/Teaching/EUPSAnalysisVis/GitRepo/Week1/munkantonsper2018.csv"</span>) <span class="co"># note the quotations marks around the path and that the path and most other things in R are case sensitive. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The command creates a data frame called kper18 that contains the data 79 observations of 85 variables. You can see that the data is loaded by looking at the Environment tab in RStudio.</p>
+</section>
+<section id="looking-at-your-data" class="level1">
+<h1>Looking at your data</h1>
+<p>If you have succeeded in loading the data, we can use several commands to look at the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(kper18) <span class="co"># this command tells you what type of object kper18 is. It should be a data frame.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "data.frame"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(kper18) <span class="co"># this command tells you the dimensions of the data frame. It should be 79 observations of 85 variables.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 79 85</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(kper18) <span class="co"># this command shows you the first 6 rows of the data frame. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sifra Municipality   Municipality2 District Ballots Empty.Ballots
+1    79     ŽIVINICE Å½IVINICE (079) KANTON 3   27915           856
+2   116       VISOKO    VISOKO (116) KANTON 4   17593           801
+3   114      FOJNICA   FOJNICA (114) KANTON 6    5719           284
+4    80     KALESIJA  KALESIJA (080) KANTON 3   14114           592
+5   117        BREZA     BREZA (117) KANTON 4    6016           388
+6   115     KISELJAK  KISELJAK (115) KANTON 6    8533           338
+  Other.Invalid.Ballots Numvoters p00090 p00008 p02321 p00001 p02328 p00004
+1                  1189     53921  35.78  14.90  11.87   7.03   6.63   5.55
+2                   953     33885  29.67  13.07   1.02   6.14   2.70   1.50
+3                   325     10132  37.14  17.57   0.10   0.00   0.12   2.33
+4                   826     32576  28.95  24.14  16.95   5.44   7.19   1.38
+5                   422     11357  29.27  12.97   0.96   1.96   1.26   2.73
+6                   331     16920  24.35   7.57   0.09   0.00   0.05   0.91
+  p01698 p01182 p02385 p00877 p02402 p02373 p00036 p00513 p02399 p01276 p02401
+1   4.95   4.65   2.46   1.41   1.16   1.12   0.82   0.66   0.52   0.09   0.09
+2  10.72  11.35   0.00   4.63   0.22   6.66   0.58   3.17   0.00   0.15   0.00
+3   4.48   8.53   0.00   0.00   0.19   1.00   0.12   0.56   0.00   0.07   0.00
+4   4.44   4.02   0.05   0.54   0.98   3.37   0.72   1.13   0.42   0.06   0.01
+5   7.60  22.21   0.00   1.56   0.93   5.10   0.42   4.92   0.00   0.33   0.00
+6   3.82   3.27   0.00   0.00   0.25   0.94   0.14   0.54   0.00   0.12   0.00
+  p02325 p02323 p01728 p02368 p00521 p01718 p01178 p01705 pNA p02403 p02317
+1   0.08   0.07   0.06   0.03   0.03   0.02   0.01   0.01   0   0.00   0.00
+2   0.20   0.00   0.08   0.07   0.00   0.04   0.00   0.00   0   6.84   0.58
+3   0.16   0.00   0.05   0.02   0.00   0.02   0.00   0.00   0   0.00   0.00
+4   0.05   0.06   0.08   0.01   0.01   0.01   0.01   0.01   0   0.00   0.00
+5   0.20   0.00   0.10   0.08   0.00   0.03   0.00   0.00   0   5.50   1.25
+6   0.13   0.00   0.02   0.12   0.00   0.01   0.00   0.00   0   0.00   0.00
+  p02382 p02391 p02395 p02314 p01699 p01701 p00028 p02375 p00502 p00769 p02383
+1   0.00   0.00   0.00   0.00   0.00      0      0      0      0      0      0
+2   0.48   0.13   0.00   0.00   0.00      0      0      0      0      0      0
+3  20.13   0.00   4.60   2.73   0.09      0      0      0      0      0      0
+4   0.00   0.00   0.00   0.00   0.00      0      0      0      0      0      0
+5   0.47   0.15   0.00   0.00   0.00      0      0      0      0      0      0
+6  50.94   0.00   5.64   1.05   0.04      0      0      0      0      0      0
+  p02311 p00017 p01200 p02384 p01703 p02322 p00734 p01714 p02353 p02358 p02388
+1      0      0      0      0      0      0      0      0      0      0      0
+2      0      0      0      0      0      0      0      0      0      0      0
+3      0      0      0      0      0      0      0      0      0      0      0
+4      0      0      0      0      0      0      0      0      0      0      0
+5      0      0      0      0      0      0      0      0      0      0      0
+6      0      0      0      0      0      0      0      0      0      0      0
+  p01270 p02389 p02398 p01188 p01290 p02400 p02396 p02355 p02360 p02361 p02072
+1      0      0      0      0      0      0      0      0      0      0      0
+2      0      0      0      0      0      0      0      0      0      0      0
+3      0      0      0      0      0      0      0      0      0      0      0
+4      0      0      0      0      0      0      0      0      0      0      0
+5      0      0      0      0      0      0      0      0      0      0      0
+6      0      0      0      0      0      0      0      0      0      0      0
+  p02354 p02390 p02392 p02376 p00882 p02387 p01989 p01723 p02347 p02397 p02291
+1      0      0      0      0      0      0      0      0      0      0      0
+2      0      0      0      0      0      0      0      0      0      0      0
+3      0      0      0      0      0      0      0      0      0      0      0
+4      0      0      0      0      0      0      0      0      0      0      0
+5      0      0      0      0      0      0      0      0      0      0      0
+6      0      0      0      0      0      0      0      0      0      0      0
+  p02359 p01706 p02349 Entity Election
+1      0      0      0    Fed  Kantons
+2      0      0      0    Fed  Kantons
+3      0      0      0    Fed  Kantons
+4      0      0      0    Fed  Kantons
+5      0      0      0    Fed  Kantons
+6      0      0      0    Fed  Kantons</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(kper18) <span class="co"># this command shows you the names of the variables in the data frame. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "sifra"                 "Municipality"          "Municipality2"        
+ [4] "District"              "Ballots"               "Empty.Ballots"        
+ [7] "Other.Invalid.Ballots" "Numvoters"             "p00090"               
+[10] "p00008"                "p02321"                "p00001"               
+[13] "p02328"                "p00004"                "p01698"               
+[16] "p01182"                "p02385"                "p00877"               
+[19] "p02402"                "p02373"                "p00036"               
+[22] "p00513"                "p02399"                "p01276"               
+[25] "p02401"                "p02325"                "p02323"               
+[28] "p01728"                "p02368"                "p00521"               
+[31] "p01718"                "p01178"                "p01705"               
+[34] "pNA"                   "p02403"                "p02317"               
+[37] "p02382"                "p02391"                "p02395"               
+[40] "p02314"                "p01699"                "p01701"               
+[43] "p00028"                "p02375"                "p00502"               
+[46] "p00769"                "p02383"                "p02311"               
+[49] "p00017"                "p01200"                "p02384"               
+[52] "p01703"                "p02322"                "p00734"               
+[55] "p01714"                "p02353"                "p02358"               
+[58] "p02388"                "p01270"                "p02389"               
+[61] "p02398"                "p01188"                "p01290"               
+[64] "p02400"                "p02396"                "p02355"               
+[67] "p02360"                "p02361"                "p02072"               
+[70] "p02354"                "p02390"                "p02392"               
+[73] "p02376"                "p00882"                "p02387"               
+[76] "p01989"                "p01723"                "p02347"               
+[79] "p02397"                "p02291"                "p02359"               
+[82] "p01706"                "p02349"                "Entity"               
+[85] "Election"             </code></pre>
+</div>
+</div>
+<p>One of the most useful functions is summary(), which gives you basic summary information on the object. For a data.frame like kper18, it will give you summary information for each variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(kper18) <span class="co"># this command gives you a summary of the data frame. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     sifra       Municipality       Municipality2        District        
+ Min.   :  1.0   Length:79          Length:79          Length:79         
+ 1st Qu.: 53.5   Class :character   Class :character   Class :character  
+ Median : 98.0   Mode  :character   Mode  :character   Mode  :character  
+ Mean   : 95.8                                                           
+ 3rd Qu.:132.0                                                           
+ Max.   :199.0                                                           
+    Ballots      Empty.Ballots    Other.Invalid.Ballots   Numvoters     
+ Min.   :  422   Min.   :   4.0   Min.   :  11.0        Min.   :   600  
+ 1st Qu.: 4805   1st Qu.: 129.0   1st Qu.: 184.5        1st Qu.:  9722  
+ Median : 9102   Median : 290.0   Median : 375.0        Median : 20006  
+ Mean   :12196   Mean   : 386.7   Mean   : 549.7        Mean   : 25407  
+ 3rd Qu.:15118   3rd Qu.: 544.0   3rd Qu.: 782.0        3rd Qu.: 33871  
+ Max.   :58225   Max.   :1655.0   Max.   :2911.0        Max.   :112479  
+     p00090          p00008           p02321           p00001     
+ Min.   : 0.00   Min.   : 0.000   Min.   : 0.000   Min.   :0.000  
+ 1st Qu.:14.98   1st Qu.: 3.965   1st Qu.: 0.000   1st Qu.:0.000  
+ Median :25.71   Median : 9.580   Median : 0.000   Median :0.210  
+ Mean   :23.44   Mean   :12.187   Mean   : 3.968   Mean   :1.085  
+ 3rd Qu.:31.85   3rd Qu.:16.140   3rd Qu.: 0.990   3rd Qu.:1.740  
+ Max.   :62.24   Max.   :53.040   Max.   :57.700   Max.   :7.030  
+     p02328           p00004           p01698           p01182      
+ Min.   : 0.000   Min.   : 0.000   Min.   : 0.000   Min.   : 0.000  
+ 1st Qu.: 0.000   1st Qu.: 0.025   1st Qu.: 1.645   1st Qu.: 1.605  
+ Median : 0.100   Median : 0.850   Median : 5.250   Median : 5.280  
+ Mean   : 1.456   Mean   : 2.334   Mean   : 4.722   Mean   : 5.771  
+ 3rd Qu.: 1.240   3rd Qu.: 2.445   3rd Qu.: 6.840   3rd Qu.: 8.270  
+ Max.   :19.250   Max.   :20.050   Max.   :15.830   Max.   :24.150  
+     p02385          p00877           p02402           p02373      
+ Min.   :0.000   Min.   : 0.000   Min.   :0.0000   Min.   : 0.000  
+ 1st Qu.:0.000   1st Qu.: 0.000   1st Qu.:0.0000   1st Qu.: 0.000  
+ Median :0.000   Median : 0.780   Median :0.0200   Median : 0.000  
+ Mean   :0.301   Mean   : 2.435   Mean   :0.1554   Mean   : 1.423  
+ 3rd Qu.:0.000   3rd Qu.: 2.725   3rd Qu.:0.1800   3rd Qu.: 1.590  
+ Max.   :9.460   Max.   :21.290   Max.   :1.1600   Max.   :18.960  
+     p00036           p00513           p02399            p01276       
+ Min.   :0.0000   Min.   :0.0000   Min.   : 0.0000   Min.   :0.00000  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.: 0.0000   1st Qu.:0.01000  
+ Median :0.1800   Median :0.4100   Median : 0.0000   Median :0.07000  
+ Mean   :0.5825   Mean   :0.6467   Mean   : 0.4201   Mean   :0.08165  
+ 3rd Qu.:0.4900   3rd Qu.:0.7700   3rd Qu.: 0.0000   3rd Qu.:0.12000  
+ Max.   :6.0000   Max.   :4.9200   Max.   :13.1000   Max.   :0.33000  
+     p02401             p02325         p02323            p01728      
+ Min.   :0.000000   Min.   :0.00   Min.   :0.00000   Min.   : 0.000  
+ 1st Qu.:0.000000   1st Qu.:0.02   1st Qu.:0.00000   1st Qu.: 0.020  
+ Median :0.000000   Median :0.06   Median :0.00000   Median : 0.050  
+ Mean   :0.007468   Mean   :0.07   Mean   :0.05456   Mean   : 0.302  
+ 3rd Qu.:0.000000   3rd Qu.:0.11   3rd Qu.:0.06000   3rd Qu.: 0.065  
+ Max.   :0.280000   Max.   :0.23   Max.   :0.49000   Max.   :13.820  
+     p02368           p00521             p01718            p01178        
+ Min.   : 0.000   Min.   :0.000000   Min.   :0.00000   Min.   :0.000000  
+ 1st Qu.: 0.010   1st Qu.:0.000000   1st Qu.:0.00000   1st Qu.:0.000000  
+ Median : 0.080   Median :0.000000   Median :0.01000   Median :0.000000  
+ Mean   : 2.211   Mean   :0.002785   Mean   :0.02203   Mean   :0.001266  
+ 3rd Qu.: 0.280   3rd Qu.:0.000000   3rd Qu.:0.03000   3rd Qu.:0.000000  
+ Max.   :59.060   Max.   :0.070000   Max.   :0.20000   Max.   :0.020000  
+     p01705             pNA        p02403            p02317      
+ Min.   : 0.0000   Min.   :0   Min.   : 0.0000   Min.   : 0.000  
+ 1st Qu.: 0.0000   1st Qu.:0   1st Qu.: 0.0000   1st Qu.: 0.000  
+ Median : 0.0000   Median :0   Median : 0.0000   Median : 0.000  
+ Mean   : 0.7986   Mean   :0   Mean   : 0.8803   Mean   : 1.844  
+ 3rd Qu.: 0.0350   3rd Qu.:0   3rd Qu.: 0.0000   3rd Qu.: 0.485  
+ Max.   :17.0800   Max.   :0   Max.   :29.5600   Max.   :19.000  
+     p02382          p02391           p02395           p02314      
+ Min.   : 0.00   Min.   :0.0000   Min.   :0.0000   Min.   : 0.000  
+ 1st Qu.: 0.00   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.: 0.000  
+ Median : 0.23   Median :0.0000   Median :0.0000   Median : 0.020  
+ Mean   :12.89   Mean   :0.1365   Mean   :0.6954   Mean   : 1.266  
+ 3rd Qu.:13.47   3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.: 1.530  
+ Max.   :89.73   Max.   :5.8600   Max.   :9.6500   Max.   :17.870  
+     p01699            p01701            p00028           p02375      
+ Min.   :0.00000   Min.   : 0.0000   Min.   : 0.000   Min.   : 0.000  
+ 1st Qu.:0.00000   1st Qu.: 0.0000   1st Qu.: 0.000   1st Qu.: 0.000  
+ Median :0.00000   Median : 0.0000   Median : 0.000   Median : 0.000  
+ Mean   :0.05519   Mean   : 0.6365   Mean   : 0.223   Mean   : 1.941  
+ 3rd Qu.:0.02500   3rd Qu.: 0.0000   3rd Qu.: 0.000   3rd Qu.: 0.000  
+ Max.   :1.47000   Max.   :46.5600   Max.   :11.880   Max.   :46.490  
+     p00502            p00769            p02383            p02311       
+ Min.   : 0.0000   Min.   : 0.0000   Min.   :0.00000   Min.   :0.00000  
+ 1st Qu.: 0.0000   1st Qu.: 0.0000   1st Qu.:0.00000   1st Qu.:0.00000  
+ Median : 0.0000   Median : 0.0000   Median :0.00000   Median :0.00000  
+ Mean   : 0.3967   Mean   : 0.7362   Mean   :0.02506   Mean   :0.02253  
+ 3rd Qu.: 0.0000   3rd Qu.: 0.0000   3rd Qu.:0.00000   3rd Qu.:0.00000  
+ Max.   :10.6700   Max.   :23.9900   Max.   :1.50000   Max.   :0.72000  
+     p00017           p01200            p02384           p01703       
+ Min.   :0.0000   Min.   : 0.0000   Min.   : 0.000   Min.   : 0.0000  
+ 1st Qu.:0.0000   1st Qu.: 0.0000   1st Qu.: 0.000   1st Qu.: 0.0000  
+ Median :0.0000   Median : 0.0000   Median : 0.000   Median : 0.0000  
+ Mean   :0.2146   Mean   : 0.9079   Mean   : 2.039   Mean   : 0.6866  
+ 3rd Qu.:0.0000   3rd Qu.: 0.0000   3rd Qu.: 0.000   3rd Qu.: 0.0000  
+ Max.   :9.4300   Max.   :47.7100   Max.   :55.820   Max.   :23.1500  
+     p02322           p00734           p01714             p02353        
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.000000   Min.   :0.000000  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.000000   1st Qu.:0.000000  
+ Median :0.0000   Median :0.0000   Median :0.000000   Median :0.000000  
+ Mean   :0.1867   Mean   :0.1753   Mean   :0.002405   Mean   :0.001266  
+ 3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:0.000000   3rd Qu.:0.000000  
+ Max.   :9.1400   Max.   :4.9900   Max.   :0.090000   Max.   :0.050000  
+     p02358             p02388            p01270            p02389      
+ Min.   :0.000000   Min.   :0.00000   Min.   :0.00000   Min.   : 0.000  
+ 1st Qu.:0.000000   1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.: 0.000  
+ Median :0.000000   Median :0.00000   Median :0.00000   Median : 0.000  
+ Mean   :0.001266   Mean   :0.08506   Mean   :0.01013   Mean   : 1.886  
+ 3rd Qu.:0.000000   3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.: 0.000  
+ Max.   :0.060000   Max.   :3.92000   Max.   :0.16000   Max.   :61.050  
+     p02398            p01188            p01290           p02400       
+ Min.   : 0.0000   Min.   : 0.0000   Min.   :0.0000   Min.   : 0.0000  
+ 1st Qu.: 0.0000   1st Qu.: 0.0000   1st Qu.:0.0000   1st Qu.: 0.0000  
+ Median : 0.0000   Median : 0.0000   Median :0.0000   Median : 0.0000  
+ Mean   : 0.6743   Mean   : 0.3594   Mean   :0.1091   Mean   : 0.2565  
+ 3rd Qu.: 0.0000   3rd Qu.: 0.0000   3rd Qu.:0.0000   3rd Qu.: 0.0000  
+ Max.   :30.9900   Max.   :17.7600   Max.   :3.2100   Max.   :10.7800  
+     p02396           p02355             p02360             p02361         
+ Min.   : 0.000   Min.   :0.000000   Min.   :0.000000   Min.   :0.0000000  
+ 1st Qu.: 0.000   1st Qu.:0.000000   1st Qu.:0.000000   1st Qu.:0.0000000  
+ Median : 0.000   Median :0.000000   Median :0.000000   Median :0.0000000  
+ Mean   : 1.338   Mean   :0.004684   Mean   :0.008481   Mean   :0.0008861  
+ 3rd Qu.: 0.000   3rd Qu.:0.000000   3rd Qu.:0.000000   3rd Qu.:0.0000000  
+ Max.   :38.750   Max.   :0.110000   Max.   :0.200000   Max.   :0.0300000  
+     p02072           p02354             p02390           p02392       
+ Min.   :0.0000   Min.   :0.000000   Min.   : 0.000   Min.   : 0.0000  
+ 1st Qu.:0.0000   1st Qu.:0.000000   1st Qu.: 0.000   1st Qu.: 0.0000  
+ Median :0.0000   Median :0.000000   Median : 0.000   Median : 0.0000  
+ Mean   :0.2166   Mean   :0.003924   Mean   : 3.359   Mean   : 0.5384  
+ 3rd Qu.:0.0000   3rd Qu.:0.000000   3rd Qu.: 0.000   3rd Qu.: 0.0000  
+ Max.   :2.4300   Max.   :0.070000   Max.   :72.410   Max.   :16.3900  
+     p02376           p00882           p02387           p01989      
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
+ Median :0.0000   Median :0.0000   Median :0.0000   Median :0.0000  
+ Mean   :0.2452   Mean   :0.1362   Mean   :0.1148   Mean   :0.1159  
+ 3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:0.0000  
+ Max.   :9.3600   Max.   :1.6200   Max.   :2.7700   Max.   :2.2000  
+     p01723            p02347             p02397             p02291      
+ Min.   :0.00000   Min.   :0.000000   Min.   :0.000000   Min.   :0.0000  
+ 1st Qu.:0.00000   1st Qu.:0.000000   1st Qu.:0.000000   1st Qu.:0.0000  
+ Median :0.00000   Median :0.000000   Median :0.000000   Median :0.0000  
+ Mean   :0.04367   Mean   :0.007342   Mean   :0.008481   Mean   :0.0219  
+ 3rd Qu.:0.00000   3rd Qu.:0.000000   3rd Qu.:0.000000   3rd Qu.:0.0000  
+ Max.   :1.35000   Max.   :0.090000   Max.   :0.220000   Max.   :0.5100  
+     p02359            p01706             p02349            Entity         
+ Min.   :0.00000   Min.   :0.000000   Min.   :0.000000   Length:79         
+ 1st Qu.:0.00000   1st Qu.:0.000000   1st Qu.:0.000000   Class :character  
+ Median :0.00000   Median :0.000000   Median :0.000000   Mode  :character  
+ Mean   :0.00962   Mean   :0.002658   Mean   :0.002405                     
+ 3rd Qu.:0.00000   3rd Qu.:0.000000   3rd Qu.:0.000000                     
+ Max.   :0.17000   Max.   :0.060000   Max.   :0.040000                     
+   Election        
+ Length:79         
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   </code></pre>
+</div>
+</div>
+<p>For the numeric variables, it shows the mean, median, range and quartiles of the variable. For the text variables, it just the type class “character”. Later, we’ll work on turning these character variables into factor variables, which are more useful. You can also click on the data.frame in the Environment tab and it will show it like a spreadsheet.</p>
+<p>This is a dataset of the results for the Kantonal elections in Bosnia and Herzegovina in 2018 aggregated at the municipal level. We can see from the output that there are 79 rows and 85 columns. There are 79 rows because there are 79 municipalities in the Federation half of Bosnia, which is where the cantons are located. There are 85 columns because there are 9 columns with information about the municipality like its numeric code (sifra), name(Municipality), Kanton (District), total number of Ballots, and the percentage of votes for each of the parties. There are 76 parties receiving votes in one of the 10 Kantonal elections. It’s a lot of parties. This is too many for us to think about right now, so we’re going to use some Tidyverse functions to trim things down.</p>
+<p>The following lines take a few of the parties and information about the municipality and puts them in a new dataset called kper18_trimmed. The second one replaces all of the column names and replaces the party codes with acronyms for our three parties.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>kper18_trimmed <span class="ot">&lt;-</span> kper18 <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sifra, Municipality, District, Ballots, p00090, p00008, p01182, p00877, p01698) <span class="co"># this command selects the columns that we want to keep.</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(kper18_trimmed) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sifra"</span>, <span class="st">"Municipality"</span>, <span class="st">"District"</span>, <span class="st">"Ballots"</span>, <span class="st">"SDA"</span>, <span class="st">"SDP"</span>, <span class="st">"SBB"</span>, <span class="st">"NS"</span>, <span class="st">"DF"</span>) <span class="co"># this command renames the columns. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So, now you can see how to select a few columns and rename columns. Note that when you use the names function, you have to give a name to all of the columns, even if you aren’t changing all of them. The c(“sifra”, “Municipality) form is of a list of names and the list of names must be equal to the list of columns in your dataset. You shouldn’t have spaces in your column names.</p>
+<p>Now, we can look at the data using the same functions as before and see the changes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(kper18_trimmed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 79  9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(kper18_trimmed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sifra Municipality District Ballots   SDA   SDP   SBB   NS    DF
+1    79     ŽIVINICE KANTON 3   27915 35.78 14.90  4.65 1.41  4.95
+2   116       VISOKO KANTON 4   17593 29.67 13.07 11.35 4.63 10.72
+3   114      FOJNICA KANTON 6    5719 37.14 17.57  8.53 0.00  4.48
+4    80     KALESIJA KANTON 3   14114 28.95 24.14  4.02 0.54  4.44
+5   117        BREZA KANTON 4    6016 29.27 12.97 22.21 1.56  7.60
+6   115     KISELJAK KANTON 6    8533 24.35  7.57  3.27 0.00  3.82</code></pre>
+</div>
+</div>
+<p>Now we have the “sifra” a code for each municipality, the name of the municipality, the district (Kanton) that the municipality is in, the total number of ballots, and the percentage of votes for the SDA, SDP, SBB, NS, and DF parties.</p>
+</section>
+<section id="subsetting-by-values" class="level1">
+<h1>Subsetting by values</h1>
+<p>Using select() above, we learned how to choose columns. Another useful tool is to be able to subset the dataset by values of particular rows. For example, we might want to see just the municipalities from Kanton 1. To do that, we’ll use the filter command.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>kper18_trimmed <span class="sc">%&gt;%</span> <span class="fu">filter</span>(District <span class="sc">==</span> <span class="st">"KANTON 1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sifra      Municipality District Ballots   SDA   SDP   SBB   NS    DF
+1     1    VELIKA KLADUŠA KANTON 1   13927 18.45  3.02  7.35 1.20  2.00
+2     2             CAZIN KANTON 1   22173 30.26  5.35  1.31 1.72  8.19
+3     3             BIHAĆ KANTON 1   21027 26.27 12.60  8.96 7.45  7.34
+4     4    BOSANSKA KRUPA KANTON 1    9194 30.12 19.15  7.25 7.02 15.83
+5     5             BUŽIM KANTON 1    6619 26.53  3.91 14.32 0.82  2.60
+6    30 BOSANSKI PETROVAC KANTON 1    2210 34.21  7.96  7.24 3.89  5.93
+7    32       SANSKI MOST KANTON 1    9604 35.68 17.33 14.71 5.04  7.94
+8    59             KLJUČ KANTON 1    4762 39.71 31.90  7.64 1.22  6.89</code></pre>
+</div>
+</div>
+<p>Note that we have to use == when we are doing a logical test and we have to use quotation marks when the value is characters as opposed to a number.</p>
+<p>We could also use filter() to find only those municipalities where DF received more than 10 percent of the votes.</p>
+<p>I’ve been using the “tidyverse” way of doing things, which uses the pipe operator %&gt;% to chain functions together. This is a way of making your code more readable. The pipe operator takes the output of the function on the left and uses it as the input for the function on the right.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>kper18_trimmed <span class="sc">%&gt;%</span> <span class="fu">filter</span>(DF <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="co">#tidy command using the pipe operator which always puts the result of the step before the pipe in as the first argument of the function after the pipe. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sifra   Municipality District Ballots   SDA   SDP   SBB    NS    DF
+1   116         VISOKO KANTON 4   17593 29.67 13.07 11.35  4.63 10.72
+2     4 BOSANSKA KRUPA KANTON 1    9194 30.12 19.15  7.25  7.02 15.83
+3   135        VOGOŠĆA KANTON 9   14083 30.79 10.81  8.52  6.30 10.84
+4    50          TUZLA KANTON 3   49076 11.95 29.14  8.31 10.22 10.77
+5    96          OLOVO KANTON 4    4764 47.69 15.87  7.33  0.78 13.08</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(kper18_trimmed, DF <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="co"># the same command without the pipe operator but putting the data frame in as a first argument. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sifra   Municipality District Ballots   SDA   SDP   SBB    NS    DF
+1   116         VISOKO KANTON 4   17593 29.67 13.07 11.35  4.63 10.72
+2     4 BOSANSKA KRUPA KANTON 1    9194 30.12 19.15  7.25  7.02 15.83
+3   135        VOGOŠĆA KANTON 9   14083 30.79 10.81  8.52  6.30 10.84
+4    50          TUZLA KANTON 3   49076 11.95 29.14  8.31 10.22 10.77
+5    96          OLOVO KANTON 4    4764 47.69 15.87  7.33  0.78 13.08</code></pre>
+</div>
+</div>
+<p>-<em>Add a chunk to your qmd file to see in how many municipalities SDA received more than 50 percent. Add the answer as markdown text after your chunk.</em></p>
+<p>We can also chain these functions together using %&gt;%. So, we can look for municipalities in Sarajevo Kanton (Kanton 9) where Nasa Stranka (NS) received more than ten percent of the vote and only include the results for NS.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>kper18_trimmed <span class="sc">%&gt;%</span> <span class="fu">filter</span>(NS <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(District <span class="sc">==</span><span class="st">"KANTON 9"</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(Municipality, NS) <span class="co"># We can put the chain on the same line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Municipality    NS
+1  NOVI GRAD SARAJEVO 12.69
+2     CENTAR SARAJEVO 21.29
+3 STARI GRAD SARAJEVO 11.96
+4       NOVO SARAJEVO 20.95</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>kper18_trimmed <span class="sc">%&gt;%</span> <span class="co"># for more complex chains, we can put each step on a new line. This line defines the data frame</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(NS <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="co"># this line filters the data frame to only include municipalities where NS received more than 10 percent of the vote</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(District <span class="sc">==</span><span class="st">"KANTON 9"</span>) <span class="sc">%&gt;%</span> <span class="co"># this line filters the data frame to only include municipalities in Kanton 9</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Municipality, NS) <span class="co"># this line selects the columns Municipality and NS.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Municipality    NS
+1  NOVI GRAD SARAJEVO 12.69
+2     CENTAR SARAJEVO 21.29
+3 STARI GRAD SARAJEVO 11.96
+4       NOVO SARAJEVO 20.95</code></pre>
+</div>
+</div>
+<p>Here you can see the results are the same using both ways of chaining the functions. There are four municipalities in Kanton 9 where NS received more than 10 percent of the vote.</p>
+<p>-<em>Add a chunk to your qmd file to see in how many municipalities SDA received more than 10 percent of the vote in Kanton 3 (Tuzla Canton). Add the answer as markdown text after your chunk.</em></p>
+</section>
+<section id="summarizing-by-category" class="level1">
+<h1>Summarizing by Category</h1>
+<p>We often want to summarize information by a categorical variable. For example, we might want to get the total number of ballots cast in each Kanton and the number of municipalities in each Kanton. To do so, we’d group by District, then create two variables that show the sum of the Ballots and the Number (n) of municipalities in each one.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>kper18_trimmed <span class="sc">%&gt;%</span> <span class="co">#starts with our dataset</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(District) <span class="sc">%&gt;%</span> <span class="co">#this defines District as the group we care about. </span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">SDPvote =</span> <span class="fu">mean</span>(SDP), <span class="at">Number =</span> <span class="fu">n</span>()) <span class="co">#this command creates two new variables. SDPvote is the mean of the SDP variable and Number is the number of municipalities in each Kanton.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   District  SDPvote Number
+   &lt;chr&gt;       &lt;dbl&gt;  &lt;int&gt;
+ 1 KANTON 1   12.7        8
+ 2 KANTON 10   2.85       6
+ 3 KANTON 2    4.65       3
+ 4 KANTON 3   19.3       13
+ 5 KANTON 4   19.5       12
+ 6 KANTON 5    8.10       3
+ 7 KANTON 6   13.0       12
+ 8 KANTON 7    8.45       9
+ 9 KANTON 8    0.438      4
+10 KANTON 9    9.66       9</code></pre>
+</div>
+</div>
+<ul>
+<li><p><em>Create your own summary that gives the mean() result for SDP and DF in each Kanton. Note that this doesn’t give us the accurate number percentage for the whole Kanton, since it would just take the average of the municipalities and not take into account the number of ballots. As a comment say which Kanton has the highest average result for each party.</em></p></li>
+<li><p><em>Bonus question: Write a comment where you describe a strategy for getting the actual Kanton level percents using the information in this table. You don’t need to implement it. </em></p></li>
+</ul>
+</section>
+<section id="rendering-and-submitting" class="level1">
+<h1>Rendering and Submitting</h1>
+<p>Once we’ve created our full document, including text and analysis, we can use the Render button to output it to .pdf. Make sure you save your .qmd file before rendering.</p>
+<p>Submit the .qmd file that you’ve edited as well as the .pdf file that you’ve rendered. Submit them both to Canvas to complete the assignment.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

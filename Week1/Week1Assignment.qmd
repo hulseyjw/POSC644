@@ -1,0 +1,258 @@
+---
+title: "Assignment 1"
+author: "John Hulsey"
+format: pdf
+editor: source
+---
+
+## How R Works
+
+R is a powerful tool for data analysis and visualization. It is a programming language that is designed for data analysis. Researchers and users contribute tools and functions.
+
+-   *R* is a software program that you will need to install on your computer.
+-   *RStudio* is an integrated development environment (IDE) that makes it easier to use R. You will rarely work with R without using RStudio.
+-   When you work in RStudio, you will write a code script that issues commands to R, which will read in data, perform the analysis and the produce outputs. In this class we'll use .R scripts and Quarto (.qmd) documents. Quarto (.qmd) documents allow you to embed code and output within a text document so that you can produce reports, presentations and websites seamlessly. The document you are reading now is generated from a quarto document.
+
+## Working in R Studio
+
+For almost everyting you do in R, you will create variables or objects, which are then passed to functions in order to perform the actions that you want, whether that is reading in data, changings the data (usually in a data frame), or producing output (usually in the form of a figure or a table.)
+
+While it is possible to work in R by using the Console directly (ie. without using a script), you should always work in a script because scripts make your work reproducible. You can save your script and rerun it at any time to reproduce your results. If you find a problem in you output, you can go back and change the script, then re-run it quickly. You can also re-use scripts with minor changes to incorporate new data or new analyses. In this class, most assignments will require you to submit your script (.R or .qmd) along with an output.
+
+## Literate Programming using Quarto and .qmd files
+
+Literate programming is a way of mixing code and text in a single document. This allows you to explain your code and your results in the same document. Quarto is a package that allows you to create literate programming documents in R. You can use Quarto to create reports, presentations, and websites that include code, output, and text. This document is an example of a Quarto document.
+
+The body of the document that contains the text is written in Markdown, which is a simple way of formatting text. Markdown is a very simple formatting code that lets you create headings, lists and links as well as italicize and bold text. [Here is a sheet with the basics of Markdown formatting.](https://www.markdownguide.org/cheat-sheet/)
+
+The analysis is done by R code in *chunks* The code chunks are written in R, and they are surrounded by three backticks. The code chunks are executed by R, and the output is displayed in the document. 
+
+```{r}
+2+2
+```
+
+You can set options within each chunk that determine whether and how it is shown in the document. For example, the chunks that contain code that prepare the data are run in R but are not shown in the final document, but the chunks that show the results and figures are shown. In this document, I am showing everything. 
+
+You can (and should!) also add comments to your code. Comments are lines that start with a #. Comments are not executed by R, but they are useful for explaining what your code is doing. You can use this to explain your code to me, but most important is that it allows present you to communicate with future you about what you were doing. 
+
+```{r}
+#| echo: TRUE # this command tells R to show the code in the document
+
+mynumber <- 2+2 # This line creates a variable called mynumber that is the sum of 2+2
+```
+
+
+
+
+It is a good practice to have a section at the beginning of your script that loads all the packages that you will use in the script.
+
+### Our first Analysis
+
+
+
+For this assignment, we're going to work with Municipal-level Data from from the Kantonal elections in Bosnia in 2018.  
+
+Download the file munkantonsper2018.csv from here https://hulseyjw.github.io/Izbori2018/munkantonsper2018.csv and place it in a new folder within the class folder you created for this class. So, something like "Documents\\POSC644\\Week1\\"  
+
+Then save this .qmd file Week1Assignment.qmd from Canvas and save it into that folder as well. It is a good practice to have your script file (.qmd) and your data file(s) in a seperate folder for each project or assignment. 
+
+### Some best practices
+
+Sometimes, R will carry over some loaded packages or data files from previous instances. So, it is a good idea to restart R and clear your environment before running your code from the beginning. To do so, go the Session Menu in RStudio and choose Clear Environment and Restart R.  
+
+### Packages and Libraries
+
+R comes with many functions built-in like *plot* and *read.csv* but most functions aren't built-in and have to be added as part of a package.  There are thousands of packages, which can extend R to perform a wide range of functions.  The first time that you want to use a package, you have to install the package. This usually only has to be done once.  However, every time you restart R, you have to load the packages that you want to use using the library() command.  
+
+We're going to start by installing the tidyverse set of packages, which includes many packages we'll use. 
+
+To install, copy *install.packages("tidyverse")* into the Console and press Enter. 
+
+Once you've installed the package, you can load it for use by using the library() command.  Normally, you'll have a list of packages that you'll use at the top of your R script. Add the library command for tidyverse to your script and run it.  
+
+```{r}
+#| echo: true
+library(tidyverse)
+
+```
+
+In order to render .qmd documents into pdf, you'll also need to install the `tinytex` package. You can install the package using the same method as above. Go ahead and use *install.packages* to install the `tinytex` package.
+
+# Load the data
+
+The following code chunk:
+
+
+-reads in the file you've just downloaded using read_csv. 
+
+-figuring out the path can be a challenge.  [This video may help.](https://www.youtube.com/watch?v=FzDGSLbULeE)
+
+```{r}
+#| echo: true
+
+kper18 <- read.csv("~/Dropbox/Teaching/EUPSAnalysisVis/GitRepo/Week1/munkantonsper2018.csv") # note the quotations marks around the path and that the path and most other things in R are case sensitive. 
+
+
+```
+
+The command creates a data frame called kper18 that contains the data 79 observations of 85 variables. You can see that the data is loaded by looking at the Environment tab in RStudio.
+
+# Looking at your data
+
+If you have succeeded in loading the data, we can use several commands to look at the data. 
+
+```{r}
+#| echo: true
+
+class(kper18) # this command tells you what type of object kper18 is. It should be a data frame.
+
+dim(kper18) # this command tells you the dimensions of the data frame. It should be 79 observations of 85 variables.
+
+head(kper18) # this command shows you the first 6 rows of the data frame. 
+
+names(kper18) # this command shows you the names of the variables in the data frame. 
+
+
+
+
+```
+
+One of the most useful functions is summary(), which gives you basic summary information on the object.  For a data.frame like kper18, it will give you summary information for each variable. 
+
+```{r}
+#| echo: true
+
+summary(kper18) # this command gives you a summary of the data frame. 
+```
+
+For the numeric variables, it shows the mean, median, range and quartiles of the variable. For the text variables, it just the type class "character". Later, we'll work on turning these character variables into factor variables, which are more useful. You can also click on the data.frame in the Environment tab and it will show it like a spreadsheet. 
+
+This is a dataset of the results for the Kantonal elections in Bosnia and Herzegovina in 2018 aggregated at the municipal level. We can see from the output that there are 79 rows and 85 columns.  There are 79 rows because there are 79 municipalities in the Federation half of Bosnia, which is where the cantons are located. There are 85 columns because there are 9 columns with information about the municipality like its numeric code (sifra), name(Municipality), Kanton (District), total number of Ballots, and the percentage of votes for each of the parties. There are 76 parties receiving votes in one of the 10 Kantonal elections.  It's a lot of parties.  This is too many for us to think about right now, so we're going to use some Tidyverse functions to trim things down. 
+
+The following lines take a few of the parties and information about the municipality and puts them in a new dataset called kper18_trimmed. The second one replaces all of the column names and replaces the party codes with acronyms for our three parties. 
+
+```{r}
+#| echo: true
+
+kper18_trimmed <- kper18 %>% 
+  select(sifra, Municipality, District, Ballots, p00090, p00008, p01182, p00877, p01698) # this command selects the columns that we want to keep.
+
+names(kper18_trimmed) <- c("sifra", "Municipality", "District", "Ballots", "SDA", "SDP", "SBB", "NS", "DF") # this command renames the columns. 
+
+```
+
+So, now you can see how to select a few columns and rename columns.  Note that when you use the names function, you have to give a name to all of the columns, even if you aren't changing all of them.  The c("sifra", "Municipality) form is of a list of names and the list of names must be equal to the list of columns in your dataset. You shouldn't have spaces in your column names. 
+
+Now, we can look at the data using the same functions as before and see the changes.
+
+```{r}
+#| echo: true
+
+dim(kper18_trimmed)
+head(kper18_trimmed)
+
+
+
+```
+
+Now we have the "sifra" a code for each municipality, the name of the municipality, the district (Kanton) that the municipality is in, the total number of ballots, and the percentage of votes for the SDA, SDP, SBB, NS, and DF parties.
+
+# Subsetting by values
+
+Using select() above, we learned how to choose columns. Another useful tool is to be able to subset the dataset by values of particular rows.  For example, we might want to see  just the municipalities from Kanton 1. To do that, we'll use the filter command.  
+
+```{r}
+#| echo: true
+
+kper18_trimmed %>% filter(District == "KANTON 1")
+
+
+```
+Note that we have to use ==  when we are doing a logical test and we have to use quotation marks when the value is characters as opposed to a number.  
+
+We could also use filter() to find only those municipalities where DF received more than 10 percent of the votes. 
+
+I've been using the "tidyverse" way of doing things, which uses the pipe operator %>% to chain functions together.  This is a way of making your code more readable.  The pipe operator takes the output of the function on the left and uses it as the input for the function on the right.
+
+```{r Filter2, echo=TRUE}
+kper18_trimmed %>% filter(DF > 10) #tidy command using the pipe operator which always puts the result of the step before the pipe in as the first argument of the function after the pipe. 
+
+
+filter(kper18_trimmed, DF > 10) # the same command without the pipe operator but putting the data frame in as a first argument. 
+
+
+
+```
+
+-*Add a chunk to your qmd file to see in how many municipalities SDA received more than 50 percent.  Add the answer as markdown text after your chunk.*
+
+```{r}
+kper18_trimmed %>% filter(SDA > 50) #tidy command using the pipe operator which always puts the result of the step before the pipe in as the first argument of the function after the pipe. 
+
+
+```
+
+
+We can also chain these functions together using %>%. So, we can look for municipalities in Sarajevo Kanton (Kanton 9) where Nasa Stranka (NS) received more than ten percent of the vote and only include the results for NS.
+
+```{r}
+#| echo: true
+
+kper18_trimmed %>% filter(NS > 10) %>% filter(District =="KANTON 9") %>% select(Municipality, NS) # We can put the chain on the same line
+
+kper18_trimmed %>% # for more complex chains, we can put each step on a new line. This line defines the data frame
+  filter(NS > 10) %>% # this line filters the data frame to only include municipalities where NS received more than 10 percent of the vote
+  filter(District =="KANTON 9") %>% # this line filters the data frame to only include municipalities in Kanton 9
+  select(Municipality, NS) # this line selects the columns Municipality and NS.
+
+
+```
+
+Here you can see the results are the same using both ways of chaining the functions. There are four municipalities in Kanton 9 where NS received more than 10 percent of the vote.
+
+-*Add a chunk to your qmd file to see in how many municipalities SDA received more than 10 percent of the vote in Kanton 3 (Tuzla Canton).  Add the answer as markdown text after your chunk.*
+
+```{r}
+kper18_trimmed %>% # for more complex chains, we can put each step on a new line. This line defines the data frame
+  filter(SDA > 10) %>% # this line filters the data frame to only include municipalities where NS received more than 10 percent of the vote
+  filter(District =="KANTON 3") %>% # this line filters the data frame to only include municipalities in Kanton 9
+  select(Municipality, SDA) # this line selects the columns Municipality and NS.
+
+
+```
+
+
+# Summarizing by Category
+
+We often want to summarize information by a categorical variable.  For example, we might want to get the total number of ballots cast in each Kanton and the number of municipalities in each Kanton. To do so, we'd group by District, then create two variables that show the sum of the Ballots and the Number (n) of municipalities in each one. 
+```{r}
+#| echo: true
+#| 
+kper18_trimmed %>% #starts with our dataset
+  group_by(District) %>% #this defines District as the group we care about. 
+    summarise(SDPvote = mean(SDP), Number = n()) #this command creates two new variables. SDPvote is the mean of the SDP variable and Number is the number of municipalities in each Kanton.
+
+
+
+```
+```{r}
+kper18_trimmed %>% #starts with our dataset
+    summarise(SDPvote = mean(SDP), Number = n()) #this command creates two new variables. 
+```
+
+- *Create your own summary that gives the mean() result for SDP and DF in each Kanton.  Note that this doesn't give us the accurate number percentage for the whole Kanton, since it would just take the average of the municipalities and not take into account the number of ballots.  As a comment say which Kanton has the highest average result for each party.*  
+
+```{r}
+kper18_trimmed %>% #starts with our dataset
+  group_by(District) %>% #this defines District as the group we care about. 
+    summarise(SDPvote = mean(SDP), DF = mean(DF)) #this command creates two new variables. SDPvote is the mean of the SDP variable and Number is the number of municipalities in each Kanton.
+```
+
+
+- *Bonus question: Write a comment where you describe a strategy for getting the actual Kanton level percents using the information in this table.  You don't need to implement it.  *
+
+# Rendering and Submitting
+
+Once we've created our full document, including text and analysis, we can use the Render button to output it to .pdf.  Make sure you save your .qmd file before rendering. 
+
+Submit the .qmd file that you've edited as well as the .pdf file that you've rendered.  Submit them both to Canvas to complete the assignment. 

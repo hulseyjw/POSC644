@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Week2Assignment</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Week2Assignment_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Week2Assignment_files/libs/quarto-html/quarto.js"></script>
+<script src="Week2Assignment_files/libs/quarto-html/popper.min.js"></script>
+<script src="Week2Assignment_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Week2Assignment_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Week2Assignment_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Week2Assignment_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Week2Assignment_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Week2Assignment_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Week2Assignment_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Week2Assignment</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="accessing-eurostat-data" class="level2">
+<h2 class="anchored" data-anchor-id="accessing-eurostat-data">Accessing Eurostat Data</h2>
+<p>The European Union collects extensive data on its member states and their populations. The cheif repository for this data is Eurostat. The <code>restatapi</code> package provides an interface to the Eurostat API. The following code demonstrates how to access data on the population of the EU member states and pull it directly into R. In order to get started, we need to load the <code>tidyverse</code> and <code>restatapi</code> packages.</p>
+<p>You can find a list of all available datasets on the [Eurostat website]<a href="https://ec.europa.eu/eurostat/data/database" class="uri">https://ec.europa.eu/eurostat/data/database</a>. The <code>get_eurostat_data</code> function allows you to access these datasets directly from R. The function takes the dataset code as an argument. The dataset code for educational attainment of the EU member states by age and gender is <code>edat_lfse_03</code>. The following code demonstrates how to access this dataset and store it in a data frame called <code>EUEduc</code>. It then generates a summary of the dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>EUEduc <span class="ot">&lt;-</span> <span class="fu">get_eurostat_data</span>(<span class="st">"edat_lfse_03"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(EUEduc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> sex            age        unit            isced11           geo        
+ F:41349   Y25-34 :13823   PC:124158   ED0-2   :28355   BE     :  3954  
+ M:41380   Y30-34 :13803               ED3-8   :28371   EL     :  3954  
+ T:41429   Y20-24 :13742               ED3_4   :28366   ES     :  3954  
+           Y15-64 :12297               ED3_4GEN: 5356   IT     :  3954  
+           Y25-64 :12297               ED3_4VOC: 5406   PT     :  3954  
+           Y35-44 :12295               ED5-8   :28304   DK     :  3951  
+           (Other):45901                                (Other):100437  
+      time           values     
+ 2023   : 6270   Min.   : 0.40  
+ 2022   : 6269   1st Qu.:20.20  
+ 2021   : 6268   Median :37.00  
+ 2016   : 5102   Mean   :41.82  
+ 2017   : 5092   3rd Qu.:61.50  
+ 2018   : 5092   Max.   :98.40  
+ (Other):90065                  </code></pre>
+</div>
+</div>
+<p>The summaries of some of the variables in the dataset are portrayed differently than others. Some of the variables, like sex, are categorical, so the summary shows the number of observations for each category. The only numeric, continuous variable is “values,” so the summary shows the mean, median, and other statistics for that variable. This dataset is in long format, meaning that each row represents a unique combination of the categorical variables.</p>
+</section>
+<section id="getting-to-know-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="getting-to-know-the-data">Getting to Know the Data</h2>
+<p>When you are working with a new dataset, it is important to get to know the data before you start analyzing it. We’ve already looked at a summary of the whole dataset, but that summary didn’t show us all of the values for each variable. So, we can also look at summaries of individual variables for more information. In order to access columns within a dataset, we use the $ operator.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(EUEduc<span class="sc">$</span>age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Y15-64 Y20-24 Y25-34 Y25-64 Y30-34 Y30-54 Y35-44 Y45-54 Y45-64 Y55-64 
+ 12297  13742  13823  12297  13803  10677  12295  12294  10676  12254 </code></pre>
+</div>
+</div>
+<p>This summary shows all of the levels of the factor variable “age” and the number of observations for each level. Factor variables are R’s way of dealing with categorical data. Here we can see that the age variable has levels that correspond to age ranges, but that the age ranges overlap, so we’ll have to be intentional about how we build comparisons.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(EUEduc<span class="sc">$</span>isced11)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   ED0-2    ED3-8    ED3_4 ED3_4GEN ED3_4VOC    ED5-8 
+   28355    28371    28366     5356     5406    28304 </code></pre>
+</div>
+</div>
+<p>This summary shows all of the levels of the factor variable “isced11” and the number of observations for each level. The isced11 variable is a factor variable that represents the International Standard Classification of Education (ISCED) levels. The ISCED levels are a way of categorizing the level of education that a person has completed. ED0-2 corresponds to pre-primary, primary, and lower secondary education, ED3-4 corresponds to upper secondary and post-secondary non-tertiary education, and ED5-8 corresponds to tertiary education.</p>
+</section>
+<section id="filtering-the-data-to-make-comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="filtering-the-data-to-make-comparisons">Filtering the data to make comparisons</h2>
+<p>“value” represents the percentage of the population that falls into the category defined by the other variables.So, in the next chunk, we filter the data to show only the observation where sex is “Total,” age is “25-64,” isced11 is “ED5-8,” geo is “Italy,” and time is “2023.” The value column therefore shows the percentage of the total population of Italy between 25 and 64 in 2023 that has completed ISCED levels 5-8, or some kind of college degree.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>EUEduc <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">"T"</span>, age<span class="sc">==</span><span class="st">"Y25-64"</span>, isced11<span class="sc">==</span><span class="st">"ED5-8"</span>, geo<span class="sc">==</span><span class="st">"IT"</span>, time<span class="sc">==</span><span class="st">"2023"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;sex, age, unit, isced11, geo&gt;
+      sex    age   unit isced11    geo   time values
+   &lt;fctr&gt; &lt;fctr&gt; &lt;fctr&gt;  &lt;fctr&gt; &lt;fctr&gt; &lt;fctr&gt;  &lt;num&gt;
+1:      T Y25-64     PC   ED5-8     IT   2023   21.6</code></pre>
+</div>
+</div>
+<p>This shows that 21.6% of the population of Italy between the ages of 25 and 64 in 2023 has a college degree or higher.</p>
+<p>In most cases, we’re going to want to do a comparison across categories, so we can adjust our filters differently in order to show the slices of this dataset that highlight the comparisons we want. For example, if we just drop the sex filter, we can see the percentage of the population with a college degree in Italy in 2023 broken down by sex.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>EUEduc <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(age<span class="sc">==</span><span class="st">"Y25-64"</span>, isced11<span class="sc">==</span><span class="st">"ED5-8"</span>, geo<span class="sc">==</span><span class="st">"IT"</span>, time<span class="sc">==</span><span class="st">"2023"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;sex, age, unit, isced11, geo&gt;
+      sex    age   unit isced11    geo   time values
+   &lt;fctr&gt; &lt;fctr&gt; &lt;fctr&gt;  &lt;fctr&gt; &lt;fctr&gt; &lt;fctr&gt;  &lt;num&gt;
+1:      F Y25-64     PC   ED5-8     IT   2023   24.9
+2:      M Y25-64     PC   ED5-8     IT   2023   18.3
+3:      T Y25-64     PC   ED5-8     IT   2023   21.6</code></pre>
+</div>
+</div>
+<p>So, we can see that women are more likely to go to college in Italy than men.</p>
+<p>If we wanted to know how college attendance in Italy compared to that in other countries, we could adjust the geo filter to include multiple countries using the “|” operator which means “or.” I’ve used “or” to include Italy, Germany, France, Spain, and the 27 members of the European Union as a whole.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>EUEduc <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">"T"</span>, age<span class="sc">==</span><span class="st">"Y25-64"</span>, isced11<span class="sc">==</span><span class="st">"ED5-8"</span>, geo<span class="sc">==</span><span class="st">"IT"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"DE"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"FR"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"ES"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"EU27_2020"</span>, time<span class="sc">==</span><span class="st">"2023"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;sex, age, unit, isced11, geo&gt;
+      sex    age   unit isced11       geo   time values
+   &lt;fctr&gt; &lt;fctr&gt; &lt;fctr&gt;  &lt;fctr&gt;    &lt;fctr&gt; &lt;fctr&gt;  &lt;num&gt;
+1:      T Y25-64     PC   ED5-8        DE   2023   33.3
+2:      T Y25-64     PC   ED5-8        ES   2023   41.4
+3:      T Y25-64     PC   ED5-8 EU27_2020   2023   35.1
+4:      T Y25-64     PC   ED5-8        FR   2023   42.4
+5:      T Y25-64     PC   ED5-8        IT   2023   21.6</code></pre>
+</div>
+</div>
+<p>The following code chunk adds a few steps to the previous code that uses the kable() package to generate a more attractive table.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>EUEduc <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">"T"</span>, age<span class="sc">==</span><span class="st">"Y25-64"</span>, isced11<span class="sc">==</span><span class="st">"ED5-8"</span>, geo<span class="sc">==</span><span class="st">"IT"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"DE"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"FR"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"ES"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"EU27_2020"</span>, time<span class="sc">==</span><span class="st">"2023"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_column</span>(<span class="at">Country =</span> <span class="fu">c</span>(<span class="st">"Germany"</span>, <span class="st">"Spain"</span>, <span class="st">"European Union"</span>, <span class="st">"France"</span>, <span class="st">"Italy"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Country, values) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits=</span><span class="dv">3</span>, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Country"</span>, <span class="st">"Percent"</span>), <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">caption =</span> <span class="st">"Working-Age Population with College Degree in 2023"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Working-Age Population with College Degree in 2023</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Country</th>
+<th style="text-align: right;">Percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Germany</td>
+<td style="text-align: right;">33.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Spain</td>
+<td style="text-align: right;">41.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">European Union</td>
+<td style="text-align: right;">35.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">France</td>
+<td style="text-align: right;">42.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Italy</td>
+<td style="text-align: right;">21.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="using-ggplot-for-data-visualizations" class="level2">
+<h2 class="anchored" data-anchor-id="using-ggplot-for-data-visualizations">Using ggplot() for data visualizations</h2>
+<p>Data visualization is about creating the right visual representation of the data to communicate the information effectively. The <code>ggplot2</code> package is a powerful tool for creating visualizations in R. ggplot2 is loaded along with the other ‘tidyverse’ packages. The following code demonstrates how to create a bar plot of the percentage of the population with a college degree in the EU member states in 2023.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar Plot of the percentage of the population with a college degree in the EU member states in 2023</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>EUEduc <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">"T"</span>, age<span class="sc">==</span><span class="st">"Y25-64"</span>, isced11<span class="sc">==</span><span class="st">"ED5-8"</span>, geo<span class="sc">==</span><span class="st">"IT"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"DE"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"FR"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"ES"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"EU27_2020"</span>, time<span class="sc">==</span><span class="st">"2023"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values)) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Percentage of Population with College Degree in 2023"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="st">"Country"</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"Percentage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week2Assignment_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In order to make a plot using ggplot(), we build the components of the plot piece by piece. In the code chunk above we:</p>
+<ol type="1">
+<li>Call the dataset</li>
+<li>Filter the dataset to show only the observations we need for this plot.</li>
+<li>Call ggplot and specify the aesthetics of the plot, which corresponds to the main pieces of information we’re plotting: geo(country) and value(percentage).</li>
+<li>We call geom_bar() to specify that we want to make a bar plot. The stat=“identity” argument tells ggplot that the values in the dataset are the actual values we want to plot, rather than counts or some other transformation of the data. In other words, the “values” are already percentages and we don’t need to calculate the mean or percentage or count.</li>
+<li>We use labs() to add a title and labels to the x and y axes.</li>
+</ol>
+</section>
+<section id="going-from-long-to-wide-format" class="level2">
+<h2 class="anchored" data-anchor-id="going-from-long-to-wide-format">Going from long to wide format</h2>
+<p>The function we’ve used to access the data automatiically formats the data in long or tidy form, which means that there is only one observation per row. That’s why there is only one value for each combination of the other variables. This long format is best for generating plots and is most flexible. However, sometimes we want to compare the values of a variable across different categories in a table. In order to do that, we need to convert the data to wide format. The <code>pivot_wider()</code> function from the <code>tidyverse</code> package allows us to do this.</p>
+<p>Let’s say we want to show the percentage of women, men and the total population in Italy, Germany, France, Spain and in the EU as a whole in 2023. We can use the following code to convert the data to wide format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar Plot of the percentage of the population with a college degree in the EU member states in 2023</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>EUEduc <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(age<span class="sc">==</span><span class="st">"Y25-64"</span>, isced11<span class="sc">==</span><span class="st">"ED5-8"</span>, geo<span class="sc">==</span><span class="st">"IT"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"DE"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"FR"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"ES"</span><span class="sc">|</span>geo<span class="sc">==</span><span class="st">"EU27_2020"</span>, time<span class="sc">==</span><span class="st">"2023"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(geo, sex, values) <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from=</span>sex, <span class="at">values_from=</span>values) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits=</span><span class="dv">3</span>, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Country"</span>, <span class="st">"Women"</span>, <span class="st">"Men"</span>, <span class="st">"Total"</span>), <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">caption =</span> <span class="st">"Percentage Receiving College Degrees in 2023"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Percentage Receiving College Degrees in 2023</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Country</th>
+<th style="text-align: right;">Women</th>
+<th style="text-align: right;">Men</th>
+<th style="text-align: right;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">DE</td>
+<td style="text-align: right;">31.5</td>
+<td style="text-align: right;">35.1</td>
+<td style="text-align: right;">33.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ES</td>
+<td style="text-align: right;">45.0</td>
+<td style="text-align: right;">37.9</td>
+<td style="text-align: right;">41.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EU27_2020</td>
+<td style="text-align: right;">38.0</td>
+<td style="text-align: right;">32.2</td>
+<td style="text-align: right;">35.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FR</td>
+<td style="text-align: right;">45.6</td>
+<td style="text-align: right;">39.1</td>
+<td style="text-align: right;">42.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IT</td>
+<td style="text-align: right;">24.9</td>
+<td style="text-align: right;">18.3</td>
+<td style="text-align: right;">21.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="homework" class="level2">
+<h2 class="anchored" data-anchor-id="homework">Homework</h2>
+<p>For your homework, we’re going to practice filtering the dataset in order to go about answering questions. These will mostly be adaptations of the code we’ve already written above, but you may also find it helpful to look at Healy Chapter 3. For each answer create a code chunk under the question that produces the answer to the question.</p>
+<ol type="1">
+<li><p>Create a table that shows the percentage of the population in Italy in 2023 that has completed ED0-2 ED3-4, and ED5-8 levels of education.</p></li>
+<li><p>Create a bar plot that shows the some information as the table in 1.</p></li>
+<li><p>Create a table that shows the change over time in the percentage of women in Italy with a college degree.</p></li>
+<li><p>Create a line graph that that compares the percentage of women and men who have a college degree in Italy over time. Use the instructions here <a href="http://www.sthda.com/english/wiki/ggplot2-line-plot-quick-start-guide-r-software-and-data-visualization" class="uri">http://www.sthda.com/english/wiki/ggplot2-line-plot-quick-start-guide-r-software-and-data-visualization</a> to create a line graph.</p></li>
+<li><p>Create a line graph that compares the percentage of women with a college degree in Italy, Germany, France and the EU as a whole over time.</p></li>
+<li><p>Create a table that converts the table from long to wide in order to create a table that compares the percentage of women with a college degree in Italy, Germany, France, Spain and the EU as a whole in 2023. (Hint: you’ll need to use the pivot_wider() function.)</p></li>
+<li><p>Create your own figure to answer your own question that can be addressed by the dataset. First, write what question you want to answer, generate the figure, then write a brief explanation of what the figure shows in answer to your question and why you’ve chosen that kind of figure.</p></li>
+</ol>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

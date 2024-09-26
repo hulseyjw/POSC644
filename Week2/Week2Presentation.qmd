@@ -1,0 +1,76 @@
+---
+title: "Week2 Presentation: Basics of Data Visualization"
+format: revealjs
+editor: visual
+---
+
+## Today's Plan
+
+- Introduction to Basic Principles of Data Visualization
+
+- Getting Data from Eurostat
+
+- Creating Plots with ggplot2 in R
+
+
+## Data Visualization
+
+The best data visualizations:
+
+- Are clear and easy to understand
+
+- Focus the viewer's attention on the most important comparisons. 
+
+- Avoid misleading the viewer through problems of perception, presentation, or data validity. 
+
+## Some examples
+
+Mario Draghi, former President of the ECB and former Prime Minister of Italy has just released a report on the state of competitiveness of the EU.  The report contains a number of charts that compare the EU to the US and China.
+
+For each chart:
+
+- What is being compared? How many sets of information are being compared?
+
+- What is the conclusion that we're meant to draw?
+
+- How does it connect to the other charts?
+
+## 
+
+![EU US CN GDP](GDPUSEUCN.jpg)\
+
+##
+
+![Investment in the EU and US](investment.jpg)\
+
+##
+
+![Venture Capital Investment](vcinvest.jpg)\
+
+## 
+
+![Unicorns in US, EU and China](unicorns.jpg)\
+
+##
+
+![Research and Development in the EU and US](rd.jpg)\
+
+##
+
+![Research and Development Sources](RDFunding.jpg)\
+
+## Trade-offs and strategies
+
+- Showing more information vs. less
+
+- Showing individual observations vs. summary statistics
+
+- One figure vs. multiple figures
+
+## Getting Data from Eurostat
+
+- Eurostat collects and distributes data on the EU. You can see the list of datasets at https://ec.europa.eu/eurostat/data/database
+
+- the restatapi package in R allows you to access Eurostat data directly from R.
+
+- pay attention to the level of analysis of the data. Eurostat data is defined by its NUTS level. NUTS 0 is the countries, NUTS 1 is regions within countries, and NUTS 2 is smaller regions.

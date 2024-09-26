@@ -1,0 +1,361 @@
+---
+title: "Week3 Presentation"
+author: "John Hulsey"
+format: revealjs
+---
+
+## Week 3
+
+- joining datasets. 
+
+- Going from basic plots to more complex and attractive plots. 
+
+
+
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+
+## Data
+
+For our first part of class, we're going to work with the Educational Attainment Data from Eurostat. I've also created a dataset that has full names for the countries and some basic information about them.  
+
+
+```{r}
+#| echo: TRUE
+
+
+EUEduc <- get_eurostat_data("edat_lfse_03")
+ESNames <-read_csv('ESNames.csv', col_types = "ffffnf") # You may need to put a full path to the file on your computer. 
+
+
+```
+
+## EUEduc
+
+```{r}
+#| echo: TRUE
+
+head(EUEduc)
+
+```
+
+## ESNames
+
+```{r}
+#| echo: TRUE
+
+head(ESNames)
+
+```
+## Joining the datasets
+
+```{r}
+#| echo: TRUE
+EUEduc <- EUEduc %>% # specifiies that we are storing the result of these steps back in EUEduc, which is a little dangerous
+  left_join(ESNames, by=c("geo"="CODE"))# left join keeps all of the observations from EUEduc and adds the columns from ESNames that match (but not those from ESNames that don't match). It specifies that we're joining based on the "geo" and "code" variables.
+
+head(EUEduc)
+```
+
+It puts the same information from the ESNames dataset for every instance of the country code in the EUEduc dataset.
+
+
+
+## Dotplot of Accession Year
+
+```{r}
+#| echo: TRUE
+ESNames %>% 
+  ggplot(aes(x = AccYr)) +
+  geom_dotplot(aes(color=ColdWar, fill=ColdWar)) + 
+  labs(title = "Accession Year of EU Countries",
+       y = "Proportion",
+       x = "Year")+
+  theme_minimal()
+```
+
+
+
+## Grammar of Graphics: ggplot2
+
+ggplot2 is a package that implements the Grammar of Graphics. This is a way of thinking about plots that is based on the idea that a plot is a combination of data, aesthetics, and geoms. So, every plot is built out of a layered series of commands that control what is displayed and how. 
+
+## First, the data
+
+One of the main things we've practiced so far is using the pipe operator to pass data from one function to another, so that we can only pass the data that we need to the plotting function. Here we're only passing the Total population, ages 25-64, for three different levels of education, in four countries plus the EU as a whole, in 2023. 
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023")
+```
+
+## Aesthetics
+
+In defining the aesthetics, we're identifying the variables that will be on the x and y axis, as well as the variables that will define the fill colors for the bars. However, we haven't yet specified what kind of plot we want to make. 
+
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+    ggplot(aes(x=geo, y=values, fill=isced11))
+```
+## Adding Geoms
+
+By adding geom_bar, we're specifying that we want to make a bar plot. The stat="identity" argument specifies that we want the height of the bars to be determined by the values in the dataset, rather than by some other transformation. The position="dodge" argument specifies that we want the bars to be displayed side by side, rather than stacked. 
+
+## Dodged bar
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="dodge") 
+```
+## Stacked bar
+```{r}
+#| echo: true
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="stack") 
+```
+
+## Which is better?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="dodge") 
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: FALSE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="stack") 
+```
+:::
+::::
+
+## Labels
+
+The labs function allows us to add labels to the plot. Here we're adding a title, and labels for the x and y axes. 
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="Educational Attainment in 2023",
+       x="Country",
+       y="Percentage")
+
+```
+
+## Changing the legend
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+  mutate(isced11 = recode(isced11, "ED5-8"="College Degree", "ED3_4"="Secondary School", "ED0-2"="Less than Secondary School") )%>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="Educational Attainment in 2023",
+       x="Country",
+       y="Percentage")+
+  guides(fill=guide_legend(title="Education Level"))
+
+```
+
+## Better country names
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+  mutate(isced11 = recode(isced11, "ED5-8"="College Degree", "ED3_4"="Secondary School", "ED0-2"="Less than Secondary School"), geo = recode(geo, "IT"="Italy", "DE"="Germany", "FR"="France", "ES"="Spain", "EU27_2020"= "EU Total") )%>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="Educational Attainment in 2023 (% of Population Ages 25-64)",
+       x="Country",
+       y="Percentage")+
+  guides(fill=guide_legend(title="Education Level"))
+
+```
+
+## Simplifying labels
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+  mutate(isced11 = recode(isced11, "ED5-8"="College Degree", "ED3_4"="Secondary School", "ED0-2"="Less than Secondary School"), geo = recode(geo, "IT"="Italy", "DE"="Germany", "FR"="France", "ES"="Spain", "EU27_2020"= "EU Total") )%>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="Educational Attainment in 2023 (% of Population Ages 25-64)")+
+  guides(fill=guide_legend(title="Education Level"))+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank() 
+        )
+```
+
+## That background?
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+  mutate(isced11 = recode(isced11, "ED5-8"="College Degree", "ED3_4"="Secondary School", "ED0-2"="Less than Secondary School"), geo = recode(geo, "IT"="Italy", "DE"="Germany", "FR"="France", "ES"="Spain", "EU27_2020"= "EU Total") )%>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="Educational Attainment in 2023 (% of Population Ages 25-64)")+
+  guides(fill=guide_legend(title="Education Level"))+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        )+
+  theme_minimal()
+```
+
+## That background?
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", geo=="IT"|geo=="DE"|geo=="FR"|geo=="ES"|geo=="EU27_2020", time=="2023") %>% 
+  mutate(isced11 = recode(isced11, "ED5-8"="College Degree", "ED3_4"="Secondary School", "ED0-2"="Less than Secondary School"), geo = recode(geo, "IT"="Italy", "DE"="Germany", "FR"="France", "ES"="Spain", "EU27_2020"= "EU Total") )%>% 
+    ggplot(aes(x=geo, y=values, fill=isced11)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="Educational Attainment in 2023 (% of Population Ages 25-64)")+
+  guides(fill=guide_legend(title="Education Level"))+
+    theme_minimal()+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        )
+
+```
+
+## More countries?
+
+```{r}
+#| echo: TRUE
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", time=="2023") %>% 
+  mutate(isced11 = recode(isced11, "ED5-8"="College Degree", "ED3_4"="Secondary School", "ED0-2"="Less than Secondary School") )%>% 
+    ggplot(aes(x=isced11, y=values, fill=isced11)) +
+  facet_wrap(~geo)+
+  geom_bar(stat="identity") +
+    labs(title="Educational Attainment in 2023 (% of Population Ages 25-64)")+
+  guides(fill=guide_legend(title="Education Level"))+
+    theme_minimal()+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        )
+
+```
+
+## 
+
+```{r}
+#| echo: false
+#| 
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8"|isced11=="ED3_4"|isced11=="ED0-2", time=="2023") %>% 
+  mutate(isced11 = recode(isced11, "ED5-8"="College Degree", "ED3_4"="Secondary School", "ED0-2"="Less than Secondary School") )%>% 
+    ggplot(aes(x=isced11, y=values, fill=isced11)) +
+  facet_wrap(~countryname)+
+  geom_bar(stat="identity") +
+    labs(title="Educational Attainment in 2023 (% of Population Ages 25-64)")+
+  guides(fill=guide_legend(title="Education Level"))+
+    theme_minimal()+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        )
+
+```
+
+## Plot design
+
+Using ggplot2 you can control all aspects of the plot design, but the options can be overwhelming. To deal with this, use a design thinking process. 
+
+1. Identify the main comparisons you need in order to address the question. 
+2. Brainstorm different chart types that could be used to show these comparisons.
+3. Sketch out the features you think work best. 
+4. Make a simple plot that shows the main comparisons.
+5. Iterate your design to incrementally improve it. 
+
+## Group Activity
+
+We're going to break up into groups. Each group will be assigned a different question. The group will work together to produce the best chart they can, including all of the components we've discussed (and maybe more!).
+
+The groups will send their finished code back to me and present the chart to the class. 
+
+
+## Group 1 Annika, Lillie, Adrienne, Olivia
+
+Do the countries that joined the EU earlier have more or fewer people with college degrees than those that joined later? (Hint: https://ggplot2.tidyverse.org/reference/geom_text.html)
+
+```{r}
+#| echo: TRUE
+EUEduc %>% 
+  filter() %>% 
+  ggplot(aes(x = AccYr, y=values, label = geo)) +
+  geom_text()+  
+  labs(title = "Accession Year of EU Countries",
+       y = "Percent",
+       x = "Year")+
+  theme_minimal()
+```
+
+
+
+## Group 2 George, Camryn, Rachel, Sophia
+
+Has the percentage of women attaining college degrees surpassed the percentage of men in all member states of the EU?
+
+## Group 3 Cade, William, Emma, Sattie
+
+How do the candidate countries for EU membership compare to the EU member states in terms of the percentage of the population with college degrees? (Hint: the Membership variable says which countries are candidates.)
+
+## Group 4 Lauren, Zaria, Carter, Jackie (sp?)
+
+Are older people more likely to have a college degree than younger people and does the pattern vary by country? (Hint: use the decade levels of the age variable to compare the percentage with a college degree for 25-34, 35-44, 45-54, and 55-64 year olds.)
+
+## Group 5 Michael, Miles, Harrison, Prema
+
+Do countries with a higher percentage of women with a college degree also have a higher percentage of men with a college degree? (Hint: https://ggplot2.tidyverse.org/reference/geom_text.html)
+
