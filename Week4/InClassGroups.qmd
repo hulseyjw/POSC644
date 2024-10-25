@@ -1,0 +1,242 @@
+---
+title: "Week 3 In Class Activity Presentations"
+author: "John Hulsey"
+format: revealjs
+---
+
+## Week 3
+
+- joining datasets. 
+
+- Going from basic plots to more complex and attractive plots. 
+
+
+
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+
+## Data
+
+For our first part of class, we're going to work with the Educational Attainment Data from Eurostat. I've also created a dataset that has full names for the countries and some basic information about them.  
+
+
+```{r}
+#| echo: TRUE
+
+
+EUEduc <- get_eurostat_data("edat_lfse_03")
+ESNames <-read_csv('https://raw.githubusercontent.com/hulseyjw/POSC644/refs/heads/main/Week3/ESNames.csv', col_types = "ffffnf")
+
+```
+
+
+
+## Joining the datasets
+
+```{r}
+#| echo: TRUE
+EUEduc <- EUEduc %>% # specifiies that we are storing the result of these steps back in EUEduc, which is a little dangerous
+  left_join(ESNames, by=c("geo"="CODE"))# left join keeps all of the observations from EUEduc and adds the columns from ESNames that match (but not those from ESNames that don't match). It specifies that we're joining based on the "geo" and "code" variables.
+
+head(EUEduc)
+```
+
+
+## Group Activity
+
+We're going to break up into groups. Each group will be assigned a different question. The group will work together to produce the best chart they can, including all of the components we've discussed (and maybe more!).
+
+The groups will send their finished code back to me and present the chart to the class. 
+
+
+## Group 1 Annika, Lillie, Adrienne, Olivia
+
+Do the countries that joined the EU earlier have more or fewer people with college degrees than those that joined later? (Hint: https://ggplot2.tidyverse.org/reference/geom_text.html)
+
+##
+
+```{r}
+#| echo: FALSE
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8", Membership=="EUMember_2020", time=="2023") %>%
+   ggplot(aes(x=AccYr, y=values, label=geo)) +
+  geom_text(check_overlap = TRUE) +
+  labs(title="College Education in EU Member States in 2023 (% of Population Ages 25-64)",
+       x="Accession Year into the EU",
+       y="Percentage")+
+ theme_minimal()
+```
+##
+
+```{r}
+
+#| echo: FALSE
+EUEduc %>%
+  filter(sex=="T", age=="Y25-64", isced11=="ED5-8", Membership=="EUMember_2020", time=="2023") %>%
+   ggplot(aes(x=AccYr, y=values, label=geo)) +
+  geom_text(check_overlap = TRUE) +
+  labs(title="College Education in EU Member States in 2023 (% of Population Ages 25-64)",
+       x="Accession Year into the EU",
+       y="Percentage")+
+ theme_minimal()+
+  stat_smooth(method = "lm", 
+              formula = y ~ x, 
+              geom = "smooth") 
+
+
+```
+
+
+## Group 2 George, Camryn, Rachel, Sophia
+
+Has the percentage of women attaining college degrees surpassed the percentage of men in all member states of the EU?
+
+##
+
+```{r}
+#| echo: FALSE
+
+EUEduc %>%
+filter(sex=="M" |sex=="F", age=="Y25-64", isced11=="ED5-8", geo=="EU27_2020", time=="2019" | time=="2020" | time=="2021" | time=="2022" | time=="2023") %>%
+ggplot(aes(x=time, y=values, fill=sex)) +
+geom_bar(stat="identity", position="dodge")+
+labs(title="Women and Men Attaining College Degrees in the EU")+
+guides(fill=guide_legend(title="Gender"))
+
+```
+##
+```{r}
+#| echo: FALSE
+
+EUEduc %>%
+filter(sex=="M" |sex=="F", age=="Y25-64", isced11=="ED5-8") %>%
+ggplot(aes(x=time, y=values, group=sex, color=sex)) +
+geom_line()+
+  facet_wrap(~countryname)+
+labs(title="Women and Men Attaining College Degrees in the EU - Hulsey's Version")+
+guides(fill=guide_legend(title="Gender"))+
+    theme_minimal()+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        )
+
+```
+
+
+## Group 3 Cade, William, Emma, Sattie
+
+How do the candidate countries for EU membership compare to the EU member states in terms of the percentage of the population with college degrees? (Hint: the Membership variable says which countries are candidates.)
+
+##
+
+```{r}
+#| echo: FALSE
+EUEduc %>%
+filter(sex=="T", age=="Y25-64", isced11=="ED5-8", Membership=="EUMember_2020" | Membership=="EU_Candidate" ) %>%
+ggplot(aes(x=Membership, y=values, fill=isced11)) +
+geom_bar(stat="identity", position="dodge") +
+labs(title="Percentage of Population of College Degree: Member States vs. Candidate Countries")+
+guides(fill=guide_legend(title="Educational Attainment"))
+```
+##
+```{r}
+EUEduc %>%
+filter(sex=="T", age=="Y25-64", isced11=="ED5-8", Membership=="EUMember_2020" | Membership=="EU_Candidate", time=="2023") %>%
+mutate(isced11 = recode(isced11, "ED5-8"="College Degree"), Membership = recode(Membership, "EUMember_2020"="Member States", "EU_Candidate"="Candidate Countries")) %>%
+ggplot(aes(x=Membership, y=values, fill=isced11)) +
+geom_bar(stat="identity", position="dodge") +
+labs(title="Percentage of Population of College Degree: Member States vs. Candidate Countries in 2023")+
+guides(fill=guide_legend(title="Educational Attainment"))
+```
+##
+```{r}
+#| echo: FALSE
+
+EUEduc %>%
+filter(sex=="T", age=="Y25-64", isced11=="ED5-8", Membership=="EUMember_2020" | Membership=="EU_Candidate", time=="2023") %>%
+ggplot(aes(x=Membership, y=values)) +
+geom_text(aes(label=geo), check_overlap = TRUE) +
+labs(title="Percentage of Population of College Degree: Member States vs. Candidate Countries - Hulsey's Version")+
+guides(fill=guide_legend(title="Educational Attainment"))
+```
+
+## Group 4 Lauren, Zaria, Carter, Jackie 
+
+Are older people more likely to have a college degree than younger people and does the pattern vary by country? (Hint: use the decade levels of the age variable to compare the percentage with a college degree for 25-34, 35-44, 45-54, and 55-64 year olds.)
+
+##
+
+```{r}
+#| echo: false
+#| 
+EUEduc %>%
+  filter(age=="Y25-34"| age=="Y35-44"| age=="Y45-54"| age=="Y55-64", isced11=="ED5-8", time=="2023") %>% 
+  mutate(age = recode(age, "Y25-34"="25-34 YO", "Y35-44"="35-44 YO", "Y45-54"="45-54 YO", "Y55-64"="55-64 YO") )%>% 
+    ggplot(aes(x=age, y=values, fill=age)) +
+  facet_wrap(~countryname)+
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="% of College Educated Citzens by Age Group in 2023")+
+  guides(fill=guide_legend(title="Age Group"))+
+    theme_minimal()+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        )
+```
+
+## Group 5 Michael, Miles, Harrison, Prema
+
+Do countries with a higher percentage of women with a college degree also have a higher percentage of men with a college degree? (Hint: https://ggplot2.tidyverse.org/reference/geom_text.html)
+
+##
+```{r}
+#| echo: FALSE
+EUEduc %>%
+filter(sex=="F"| sex=="M", age == "Y15-64", isced11 == "ED5-8", time == "2023") %>%
+mutate(sex = recode(sex, "F" = "Female", "M" = "Male"),
+geo = recode(geo, "IT" = "Italy", "DE" = "Germany", "FR" = "France", "ES" = "Spain", "EU27_2020" = "EU Total")) %>%
+select(geo, sex, values) %>%
+pivot_wider(names_from = sex, values_from = values) %>%
+ggplot(aes(x = Male, y = Female)) +
+geom_point(size = 2 , alpha = 0.8, color = "blue", position = position_jitter(width = 0.5, height = 0.5)) +
+geom_text(aes(label = geo), vjust = -1,hjust = 0.5, size = 3) +
+labs(title = "College Degrees in 2023 (% of Population Ages 15-64)",
+x = "Percentage of Men with College Degrees",
+y = "Percentage of Women with College Degrees") +
+theme_minimal() +
+theme(plot.title = element_text(size = 14),
+axis.text = element_text(size = 12))
+
+```
+##
+```{r}
+#| echo: FALSE
+EUEduc %>%
+filter(sex=="F"| sex=="M", age == "Y15-64", isced11 == "ED5-8", time == "2023") %>%
+mutate(sex = recode(sex, "F" = "Female", "M" = "Male"),
+geo = recode(geo, "IT" = "Italy", "DE" = "Germany", "FR" = "France", "ES" = "Spain", "EU27_2020" = "EU Total")) %>%
+select(geo, sex, values) %>%
+pivot_wider(names_from = sex, values_from = values) %>%
+ggplot(aes(x = Male, y = Female)) +
+geom_point(size = 2 , alpha = 0.8, color = "blue", position = position_jitter(width = 0.5, height = 0.5)) +
+geom_text(aes(label = geo), vjust = -1,hjust = 0.5, size = 3, check_overlap = TRUE) +
+labs(title = "College Degrees in 2023 (% of Population Ages 15-64) Hulsey's Version",
+x = "Percentage of Men with College Degrees",
+y = "Percentage of Women with College Degrees") +
+theme_minimal() +
+theme(plot.title = element_text(size = 14),
+axis.text = element_text(size = 12))+
+  coord_fixed(ratio = 1)+
+  geom_abline()
+
+```
+
+

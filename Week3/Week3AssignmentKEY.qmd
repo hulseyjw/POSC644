@@ -1,0 +1,122 @@
+---
+title: "Week 3 Assignment"
+format:
+  html:
+    code-overflow: wrap
+editor: source
+theme: cosmo
+---
+```{r}
+#| echo: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+
+
+
+
+```
+
+# Assignment 3
+
+In this assignment, we're adding a few new skills and working on building more attractive and clearer data visualizations that show relationshiops between variables. Along the way, we're going to continue to learn about diversity within the European Union. 
+
+## Joining Data
+
+Often, we're going to want to join data from different sources. In this case, I've created a table that has some basic information about European Union Member States as well as some countries that have connections to the EU and therefore are included the Eurostat data. I've provided the files "ESNames.csv". 
+
+```{r}
+#| echo: true
+ESNames <-read_csv('https://raw.githubusercontent.com/hulseyjw/POSC644/refs/heads/main/Week3/ESNames.csv', col_types = "ffffnf") # You may need to put a full path to the file on your computer. The strange code at the end is to specify the column types. (factor, factor, factor, factor, numeric, factor)
+
+head(ESNames)
+#ESNames <-read_csv('ESNames.csv', col_types = "ffffnf") # You may need to put a full path to the file on your computer. The strange code at the end is to specify the column types. (factor, factor, factor, factor, numeric, factor)
+
+
+```
+
+
+
+This dataset has a few variables that we can use to join with the Eurostat data.
+
+**CODE** is the Eurostat code for the country or group of countries
+
+**countryname** is a more readable name for the country or group of countries
+
+**Membership** is the type of membership the country has relative to the EU
+
+**EA20** is a binary variable indicating whether the country is in the Euro Area
+
+**AccYr** is the year the country joined the EU (if it is a member)
+
+**ColdWar** identifies whether the country was part of NATO, the Warsaw Pact, Neutral, or part of Yugoslavia during the Cold War
+
+
+
+```{r}
+#| echo: true
+GDP <- get_eurostat_data('tipsna40')
+SB <- get_eurostat_data('tps00107')
+```
+```{r}
+GDP_ESN <- GDP %>%
+left_join(ESNames, by = c("geo" = "CODE"))
+
+SB_ESN <- SB %>%
+left_join(ESNames, by = c("geo" = "CODE"))
+```
+```{r}
+SB_GDP <- SB_ESN %>%
+left_join(GDP, by = c("geo", "time"))
+```
+
+
+We read in two datasets from Eurostat, one with GDP information (GDP) and one with information on spending for Social Benefits (SB). 
+
+```{r}
+#| echo: true
+summary(GDP)
+summary(SB) 
+```
+
+For GDP, the values represent GDP per Capita in Euros for each country and year. For SB, the values represent social benefits per capita for each country, year and type of benefit (OLD, SICK, FAM, UNEMP, DISAB, HOUS, and OTH).
+
+## Homework
+
+For each question, create a figure that explores the question and write a brief explanation of what you see. Clearly label your plots. Submit the .qmd file and the .html file to Canvas. 
+
+1. Do countries who joined the EU earlier tend to be wealthier or poorer than those who joined later? Create a plot that shows the relationship. 
+```{r}
+GDP_ESN %>%
+  filter(time=="2023") %>%
+   ggplot(aes(x=AccYr, y=values, label=geo)) +
+  geom_text(check_overlap = TRUE) +
+  labs(title="Wealth Based on EU Entry Year",
+       x="Accession Year into the EU",
+       y="GDP")
+```
+# There are a variety of different percentages of wealth across the EU. This data set shows the differences between a country's wealth based on their entry to the EU. 
+
+2. Do former communist countries spend more or less on social benefits for the old and sick than other countries? Create a plot that shows the relationship.(spdeps in SB has OLD and SICK)
+```{r}
+SB_ESN %>%
+  filter(ColdWar=="WP" | ColdWar=="NATO" | ColdWar=="Neutral" , spdeps=="OLD" | spdeps =="SICK" ) %>%
+ ggplot(aes(x=ColdWar, y=values, fill=spdeps)) +
+  geom_bar(stat="identity", position="dodge") +
+  labs(title="Spending on Social Benefits; Former Communist Countries vs. Former NATO" , x="Country Type", y="Social Benefit Spending")+
+  guides(fill=guide_legend(title="Social Benefits"))
+```
+# From this graph it is clear that NATO and neutral countries spend more on the old and sick than communist countries. 
+
+3. Do wealthier countries in the EU spend more on social benefits for families (FAM) than poorer countries? Create a plot that shows the relationship.
+```{r}
+SB_GDP %>%
+  filter(time == "2021", spdeps == "FAM") %>%
+   ggplot(aes(x=values.y, y=values.x, label=geo)) +
+  geom_text(check_overlap = TRUE) +
+  labs(title="EU Social Spending Based on Wealth",
+       x="GDP",
+       y="Family Spending")
+```
+

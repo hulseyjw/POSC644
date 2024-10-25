@@ -1,0 +1,284 @@
+---
+title: "Merging Datasets"
+format:
+  html:
+    code-overflow: wrap
+editor: source
+theme: cosmo
+---
+```{r}
+#| echo: false
+#| include: false
+
+
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+
+
+
+
+```
+
+# Joining Data in Assignment 3
+
+The three questions in Assignment 3 require you to merge different datasets. I knew this would be a bit of a jump for you all, but I'm experimenting with how big to make these jumps as you grow in ability and confidence.  
+
+In programming, there is often an elegant but hard to understand why to solve a problem as well as a kind of ugly, simpler and easier to understand way to solve a problem.  If you aren't sure how to solve a problem, then the less elegant, step-by-step way is often better and you will feel more confident that you are doing things correctly.
+
+## The Problem
+
+Joining datesets is a very powerful tool and often the way that we learn something new. However, the datasets we are using are sometimes complex and are structured in different ways. You have to spend some time exploring the datasets to understand how they are structured and how they can be used.
+
+##
+
+First, we'll load our three datasets. 
+
+**ESNames** is a dataset that I created that has information on the countries in the EU and their membership status.
+
+In this dataset, each row represents a country or group of countries. 
+
+```{r}
+#| echo: true
+
+ESNames <-read_csv('https://raw.githubusercontent.com/hulseyjw/POSC644/refs/heads/main/Week3/ESNames.csv', col_types = "ffffnf") # You may need to put a full path to the file on your computer. The strange code at the end is to specify the column types. (factor, factor, factor, factor, numeric, factor)
+
+head(ESNames)
+```
+
+This dataset has a few variables that we can use to join with the Eurostat data.
+
+**CODE** is the Eurostat code for the country or group of countries
+
+**countryname** is a more readable name for the country or group of countries
+
+**Membership** is the type of membership the country has relative to the EU
+
+**EA20** is a binary variable indicating whether the country is in the Euro Area
+
+**AccYr** is the year the country joined the EU (if it is a member)
+
+**ColdWar** identifies whether the country was part of NATO, the Warsaw Pact, Neutral, or part of Yugoslavia during the Cold War
+
+
+We're also loading two datasets from Eurostat. **GDP** and **SB**. 
+
+```{r}
+#| echo: true
+GDP <- get_eurostat_data('tipsna40')
+SB <- get_eurostat_data('tps00107')
+```
+
+
+
+```{r}
+#| echo: true
+head(GDP)
+head(SB) 
+```
+
+Joining simple datasets isn't too hard. You just need to find a common variable that you can use to join the datasets. Since ESNames has one row for each country, we can use the country code to join the datasets. 
+
+So, you didn't have too much trouble with the first question in Assignment 3, because you just needed to join the GDP dataset with the ESNames dataset. Since ESNames just has one row for each country, it is not complicated to use left_join to merge the datasets. 
+
+GDP is a somewhat more complex dataset, because it has multiple rows for each country, representing the different years that GDP Per Capita is measured.  So, each unique observation of value (the variable that has GDP Per Capita in it) is defined by country (geo) and year (time). We already have practiced filtering data, which allows us to see how this works. 
+
+If we use filter to show only the rows for Spain, we can see that there are multiple rows for Spain, each representing a different year. 
+
+
+```{r}
+GDP %>% filter(geo == "ES")
+```
+
+If we filter the data to show only the rows for 2019, we can see that there is only one row for each country.
+
+```{r}
+GDP %>% filter(time=="2019")
+```
+
+If we filter by both Spain and 2019, we can see that there is only one row for Spain in 2019. So, the **key** for this GDP dataset is a combination of geo and time. In other words, there is one row for each country and year. 
+
+
+
+```{r}
+GDP %>% filter(time=="2019", geo=="ES")
+```
+
+GDP has a key of geo and time, ESNames has a key of CODE, and the contents of geo from the GDP datselt and CODE from the ESNames dataset match (ie. they use the came country codes and are formatted in the same way). So, we can use left_join to merge the datasets. Unlike in my example for the homework, I'm putting the resulting dataset in a new dataset called GDP_ESN. This avoids the problem many of you were having of repeatedly joining things to one dataset and getting values.x and values.y. 
+
+We're just merging on one variable from each dataset, so for all of the rows for each country in GDP (regardless of year), we're adding the information from ESNames.
+
+
+```{r}
+#| echo: true
+
+GDP_ESN <- GDP %>% 
+  left_join(ESNames, by = c("geo" = "CODE"))
+
+head(GDP_ESN)
+```
+
+
+You can use this new dataset GDP_ESN to answer the first question in Assignment 3.
+
+## Working with the SB dataset
+
+For SB, the values represent social benefits per capita for each country, year and type of benefit (OLD, SICK, FAM, UNEMP, DISAB, HOUS, and OTH).So SB has three keys: geo, time and spdeps.
+
+If we just filter by Spain, then it shows us all of the rows for Spain, regardless of year or type of benefit. 
+
+
+```{r}
+#| echo: true
+
+SB %>% filter(geo=="ES")
+```
+
+If we filter by Spain and 2019, then it shows us all of the rows for Spain in 2019, regardless of type of benefit. 
+
+
+```{r}
+#| echo: true
+
+SB %>% filter(geo=="ES", time=="2019")
+```
+If we filter by 2019, and OLD, then it shows us the the spending on Old Age benefits for all countries in 2019.
+
+
+```{r}
+#| echo: true
+
+SB %>% filter(spdeps =="OLD", time=="2019")
+```
+
+In order to isolate one row, we have to filter by all three keys. 
+
+```{r}
+#| echo: true
+
+SB %>% filter(geo=="ES", time=="2019", spdeps=="OLD")
+```
+
+To answer question 2 in Assignment 3, you will need to merge the SB dataset with the ESNames dataset. Since there is a unique row for each country in ESNames, you can use left_join to merge the datasets, and all of the rows for each country in SB will be merged with the information from ESNames. 
+
+```{r}
+#| echo: true
+
+SB_ESN <- SB %>% 
+  left_join(ESNames, by = c("geo" = "CODE"))
+
+head(SB_ESN)
+
+```
+ 
+ Since questions 1 and 2 just involve adding information from ESNames to the GDP and SB datasets, they are relatively simple joins Where things get more complicated is in merging the GDP and SB datasets, because GDP has two keys (geo and time) and SB has three keys (geo, time, and spdeps). Some of you already had difficulty with question two because you were trying to merge GDP with the ESNames variables to SB. This isn't wrong, but it does make question 2 harder than it needs to be.
+ 
+ Question 3 asks whether wealthier countries in the EU spend more on social benefits for families than poorer countries. To answer this question, you will need to merge the GDP and SB datasets. Since GDP has two keys (geo and time) and SB has three keys (geo, time, and spdeps), the way we've been joining above won't work. It worked when ESNames was the dataset we were adding to GDP or SB, because it had only one key, so we only had to join on one shared variable by=c("geo"="CODE").
+ 
+ There are two ways to deal with this problem. We can call it the "inelegant but works" way and the "elegant but hard to understand" way. Let's do the "inelegant but works" way first.
+ 
+ ## Inelegant but Works
+ 
+ This way of dealing with the problem is possible because to answer question 3, we don't need all of the information in the two datasets, so we can make them simpler by filtering them and then merge the filtered, simpler datasets.  First, we can filter the SB_ESN dataset to only include the information that we need. I'm using SB_ESN because it has the ColdWar vairable in it, which we need to answer question 3. 
+ 
+ To answer our question, we need to know the family benefits for each country in 2021, the most recent year they have data. So, we can filter the SB_ESN dataset to only include the rows for 2021 and FAM. Since we are filtering two of the keys, the resulting dataset will have only one key (geo). 
+ 
+```{r}
+#| echo: true
+
+SB_FAM <- SB_ESN %>% filter(time=="2021", spdeps=="FAM")
+```
+ 
+In the same way, we onlly need GDP for 2021, so we can filter the GDP database to only include the rows for 2021. (I wouldn't use GDP_ESN because it duplicates the ESNames variables we already have from SB_ESN.) I'm also using select to choose only the variables that we need and using rename to rename the values variable to GDP, since we already have a values in the SB_FAM dataset, but that values has different values and a different meaning (it's the family spending)
+
+
+
+```{r}
+#| echo: true
+
+GDP_2021 <- GDP %>% filter(time=="2021") %>% 
+  select(geo, values) %>% 
+  rename(GDP = values)
+```
+
+Now we have two datasets that have only one key (geo) and we can merge them using left_join.
+
+```{r}
+#| echo: true
+
+GDP_SB_FAM <- GDP_2021 %>% 
+  left_join(SB_FAM, by = "geo")
+
+head(GDP_SB_FAM)
+```
+
+Your new dataset GDP_SB_FAM has the information you need to answer question 3.
+
+## Elegant but Harder to Understand Method
+
+It is possible to merge the GDP and SB datasets without filtering them first. This is a more elegant solution, but it is harder to understand and verify that you are doing what you think you are doing.  The key to doing this is to use the by argument in left_join to specify the variables that you are joining on.
+
+```{r}
+#| echo: true
+
+SB_GDP <- SB_ESN %>% 
+  left_join(GDP, by = c("geo", "time"))
+
+head(SB_GDP)
+```
+
+In order to look at this complex dataset and see if it is what you think it is, you can filter it to only include the rows for 2021 and FAM.
+
+```{r}
+#| echo: true
+
+SB_GDP %>% filter(time=="2021", spdeps=="FAM")
+```
+
+We can play around with filtering in different ways and looking at the dataset to verify that it has joined the dataset in the way that we expect. The new dataset has the same keys as the original SB dataset, so we can use the same methods to filter it and look at it. Since GDP just had two keys, all of the rows that have the same value for geo and time will have the same GDP information for that country and year. 
+
+```{r}
+#| echo: true
+
+SB_GDP %>% filter(geo=="ES", time=="2019")
+```
+
+One thing that we can see is that we have a number of variables that we don't need and we have some variables with suffixes .x and .y. This is because the variables in the two datasets had the same name, so R added the suffixes to distinguish them. We can use select to choose only the variables that we need and rename to rename the variables that have suffixes. Most important, the values variable from the GDP dataset values.y must be renamed to GDP, because we already have a values variable in the SB dataset (values.x) and it has a different meaning. 
+
+```{r}
+#| echo: true
+
+SB_GDP <- SB_GDP %>% 
+  select(geo, time, values.y, spdeps, countryname, Membership, EA20, AccYr, ColdWar) %>% 
+  rename(GDP = values.y)
+
+head(SB_GDP)
+```
+
+Now we can use this dataset to answer question 3. We'll still have to filter it when we use it in order to make our plots and answer the question.
+
+## Inelegant vs. Elegant
+
+Both of these methods work to answer the question. So, you should use the one that makes sense to you. For me, the advante of the inelegant method of filtering and then merging is that it is easier for me to verify that I am doing what I think I am doing. I can look at the filtered datasets and see that they are what I expect. 
+
+The advantage of the elegant method of merging and then filtering is that it is more efficient and doesn't require you to create new datasets. I can just use the complex, new dataset and filter it for what I need when I need it. 
+
+If I were going to go on and make plots for all of the different kinds of social benefits or different combinations of years over time, then the elegant way would be a lot faster. The inelegant way would still work, but I'd have to go back and step by step make the new datasets for each  new plot.
+
+
+## Homework
+
+For each question, create a figure that explores the question and write a brief explanation of what you see. Clearly label your plots. Submit the .qmd file and the .html file to Canvas. 
+
+1. Do countries who joined the EU earlier tend to be wealthier or poorer than those who joined later? Create a plot that shows the relationship. 
+
+```{r}
+#| echo: true
+#| 
+```
+
+
+2. Do former communist countries spend more or less on social benefits for the old and sick than other countries? Create a plot that shows the relationship.(spdeps in SB has OLD and SICK)
+
+3. Do wealthier countries in the EU spend more on social benefits for families (FAM) than poorer countries? Create a plot that shows the relationship.

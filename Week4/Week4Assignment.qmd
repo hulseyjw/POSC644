@@ -1,0 +1,36 @@
+---
+title: "Week 4 Assignment: Exploring a Eurostat Dataset"
+format: html
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+
+## Week 4 Homework Assignment
+
+Your assignment is to explore a dataset from Eurostat. You can choose any dataset you like, but it must be from Eurostat. Each student needs to have a unique dataset.  Enter your dataset choice on this Google Sheet <https://docs.google.com/spreadsheets/d/1WAL5nTDoqaGXqTQ02mCIpt-BDZq-h1suOjf94Dv7ves/edit?usp=sharing> . I would recommend that you choose a dataset that is at the country level rather than at one of the NUTS levels. There is quite a bit of variety in complexity, so you are allowed to change your mind after you've signed up for a dataset. You just can't use the same as someone else. 
+
+This is a first draft of your midterm. On the midterm, each student will work on their own dataset of their choice. You can use the one you choose for this week. 
+
+
+
+1. Find the dataset on Eurostat. <https://ec.europa.eu/eurostat/web/main/data/database> . Note the "M" that links to the documentation (often quite confusing)
+
+2. Load the dataset into R. using get_eurostat_data()
+
+3. Get the DSD for the dataset using get_eurostat_dsd()
+
+4. Explore the dataset. What are the variables? What are the observations? What are the units of observation? Here, you should use filter() and summary() to look at the dataset from different perspectives. You should also click on the dataset in your environment in order to look through it. 
+
+5. Write up an explanation of the dataset for your peers. What is the dataset about? What are the variables? What are the units of observation? What are the possible values for the variables? What information do you have to provide in order to define one unique observation?
+
+6. Create three plots that highlight different aspects of the dataset. These can be bar plots, scatter plots, line plots, dot plots or chloropleths. You might consider exploring time, different countries, different measures. It just depends on your dataset. 
+
+7. Answer all of these questions by editing this document. At the end, render it to HTML, then print that HTML to a PDF. You'll submit the .pdf and .qmd to a discussion board on Canvas, so that your peers can see your work and learn from it.
+

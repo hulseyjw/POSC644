@@ -1,0 +1,138 @@
+---
+title: "Week 4: Using Eurostat Documentation and Getting to Know your Data"
+author: "John Hulsey"
+format: html
+---
+
+## Approaching a New Dataset
+
+Whenever we start using a new dataset, we need to explore the dataset in order to understant how it it is structured and what the variables mean.  
+
+This work will be a combination of reading the documentation and looking at the data itself.
+
+
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+## Finding Eurostat Datasets
+
+The Eurostat API has a lot of datasets. You can find them by going to the Eurostat website and looking at the datasets there.<https://ec.europa.eu/eurostat/web/main/data/database> Here you can find the code for the dataset as well as links to the manual. 
+
+## Example
+
+This is an example of how you approach a new dataset.  We will be using the Eurostat dataset on  immigration. 
+
+
+```{r}
+#| echo: TRUE
+
+
+IMS <- get_eurostat_data("migr_imm5prv")
+ESNames <-read_csv('https://raw.githubusercontent.com/hulseyjw/POSC644/refs/heads/main/Week3/ESNames.csv', col_types = "ffffnf")
+
+
+IMS <- get_eurostat_data("env_ac_co2fp")
+dsd <- get_eurostat_dsd("env_ac_co2fp")
+
+
+```
+
+
+
+## Getting information about the variables in the dataset.
+
+restatapi has a function that will get the data structure definition (dsd) for a dataset. This will tell you what the variables are and what values they contain.
+
+
+```{r}
+#| echo: TRUE
+dsd <- get_eurostat_dsd("migr_imm5prv")
+```
+
+## The DSD
+
+The DSD is a list of variables in the dataset. Each variable has a name, a description, and a list of possible values. 
+
+```{r}
+dsd
+```
+
+This dataset shows the number of people who migrated from a partner country to destination country (geo)
+
+## Almost all Eurostat data combines multiple measuresinto one long dataset, so we need to filter the data to get the measure we want. It is also a great way to explore the dataset. 
+
+Let's see what we get when we show the total for gender, for 15-74 year olds, for 2020, for Austria.
+
+
+```{r}
+#| echo: TRUE
+
+IMS %>% 
+  filter(sex=="T", age=="Y15-64",  time=="2022", geo=="AT", agedef=="COMPLET") 
+```
+This set of filters shows us all of the countries "partners" from which immigrants came to Austria in 2022 an how many came from that country or group of countries. 
+
+## Different Angles
+
+By filtering the data in different ways, you can get different perspectives on the data. This is very important for exploring your data and making sure that you understand how the dataset is structured and what you are using for your analysis. 
+
+##
+
+```{r}
+#| echo: TRUE
+
+IMS %>% 
+  filter(sex=="T", age=="Y15-64",  time=="2022", partner=="BA", agedef=="COMPLET") 
+```
+
+This shows the destinations for migrants from Bosnia in 2022. But why are there only 12 rows? If we look through the documentation, we can see that countries use two different ways of calculating age, whether someone has completed the year or will reach that year in the year in question.
+
+```{r}
+#| echo: TRUE
+
+IMS %>% 
+  filter(sex=="T", age=="Y15-64",  time=="2022", partner=="BA", agedef=="REACH") 
+```
+
+Switching the age definition to "REACH" gives us the rest of the data. We probably don't care about this difference, so we can just leave agedef out of our filter and get all of the data.
+
+##
+
+```{r}
+#| echo: TRUE
+
+IMS %>% 
+  filter(sex=="T", age=="Y15-64",  time=="2022", partner=="BA") 
+```
+
+So, now we have 22 countries, but there are 27 countries in the EU. What are the other countries?
+
+##
+
+Here we look at all of the partner countries from which people migrated to Cyprus in 2022. Now, we can see that Cyprus does not report by individual country, but just whether the migrants are from the EU, the EFTA
+
+```{r}
+#| echo: TRUE
+
+IMS %>% 
+  filter(sex=="T", age=="Y15-64",  time=="2022", geo=="CY") 
+```
+
+## Looking at variables
+
+Any time we want to look at a variable or column within a dataset, we can use the `$` operator to access it. 
+
+
+```{r}
+summary(IMS$age)
+```
+
+
+
+

@@ -1,0 +1,33 @@
+---
+title: "POSC 644 Midterm"
+format: html
+---
+
+### Exam Guidelines
+
+The purpose of this exam is to show what you have learned so far this semester. This is an open book, open internet exam. You can use AI to help you. 
+
+You are allowed to talk to your fellow classmates about the exam and about how you want to go about answering the questions. However, you must write your own code and write your own answers to the questions. 
+
+When you have questions for me, please use the **Midterm Questions** discussion board on Canvas. The idea is to try to make it as fair as possible for everyone. This way, all students can see the questions and the answers.
+
+For this assignment, you'll submit both the .qmd file and a pdf created by printing out the html file you create. The pdf that you submit should be clean and neat, meaning that it should not have any of the code that you used to create the html file.
+
+The exam is due to Canvas by 11:59pm on Thursday, October 17th. 
+
+### Questions
+
+For this midterm, you will use two datasets of your choice from the data available from Eurostat. For your main dataset, you are allowed to use the dataset from the Week 4 Assignment, although you may choose a different dataset if you prefer. For your second dataset, you can use any dataset from Eurostat that you like, including the datasets that your fellow students used for the Week 4 Assignment. The questions are written to be general and applicable to any of the datasets. If you believe that a question doesn't work for your dataset, just ask me and we'll work out a solution if necessary. 
+
+Each question involves coding and writing. 
+
+In general, the idea of this exam is for you to produce the best analysis that you can and make it look as good as you can with what we've learned so far. 
+
+1. Write a section describing your main dataset. Create four tables or figures that illustrate the features of your main dataset. You are free to choose how this looks. You can use tables, dot plots, scatter plots, bar plots, line plots or any other type of plot that you think is appropriate. One of your figures must be a chloropleth or thematic map. Surround your tables and figures with explanatory text that describes to a reader who hasn't looked at the data before what data is contained in the dataset and how it is organized. Clearly label your figures and explain what we should take away from them. 
+
+2. Write an analysis of the main dataset that makes an argument for the main factor that is causing differences across countries in the dataset. Possible explanations might be region (North vs. South, East vs. West), wealth or some other factor. Make one or more tables or figures to illustrate your argument. 
+
+3. Choose a second dataset from Eurostat, which may be a dataset used by a fellow student in the Week 4 assignment. Briefly describe the new dataset and create one table or figure that illustrates the data from the dataset that you are using.
+
+4. Write an analysis of the relationship between a variable from your main dataset and a variable from your second dataset. Join the two datasets and make a figure that shows the relationship between the two variables. Write a summary of why you think the two variables are related and what we should learn from your analysis. 
+

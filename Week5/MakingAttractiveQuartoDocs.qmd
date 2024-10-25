@@ -1,0 +1,216 @@
+---
+title: "Making quarto documents look better"
+author: "John Hulsey"
+format: html
+bibliography: references.bib
+---
+
+We've been working with Quarto documents and their associated R code chunks all semester. The documents we've created have been a bit messy, but we can also produce final documents that look much better. So, we'll take a look at some of the options.
+
+## YAML and Types of Documents
+
+You've already seen that we can produce several kinds of documents with Quarto. We've produced pdf and html documents as well as slides. We can also produce Word documents, PowerPoint slide decks and pdf slides. The way that you tell Quarto what kind of document you want is by using the YAML header at the top of the document. By changing what comes after the 'format' line in the YAML header, you can change the kind of document that Quarto produces. docx produce a word document, pptx produces a PowerPoint slide deck, and pdf produces a pdf document. For presentations, you can use ioslides, beamer, pptx, or revealjs to make html slides. It is usually better to draft your work using html or revealjs because they render faster, but you can switch to one of the other formats later. Once you generate your pptx or docx, you can then edit them in Powerpoint or Word. Just be sure to save them under a different name so that you don't overwrite them when you render your document again.
+
+## Markdown formatting
+
+Markdown is a simple way to format text. You can use it to create headers, lists, and links. You can also use it to create tables and to format text. For example, you can make text **bold** or *italic*.
+
+-   You can make bulleted lists.
+
+-   Just make sure to leave a space between each item.
+
+1.  You can make numbered lists.
+
+2.  They also need a space.
+
+## Chunk Options
+
+You may have noticed **#\| include: false** or **#\| echo: false** in some of the code chunks. These are chunk options that tell Quarto whether or not to include the code or the results in the final document. **#\| echo: false** will hide your code from the final document but keep the results.**#\| echo: true** will show the code and the results. **#\| include: false** will hide both the code and the results, including warnings. In both of these cases, the code is still run, it just may not be shown if set to **false**. For example, you probably don't want to show the code that you used to load the libraries, and in a final document, you wouldn't the information printed by the library commands either. So, you'd use **#\| include: false** to hide that information.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+```
+
+You can also use **#\| eval: false** to tell Quarto not to run the code. This can be useful if you want to show the code that you used to generate a plot, but you don't want to show the plot itself. You also might use this if you've created a plot, but that you don't want to use that plot for the final document. However, you don't want to delete the code.
+
+# We can make headings
+
+## And subheadings
+
+### And subsubheadings
+
+There is also integration with Zotero through RStudio. @gavric2023This allows you to insert citations from your Zotero library of sources and then automatically cite them in your work. [@limani2023; @paxton2003; @hulsey2010; @mujkic2008]
+
+```{r}
+#| include: FALSE
+
+
+EUEduc <- get_eurostat_data("edat_lfse_03")
+ESNames <-read_csv('https://raw.githubusercontent.com/hulseyjw/POSC644/refs/heads/main/Week3/ESNames.csv', col_types = "ffffnf")
+
+```
+
+```{r}
+#| include: false
+EUEduc_ESN <- EUEduc %>% # specifiies that we are storing the result of these steps back in EUEduc, which is a little dangerous
+  left_join(ESNames, by=c("geo"="CODE"))# left join keeps all of the observations from EUEduc and adds the columns from ESNames that match (but not those from ESNames that don't match). It specifies that we're joining based on the "geo" and "code" variables.
+
+head(EUEduc_ESN)
+```
+
+```{r}
+#| include: false
+
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" # this creates a variable with information about the projection we want our map to be. 
+
+cntrys <- giscoR::gisco_get_countries( # this function gets the country-level maps from GISCO
+    year = "2020",
+    resolution = "3",
+    region = c("Europe", "Asia")
+) |>
+    sf::st_transform(crsLONGLAT) # this function transforms our new shape file into the projection we want.
+
+#names(cntrys)
+
+#plot(sf::st_geometry(cntrys)) # this plots the shape file. 
+```
+
+```{r}
+#| include: false
+
+EUEduc_ESN_M <- EUEduc_ESN %>% filter(time == 2021, age == "Y25-64", isced11 == "ED5-8", sex == "T") %>%  mutate(Membership = recode(Membership, "EUMember_2020" = "EU", "EFTA" = "EFTA", "EU_Candidate" = "Candidate"))
+
+cntrys_Educ <- cntrys %>%
+  left_join(EUEduc_ESN_M, by=c("CNTR_ID"="geo"))
+
+
+head(cntrys_Educ)
+
+
+```
+
+Usually, in our final documents, we only want to show figures and tables that we have formatted with kable to make them look nice.
+
+## Figures
+
+```{r}
+#| include: false
+
+
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(
+    sf::st_polygon(
+        list(
+            cbind(
+                c(
+                    xmin,
+                    xmax,
+                    xmax,
+                    xmin,
+                    xmin
+                ),
+                c(
+                    ymin,
+                    ymin,
+                    ymax,
+                    ymax,
+                    ymin
+                )
+            )
+        )
+    ), crs = 4326
+)
+
+lambert_bbox <- sf::st_transform(
+    bbox,
+    crs = crs_lambert
+)
+
+bb <- sf::st_bbox(lambert_bbox)
+
+```
+
+In our figures, we can either have the titles and captions in the text, in the options for the code chunk directly built into the figure. If we put them in the code chunk, we can use the **fig.cap** option to specify the caption. Here is an example where the title is just a heading in the text and the caption is written using **fig.cap** in the code chunk.
+
+### European Countries' Relationship to the EU
+
+```{r}
+#| echo: false
+#| fig-cap: "Source: Eurostat and GISCO"
+
+cntrys_Educ %>% 
+  ggplot() +
+  geom_sf(data = cntrys_Educ,
+        mapping = aes(
+            fill = Membership
+        ),
+        color = "gray",
+        size = 0.15
+    ) +
+    coord_sf(
+        crs = crs_lambert,
+        xlim = c(bb["xmin"], bb["xmax"]),
+        ylim = c(bb["ymin"], bb["ymax"]),
+    ) +
+  scale_fill_brewer(palette = "Dark2", labels = c("EU", "EFTA", "Candidate", "Other"),
+        na.value = "grey80") + 
+  theme_minimal()
+  
+```
+
+Alternatively, we put the title and the caption in the labels for the image.
+
+```{r}
+#| echo: false
+#| 
+cntrys_Educ %>% 
+  ggplot() +
+  geom_sf(data = cntrys_Educ,
+        mapping = aes(
+            fill = values
+        ),
+        color = "white",
+        size = .15
+    ) +
+    coord_sf(
+        crs = crs_lambert,
+        xlim = c(bb["xmin"], bb["xmax"]),
+        ylim = c(bb["ymin"], bb["ymax"]),
+    )  +
+    scale_fill_gradientn(
+        name = "College Education (pct)",
+        colors = brewer.pal(9, "Blues"),
+        na.value = "grey80"
+    ) + labs(title="College Education in Europe", caption="Source: Eurostat and GISCO")+
+  theme_minimal()
+```
+
+The advantage to to putting the title and caption outside of the figure itself is that it is easier to adapt the formatting to the rest of your document, particularly if you are saving it as a word document and are going to finalize formatting there. The advantage to putting the title and caption in the figure itself is that, when someone copies and pastes from your website or document, the title and caption will be included.
+
+## Tables
+
+Remember that we can also make summary tables and use the **kable** package to better format those tables.
+
+```{r}
+#| echo: false
+
+EUEduc_ESN_M %>% 
+  filter(time == 2021, age == "Y25-64", isced11 == "ED5-8", !is.na(ColdWar)) %>%
+  mutate(ColdWar = recode(ColdWar, "NATO" = "Former NATO Countries", "WP" = "Former Warsaw Pact Countries", "Neutral" = "Neutral Countries", "Yugo" = "Former Countries of Yugoslavia")) %>%
+  group_by(ColdWar) %>%
+  summarise(College = mean(values, na.rm = TRUE)) %>%
+  kable(caption = "College Education in Europe by Cold War Status", format = "html", col.names = c("Cold War Status", "College Education (pct)"), digits=1)
+```
