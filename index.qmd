@@ -3,7 +3,7 @@ title: "POSC 644 Data Visualization and Analysis for Policy Professionals"
 format: html
 ---
 
-# POSC 644 Data Visualization and Analysis for Policy Professionals. 
+
 
 ## Web Pages
 
