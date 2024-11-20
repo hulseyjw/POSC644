@@ -1,5 +1,5 @@
 ---
-title: "Week 7"
+title: "POSC 644 Data Visualization and Analysis for Policy Professionals"
 format: html
 ---
 
@@ -7,4 +7,4 @@ format: html
 
 ## Web Pages
 
-[Annika Anderson](https://hulseyjw.github.io/POSC644/Websites/Annika/What is this policy area about_page(Page).html)
+[Annika Anderson](https://hulseyjw.github.io/POSC644/Websites/Annika/Annika.html)
