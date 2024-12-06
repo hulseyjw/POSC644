@@ -1,0 +1,179 @@
+---
+title: "Why should I care?"
+author: "Annika Anderson"
+format: html
+editor: visual
+---
+
+## Trust in Institutions
+
+![](27-flags-post-brexit-european-260nw-1618613014.webp)
+
+In order for democracy to operate at the national or even supranational level, the beneficiaries of the government have to trust that the government is doing work in the best interest of the people they are serving. As soon as a democratic government loses the trust of the citizens nothing that the EU or a member state government will be effective because people will not follow the new laws that have been made.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(RColorBrewer)
+library(dplyr)
+library(eurostat)
+library(ggplot2)
+library(kableExtra)
+library(gtable)
+library(haven)
+```
+
+```{r}
+#| include: false
+TIPS <- get_eurostat_data ("ilc_pw03b")
+```
+
+```{r}
+#| include: false
+dsd <- get_eurostat_dsd ("ilc_pw03b")
+```
+
+```{r}
+#| echo: false
+
+country_lookup <- data.frame(
+  geo = c("AT", "FR", "DE", "ES", "BE", "BG", "CH", "CY", "CZ", "DK", "EE", "EL", "EU27_2020", 
+          "FI", "HR", "HU", "IE", "IS", "IT", "LT", "LU", "LV", "ME", "MK", "MT", "NL", "NO", 
+          "PL", "RO", "RS", "SE", "SI", "SK", "TR", "UK"), 
+  country = c("Austria", "France", "Germany", "Spain", "Belgium", "Bulgaria", "Switzerland", 
+              "Cyprus", "Czechia", "Denmark", "Estonia", "Greece", "EU", "Finland", "Croatia", 
+              "Hungary", "Ireland", "Iceland", "Italy", "Lithuania", "Luxembourg", "Latvia", 
+              "Montenegro", "N. Macedonia", "Malta", "Netherlands", "Norway", "Poland", "Romania", 
+              "Serbia", "Sweden", "Slovenia", "Slovakia", "Turkey", "United Kingdom")
+)
+
+TIPS %>%
+  filter(domain == "POLIT", 
+         isced11 %in% c("ED0-2", "ED5_6"), 
+         sex == "T", 
+         age == "Y35-49", 
+         statinfo == "AVG", 
+         unit == "RTG") %>%
+  mutate(isced11 = recode(isced11, 
+                          "ED0-2" = "Primary and Secondary Education Only", 
+                          "ED5_6" = "Bachelor's Degree or Equivalent")) %>%
+ 
+  left_join(country_lookup, by = "geo") %>%
+
+  filter(!is.na(country)) %>%
+  ggplot(aes(x = time, y = values, fill = isced11)) +
+  geom_bar(stat = "identity", position = "dodge") + 
+  facet_wrap(~ country) + 
+  labs(
+    title = "Trust in Political Institutions within the Ages of 35-49 Based on Education",
+    color = "Education Level"
+  ) +
+  theme_minimal() + 
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.x = element_blank(),
+    strip.text = element_text(size = 6)
+  ) +
+  guides(fill = guide_legend(title = "Level of Education"))
+
+
+```
+
+This visualization shows at the member state level how much trust citizens have in their national political institutions in the age group of 35-49 years old. The two bars in each country show two different levels of education, the pink being people with only primary or secondary education, and the blue being people with a bachelor's degree or an equivalent degree. Overall, people with a higher level of education tend to have more trust in the government, which is not surprising. The higher level of education you obtain the more knowledge you are exposed to, ensuring you can make informed decisions in elections because you understand the governmental framework in which your country has set up. These numbers can also be an indicator of how these citizens feel about the trust they have in the EU institutions.
+
+```{r}
+#| include: false
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+cntrys <- giscoR::gisco_get_countries(
+    year = "2020",
+    resolution = "3",
+    region = c("Europe")
+) |>
+    sf::st_transform(crsLONGLAT)
+plot(sf::st_geometry(cntrys))
+```
+
+```{r}
+#| include: false
+summary(cntrys)
+```
+
+```{r}
+#| include: false
+TIPS <- TIPS %>% 
+  filter(sex == "T" , isced11 == "ED5_6", statinfo=="AVG" , domain=="POLIT" , age == "Y35-49")
+cntrys_TIPS <- cntrys %>%
+  left_join(TIPS, by=c("CNTR_ID"="geo"))
+
+head(cntrys)
+```
+
+```{r}
+#| include: false 
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(
+    sf::st_polygon(
+        list(
+            cbind(
+                c(
+                    xmin,
+                    xmax,
+                    xmax,
+                    xmin,
+                    xmin
+                ),
+                c(
+                    ymin,
+                    ymin,
+                    ymax,
+                    ymax,
+                    ymin
+                )
+            )
+        )
+    ), crs = 4326
+)
+
+lambert_bbox <- sf::st_transform(
+    bbox,
+    crs = crs_lambert
+)
+
+bb <- sf::st_bbox(lambert_bbox)
+```
+
+```{r}
+#| echo: false
+cntrys_TIPS%>%
+  ggplot() +
+  geom_sf(data = cntrys_TIPS,
+        mapping = aes(
+            fill = values
+        ),
+        color = "white",
+        size = .15
+    ) +
+    coord_sf(
+        crs = crs_lambert,
+        xlim = c(bb["xmin"], bb["xmax"]),
+        ylim = c(bb["ymin"], bb["ymax"]),
+    )+ 
+  labs(title = "Trust in Political Institutions Among Bachelor’s Degree Holders")+
+  theme_minimal()+
+   scale_fill_gradientn(
+        colors = brewer.pal(9, "Blues"),
+        na.value = "grey80"
+    )
+```
+
+This map displays the level of trust that European countries have in their national political institutions. The darker-shaded countries are the member states with higher trust and the lighter stage is lower trust. This data set shows that the countries with a higher level of education tend to have a greater trust in the governments, Sweden and Norway being two of the highest. Trust that the government is working in your best interest is foundational for a strong democracy, without trust democratic societies would not be able to function as they do.

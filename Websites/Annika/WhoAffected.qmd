@@ -1,0 +1,115 @@
+---
+title: "Who is affected"
+author: "Annika Anderson"
+format: html
+editor: visual
+---
+
+## Let's Compare
+
+![](eu-flag_yellow.png)
+
+All of the variables that have been discussed are related to each other. Trust, citizenship, and democracy go hand in hand, and each is important to the functioning of the others. Strengthening these pillars is crucial for fostering unity and ensuring the EU's democratic and civic framework continues to thrive.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(RColorBrewer)
+library(dplyr)
+library(eurostat)
+library(ggplot2)
+library(kableExtra)
+library(gtable)
+library(haven)
+```
+
+```{r}
+#| include: false
+CTZ <- get_eurostat_data ("ilc_scp19")
+```
+
+```{r}
+#| include: false
+dsd <- get_eurostat_dsd("ilc_scp19")
+```
+
+```{r}
+#| include: false
+CD <- read_dta ("ZA8759_v1-0-0.dta") 
+```
+
+```{r}
+#| include: false
+CD_direction <- CD %>% 
+  select(isocntry, q2) %>% 
+  mutate(q2L = as_factor(q2))
+  
+head(CD_direction)
+```
+
+```{r}
+#| include: false
+summary(CD_direction$q2L)
+summary(CD_direction$q2)
+```
+
+```{r}
+#| include: false
+CD_directionRec <- CD_direction %>%
+  rename(geo = isocntry) %>% 
+  mutate(VeryWellInformed = q2L %in% c("Very well informed"), 
+         FairlyWellInformed = q2L %in% c("Fairly well informed"), 
+         NotVeryWellInformed = q2L %in% c("Not very well informed"), 
+         NotAtAllInformed = q2L %in% c("Not informed at all")) 
+```
+
+```{r}
+#| include: false
+CDCountryMeans <- CD_directionRec %>% 
+  group_by(geo) %>% 
+    summarise(VeryWellInformed = mean(VeryWellInformed), 
+              FairlyWellInformed = mean(FairlyWellInformed), 
+              NotVeryWellInformed = mean(NotVeryWellInformed), 
+              NotAtAllInformed = mean(NotAtAllInformed)) 
+```
+
+```{r}
+#| include: false
+CTZmeans <- CTZ %>%
+  left_join(CDCountryMeans, by = "geo")
+```
+
+```{r}
+#| echo: false
+filtered_data <- CTZmeans %>%
+  filter(time == "2022", acl00 == "AC43A" , isced11 == "ED5-8" , age == "Y_GE18" , sex == "T" , geo %in% c("AT", "BE", "BG", "CY", "CZ", "DK", "EE", "ES", "FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"))
+ggplot(filtered_data, aes(x = VeryWellInformed, y = values, label = geo)) + 
+  geom_text(check_overlap = TRUE) +
+  labs(
+    title = "Informed Citizenship v. Active Citizenship in 2022 (Bachelor Degree Holders)",
+    x = "Very Well Informed", 
+    y = "Active Citizenship"
+  ) + 
+  theme_minimal()
+```
+
+Here shows that active citizenship and how well-informed people feel about citizenship are correlated among Bachelor's degree holders. The countries in the upper right quadrant are both well-informed and active in citizenship, and the counties in the bottom left are both not very active and not very well-informed in their citizenship. It is not surprising that there are more countries on the right of the graph because these highly educated people tend to be active and well-informed about their citizenship.
+
+```{r}
+#| echo: false
+filtered_data <- CTZmeans %>%
+  filter(time == "2022", acl00 == "AC43A" , isced11 == "ED3_4" , age == "Y_GE18" , sex == "T" , geo %in% c("AT", "BE", "BG", "CY", "CZ", "DK", "EE", "ES", "FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"))
+ggplot(filtered_data, aes(x = NotAtAllInformed, y = values, label = geo)) + 
+  geom_text(check_overlap = TRUE) +
+  labs(
+    title = " Less Informed Citizenship v. Active Citizenship in 2022 (High School Education)",
+    x = "Not At All Informed", 
+    y = "Active Citizenship"
+  ) + 
+  theme_minimal()
+```
+
+This visualization shows the relationship between active citizenship and people who feel they are not informed about their citizenship rights at all among people who have a high school education. As shown by this graph, the people who feel that they are not at all informed about their citizenship are not active participants in democracy. Luxembourg is unique in that there is a high level of active citizenship disputes the people feel like they are not informed about their citizenship at all. This scatter plot shows how the level of education you have affects how active you are in your citizenship and how well-informed you are. The higher level of education you have, the more active and well-informed you are about citizenship. Education gives you the power and tools to cast well-informed votes, hold trust in government institutions, and be an active citizen in your community.

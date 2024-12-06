@@ -1,0 +1,110 @@
+---
+title: "What is this policy area about?"
+author: "Annika Anderson"
+format: html
+editor: visual
+---
+
+## Active Citizenship in the EU
+
+Being a citizen of the EU means many different things to the 448 million people who live in Europe. As an EU citizen you are entitled to the right to the free movement within the EU, to live in any member state, and standardized universal healthcare, just to name a few perks. Living within a democratic society, such as the EU, is fully reliant on the citizens participating in the democratic processes being held. Active citizenship entails the civic and political participation by citizens and the consequent acquisition and exercise of equal rights and responsibilities.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(RColorBrewer)
+library(dplyr)
+library(eurostat)
+library(ggplot2)
+library(kableExtra)
+library(gtable)
+library(haven)
+```
+
+```{r}
+#| include: false
+CTZ <- get_eurostat_data ("ilc_scp19")
+```
+
+```{r}
+#| include: false
+dsd <- get_eurostat_dsd ("ilc_scp19")
+```
+
+```{r}
+#| echo: false
+country_names <- c(
+  BE = "Belgium", BG = "Bulgaria", CZ = "Czechia", DK = "Denmark", DE = "Germany",
+  EE = "Estonia", IE = "Ireland", EL = "Greece", ES = "Spain", FR = "France",
+  HR = "Croatia", IT = "Italy", CY = "Cyprus", LV = "Latvia", LT = "Lithuania",
+  LU = "Luxembourg", HU = "Hungary", MT = "Malta", NL = "Netherlands",
+  AT = "Austria", PL = "Poland", PT = "Portugal", RO = "Romania", 
+  SI = "Slovenia", SK = "Slovakia", FI = "Finland", SE = "Sweden"
+)
+
+CTZ %>%
+  filter(sex == "T", isced11 == "ED5-8", acl00 == "AC43A", age == "Y_GE18", unit == "PC") %>%
+  filter(geo %in% names(country_names)) %>% 
+  mutate(
+    geo = fct_reorder(geo, values, .desc = TRUE),
+    country = factor(geo, levels = levels(geo), labels = country_names[levels(geo)])
+  ) %>%
+  ggplot(aes(x = country, y = values)) +
+  geom_bar(stat = "identity", fill = "cornflowerblue", color = "black") + 
+  labs(
+    title = "Active Citizenship of Tertiary-Educated Adults Aged 18+ in EU Countries",
+    x = "Country", 
+    y = "Percentage (%)"  
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  
+    legend.position = "none"
+  )
+
+
+```
+
+This visualization illustrates the level of active citizenship among college educated residents of EU member states, broken down by country. The data shows that Sweden and the Netherlands have the highest rates of participation among member states, with Bulgaria, Cyprus, Croatia, and Italy being the lowest. It is not surprising that the less educated member states have a lower rate of active citizenship.
+
+```{r}
+#| echo: false
+CTZ %>%
+  filter(
+    isced11 %in% c("ED0-2", "ED3_4", "ED5-8"),  
+    acl00 == "AC43A", 
+    age == "Y_GE18",   
+    sex == "T",        
+    geo %in% names(country_names)  
+  ) %>%
+  mutate(
+    geo = factor(geo, levels = names(country_names), labels = country_names),  
+    isced11 = recode(isced11, 
+                     "ED0-2" = "Less than Primary and Secondary Education",
+                     "ED3_4" = "Primary and Secondary Education Only", 
+                     "ED5-8" = "Bachelor's Degree or Equivalent")
+  ) %>%
+  ggplot(aes(x = time, y = values, fill = isced11)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ geo) +  
+  labs(
+    title = "Active Citizenship by Education Level (Aged 18+)",
+    fill = "Education Level"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.x = element_blank(),  
+    axis.ticks.x = element_blank(),
+    strip.text = element_text(size = 7)  # Reduce font size for facet labels
+  )
+
+
+```
+
+Here shows the different levels of active citizenship by education levels in EU countries. Generally, the member states with higher educated individuals, tend to have higher levels of active citizenship across the different education levels. Strong and stable democracies tend to have high levels of citizenship engagement and political efficacy. Overall, the EU has very average engagement leading to a relatively strong and stable supranational democracy.
+
+![](080f3aa735d1bd3f0559f4dc20bf8197.jpg){width="375"}

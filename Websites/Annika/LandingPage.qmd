@@ -1,0 +1,32 @@
+---
+title: "Website"
+author: "Annika Anderson"
+format: html
+editor: visual
+---
+
+# European Citizenship and Democracy
+
+Welcome! This website explores how the citizens interact with democracy in the European Union (EU). The EU was founded on the principle and value of transparency of democracy. In order to even be considered as a candidate EU country, the regime in your country has to be a democracy. Democracy in the EU is very important, but here we will explore how important it is to EU citizens and how they feel those democratic values are being portrayed in each member state. The EU's commitment to these values ensures that the voices of citizens are heard, fostering a system where the government is accountable, inclusive, and based on the rule of law. Through this framework, the EU aims to strengthen democratic practices across its member states, ensuring that power remains with the people.
+
+![](European_Union_Flags_2a.jpg)
+
+For democracy to function efficiently, citizens have to have trust in the governmental institutions and politicians that they elect into office. Citizens have to trust the government will make decisions in the best interest of the citizens and will do so transparently and legitimately. Throughout this website, we will explore the trust in government institutions, the rights of an EU citizen, and how people interact with the principle of democracy and accountability in the EU.
+
+[What is this policy area about?](PolicyAbout.html)
+
+[Why should I care?](WhyCare.html)
+
+[What does this have to do with the EU?](WithEU.html)
+
+[Who is effected?](WhoAffected.html)
+
+### Works Cited
+
+1.  “Key Facts and Figures \| European Union.” https://european-union.europa.eu/principles-countries-history/facts-and-figures-european-union_en (November 28, 2024).
+2.  “Active Citizenship - European Commission.” https://home-affairs.ec.europa.eu/networks/european-migration-network-emn/emn-asylum-and-migration-glossary/glossary/active-citizenship_en (November 28, 2024).
+3.  “Page Header 28 Flags European Union Stock Photo 262619537.” *Shutterstock*. https://www.shutterstock.com/image-photo/page-header-28-flags-european-union-262619537 (November 28, 2024).
+4.  “Pin on Für Dich.” *Pinterest*. https://uk.pinterest.com/pin/12-fun-things-to-do-in-brussels-with-2-day-itinerary--140596819603777807/ (November 28, 2024).
+5.  “European Flags Flying in Front of the Berlaymont \| European Flags, European, The European Union.” *Pinterest*. https://www.pinterest.com/pin/european-flags-flying-in-front-of-the-berlaymont--60587557477262226/ (November 28, 2024).
+6.  “Pin on אמנות.” *Pinterest*. https://es.pinterest.com/pin/578360777195353967/ (November 28, 2024).
+7.  “Europe Direct \| Libraries Ireland.” https://www.librariesireland.ie/services/europe-direct (November 28, 2024).

@@ -1,0 +1,69 @@
+---
+title: "What does this have to do with the EU?"
+author: "Annika Anderson"
+format: html
+editor: visual
+---
+
+## Rights as an EU citizen
+
+There are many upsides to living in a democratic society. Some certain rights and freedoms come with living in a democracy. For example, the freedom of speech and the right to vote are both things that are important parts of democracies.
+
+Being a citizen of the EU awards you a whole other set of rights, which include the freedom of movement throughout the EU or the right to live, work, and study in an EU country. Without the public trust in the government, EU citizens would not be able awarded any of the rights that they enjoy on a daily basis.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(RColorBrewer)
+library(dplyr)
+library(eurostat)
+library(ggplot2)
+library(kableExtra)
+library(gtable)
+library(haven)
+```
+
+```{r}
+#| include: false
+CD <- read_dta ("ZA8759_v1-0-0.dta") 
+```
+
+```{r}
+#| include: false
+CD_direction <- CD %>% 
+  select(isocntry, q2) %>% 
+  mutate(q2L = as_factor(q2))
+  
+head(CD_direction)
+```
+
+```{r}
+#| include: false
+summary(CD_direction$q2L)
+summary(CD_direction$q2)
+```
+
+```{r}
+#| echo: false
+CD_direction %>%
+filter(!q2L %in% c("Don't know (DO NOT READ OUT)", "Inap. (not 1 or 2 in q1)")) %>%
+  ggplot(aes(x = isocntry, fill = q2L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Knowledge of My Rights as an EU Citizen", 
+    x = "Country", 
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "In my country...")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+Here we see the responses from each member state. This shows the percentage of respondents that are very well informed, fairly well informed, not very well informed, not informed at all, don't know, or inapt about their rights as an EU citizen.
+
+![](203c7c8c44116e8fca6d39fda6013728%20copy.jpg)
+
+In France, there are very few citizens who feel very well informed about their rights as EU citizens. On the opposite end of the spectrum, most Germans feel fairly well-informed about their rights as citizens of the EU. This graph shows the variation in education and how well-informed EU citizens are across the continent. You can see that most people feel that they are not well informed about their rights as EU citizens, but with more EU-specific education, citizens will be better informed about the rights that they are awarded.
