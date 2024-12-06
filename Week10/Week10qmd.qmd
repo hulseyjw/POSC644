@@ -1,0 +1,44 @@
+---
+title: "Week 10"
+format: revealjs
+---
+
+## The Plan
+
+- *Today* we'll have individual meetings about your websites.
+
+- *Next Wednesday* the remaining draft pages for your website will be due. You'll present your pages in groups of 5 and get feedback from me and your colleagues. 
+
+- *Wednesday December 11th* The final version of your website is due. This will also be the day of the final exam. 
+
+## Expectations for Next Wednesday. 
+
+Before class, you'll submit pdfs of your rendered html pages to Canvas discussion boards. 
+
+We will meet in groups of five, plus me.  Each person will present their website pages. Your presentation should be 5 minutes long. You'll share your screen and walk through the rendered pages you've created.  The pages should be complete, but you don't need to have the hyperlinks among the pages. Just have text where the links should be.  After each presentation the students in the group and I will ask questions and give feedback for 7 minutes.  
+
+## Final Submission of Web Pages
+
+You'll have the opportunity to revise your pages based on the feedback you receive. The final version of your pages is due on December 11th.
+
+I will host the pages on the [course website](https://hulseyjw.github.io/POSC644/). If you have succeded in getting registered for Github Education, I can help you set up your own page.  
+
+## Final Exam
+
+The final exam will take place on December 11th. It will be an online exam during the exam period.  The exam will test you about principles of data visualization, but isn't something you'll need to study for. There will be questions asking you to:
+
+- Interpret a visualization
+
+- Compare two visualizations and evaluate their strengths and weaknesses
+
+- Analyze a data question and propose a visualization to answer it
+
+## Final Exam (cont.)
+
+- Your answers will be like very short essays of a few sentences or a couple of paragraphs, depending on the question.  You'll have plenty of time for the exam. I'll provide some examples before the exam. 
+
+Questions?
+
+
+
+

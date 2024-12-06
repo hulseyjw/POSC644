@@ -1,0 +1,187 @@
+---
+title: "Week 7"
+format: html
+---
+
+## Research Design Topics
+
+Research is always about comparison. So far we've largely been comparing member states of the European Union. As we move forward with your projects, we'll be building more complex and robust comparisons. To do so, we need to get sharper and more consistent on **concepts**, **measures**, and **levels of analysis**. Next week we'll focus more on methods of comparison. 
+
+## Level of Analysis
+
+We've been focusing on countries, but policies may not primarily act on countries as a whole, or may have a differential impact on different groups, individuals or regions. Even more important, data can be organized and aggregated at different levels of analysis. 
+
+## Concepts and Conceptual Stretching
+
+Concepts are essential for comparison and therefore for research. We are saying that two things are similar or different in some way. Our comparisons are only as good as our concepts and their alignment with reality. 
+
+In order to compare, we move up the ladder of abstraction from concrete observations to more abstract concepts.
+
+## Example: Education Level
+
+For example, we examined the Eurostat dataset that examined the percentage of people with a post-secondary education. This is a concept that is relatively easy to measure and compare across countries, since it is based on formal credentials. 
+
+You may remember that Italy had a very low percentage of people with post-secondary education. This is driven by the fact that many more students drop out of university in Italy than in Germany. As a result, the way that the data is conceptualized and collected is exaggerating the difference between the two countries.
+
+## Common Levels and Units of Analysis
+
+- Individuals
+- Groups
+- Sub-regions
+- Countries
+- Diads or relationships 
+- Industries
+
+## Aggregation
+
+We often deal with aggregated data, such as when we have data on countries that is the sum or mean of information in individuals. 
+
+We should always aggregate with care in order to be clear and consistent about what the new aggregations mean. 
+
+## Ecological Inference Problem
+
+Aggregations are also subject to the **ecological inference problem,** where we infer individual behavior from aggregate data. For example, we might observe that countries with more citizens born abroad have higher support for far-right parties and infer that individuals born abroad are more likely to support far-right parties. We can't evaluate this claim without individual-level data.
+
+## Individual Level Data
+
+One source of data that may be helpful to you in your projects is the Eurobarometer survey. In order to download the data, you need to create an account on the GESIS website and then download the .dta file of the most recent 100.2 Survey from the website.  https://search.gesis.org/research_data/ZA8779. Save the .dta file into a folder for this assignment. 
+
+## Opening .dta files
+
+In order to open this kind of file, you'll need to install in haven package in R and use library() to load it. 
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+
+
+```
+
+Then, you can use the read_dta() function to read in the file. As you can see, it has a ton of observations and 521 variables. 
+
+```{r}
+#| echo: false
+
+EB <- read_dta("~/Dropbox/Teaching/EUPSAnalysisVis/GitRepo/Week7/ZA8779_v1-0-0.dta") 
+
+```
+
+## Working with Surveys
+
+National and cross-national surveys include weights, which are used to adjust the sample to be more representative of the population and to facilitate comparisons across countries. We're not going to concern ourself with this detail for now, but if you are using surveys in a professional capacity, you'll need to take account of weighting when you analyze the data. 
+
+
+## Selecting Variables
+
+The Eurobarometer survey page has information on all of the variables in the survey. Here, I've chosen one question about "the direction things are going in (your country)" and the country variable. The mutate and as_factor creates a new variable that is a factor, taking advantage of the attributes that are embedded in the .dta file to show the label for the question and the levels of the factor. 
+
+
+```{r}
+#| echo: TRUE
+
+EB_direction <- EB %>% 
+  select(isocntry, d73_1) %>% 
+  mutate(d73_1L = as_factor(d73_1))
+  
+head(EB_direction)
+
+
+```
+
+## Factor levels
+
+Now lets look at our variable. You can see that we have some choices to make.  Respondents were asked to say whether their country was going in the right direction or the wrong direction, but some said that it is neither one nor the other and some said that they didn't know. What should we do with these responses?
+
+```{r}
+#| echo: TRUE
+
+summary(EB_direction$d73_1L)
+summary(EB_direction$d73_1)
+
+
+
+
+
+```
+
+## What do do?
+
+- We could treat the spontaneous responses as missing data and exclude those observations from the analysis. 
+
+- We could treat them as separate categories that are retained in the analysis. 
+
+- We could drop don't know and treat Neither as being between right and wrong.
+
+- We could just present information on the percentage of the people who thought their country was going in the right direction and treat all of the other responses as not right. 
+
+What are the advantages and disadvantages of each of these options?
+
+## Missing Data in R
+
+If you want to exclude missing data from your analysis, you can use the filter() function to exclude observations where the variable is missing. You can also set the missing values to NA using the na_if() function. 
+
+```{r}
+#| echo: TRUE
+
+  EB_direction %>% 
+  filter(d73_1==1|d73_1==2, isocntry=="AT"|isocntry=="IT"|isocntry=="FR") %>%
+  ggplot(aes(x = isocntry, fill = d73_1L)) +
+  geom_bar(position = "fill")+
+    labs(title = "Direction of Country", x = "Country", y = "Percentage Responding")+
+    guides(fill=guide_legend(title="In my country..."))
+```
+## Retaining all categories
+
+```{r}
+#| echo: TRUE
+
+  EB_direction %>% 
+  filter(isocntry=="AT"|isocntry=="IT"|isocntry=="FR") %>%
+  ggplot(aes(x = isocntry, fill = d73_1L)) +
+  geom_bar(position = "fill")+
+    labs(title = "Direction of Country", x = "Country", y = "Percentage Responding")+
+    guides(fill=guide_legend(title="In my country..."))
+```
+
+## Comparing two categorical variables
+
+We can also compare two categorical variables. Here, I'm comparing the direction that people think their country is going with how they think the EU is going. 
+
+```{r}
+#| echo: TRUE
+
+EB %>% 
+  select(d73_1, d73_2) %>% 
+  mutate(d73_1L = as_factor(d73_1),
+         d73_2L = as_factor(d73_2)) %>%
+  mutate(d73_1L = fct_recode(d73_1L, "Right Direction (Country)" = "Things are going in the right direction",
+                             "Wrong Direction (Country)" = "Things are going in the wrong direction", 
+                             "Neither (Country)" = "Neither the one nor the other (SPONTANEOUS)", 
+                             "Don't know (Country)" = "Don't know (SPONT.)"),
+         d73_2L = fct_recode(d73_2L, "Right Direction (EU)" = "Things are going in the right direction",
+                             "Wrong Direction (EU)" = "Things are going in the wrong direction", 
+                             "Neither (EU)" = "Neither the one nor the other (SPONTANEOUS)", 
+                             "Don't know (EU)" = "Don't know (SPONT.)")) %>%
+  group_by(d73_1L, d73_2L) %>%
+  tally() %>%
+  spread(d73_1L, n) %>% 
+  kable()
+  
+
+```
+
+## Survey assignment
+
+I'm going to put you in smaller breakout rooms so that you can help one another, but everyone will do and submit their own assignments. 
+
+1. Download the Eurobarometer survey data and use read_dta() to read it into R. You'll have to save it and your script for this assignment in a folder on your computer. 
+
+2. Select two variables from the survey that interest you.  Created a bar graph for each variable that shows the percentage of respondents in each a few countries that selected each response. Explain what the variables are showing and what you would do with regard to analyzing the responses to the variable.  
+
+3. Create a frequency table that combines the two variables and shows the relationship between the responses for the two variables. 
+
+4. Submit your .qmd script as well as a pdf of the rendered output. 
+
