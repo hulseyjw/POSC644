@@ -1,6 +1,6 @@
 ---
 title: "Education and Employment in Europe, 2023"
-format: pdf
+format: html
 editor: source
 ---
 

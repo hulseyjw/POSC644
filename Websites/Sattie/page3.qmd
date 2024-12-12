@@ -30,7 +30,7 @@ library(ggplot2)
 #| warning: FALSE
 #| message: FALSE
 
-EB <- read_dta("~/Desktop/data_vis/assignment 7/ZA8779_v1-0-0.dta")
+EB <- read_dta("ZA8779_v1-0-0.dta")
 ```
 
 ```{r}
@@ -150,4 +150,4 @@ Eurostat. Education and training statistics: SDG 4.2.0 - Proportion of children 
 
 Eurostat. Labour Force Survey: Employment rates by sex, age, and educational attainment \[Dataset\]. Eurostat. https://ec.europa.eu/eurostat/web/lfs/data
 
-- [Back to Home](landing.html)
+-   [Back to Home](landing.html)
