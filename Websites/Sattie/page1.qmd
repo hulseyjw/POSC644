@@ -1,0 +1,146 @@
+---
+title: "Public Opinion using Eurobarometer"
+format: html
+editor: source
+---
+
+## What do Europeans think about the European Union?
+
+![Photo from EUNews](page1.jpeg)
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(dplyr)
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+EB <- read_dta("~/Desktop/data_vis/assignment 7/ZA8779_v1-0-0.dta")
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+#| results: 'hide'
+
+
+EB_direction <- EB %>% 
+  select(isocntry, d73_2) %>% 
+  mutate(d73_2L = as_factor(d73_2))
+  
+head(EB_direction)
+```
+
+```{r}
+#| echo: FALSE
+EB_direction %>% 
+  filter(d73_2 == 1 | d73_2 == 2) %>%
+  ggplot(aes(x = isocntry, fill = d73_2L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Direction of European Union", 
+    x = "Country", 
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "In the European Union...")) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 4) # Adjust size here
+  )
+
+
+
+```
+
+This figure illustrates the results from a 2023 Eurobarometer survey, where respondents were asked about their views on a variety of national and international issues. A notable proportion of participants indicated that they believe things are heading in the wrong direction for the European Union. This sentiment reflects widespread dissatisfaction with the EU -- could it include European policy? Financial reasons? Political issues?
+
+The visualization provides a clear representation of the varying levels of agreement across different countries, highlighting the growing discontent among European citizens.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+#| results: 'hide'
+
+EBfuture <- EB %>%
+  select(isocntry, qa12) %>%
+  mutate(qa12L = as_factor(qa12))
+head(EBfuture)
+```
+
+```{r}
+#| echo: FALSE
+EBfuture %>% 
+  ggplot(aes(x = isocntry, fill = qa12L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Future of the European Union", 
+    x = "Country", 
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "Feelings about the future of the European Union")) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 4) # Adjust size here
+  )
+
+```
+
+When asked about the future of the European Union, respondents largely responded with "fairly optimistic" or "fairly pessimistic". Fairly optimistic is okay, but not perfect.
+
+Now, let's look at levels of trust in European institutions to give more context to this issue:
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+#| results: 'hide'
+
+EB_trust <- EB %>% 
+  select(isocntry, qa6_4) %>% 
+  mutate(qa6_4L = as_factor(qa6_4))
+
+head(EB_trust)
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+library(ggplot2)
+library(scales)
+
+EB_trust %>%
+  filter(qa6_4==1 | qa6_4==2) %>%
+   ggplot(aes(x = isocntry, fill = qa6_4L)) +
+   geom_bar(position = "fill") +
+   labs(title = "Trust in EU Institutions", 
+        x = "Country", 
+        y = "Percentage Responding") +
+   guides(fill = guide_legend(title = "EU Institutions: Member State Trust")) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 4) # Adjust size here
+  )
+```
+
+This figure highlights varying levels of confidence among citizens in institutions such as the European Commission, the Council of the European Union, and the European Parliament. The data illustrates the overall trend in trust across European countries, with some nations showing higher levels of confidence, while others reflect more skepticism. This visualization provides insights into how different regions perceive the effectiveness and legitimacy of European institutions, shedding light on public sentiment towards EU governance, decision-making, and policies.
+
+Are there demographic factors that could predict who is more or less Euroskeptic? Let's find out.
+
+## *Works Cited*
+
+EU News. (2024, March 29). *Citizens will save the European Union*. https://www.eunews.it/en/2024/03/29/citizens-will-save-the-european-union/
+
+European Commission. (2023). *Eurobarometer 97: Public opinion in the European Union*. European Union. https://europa.eu/eurobarometer/surveys/detail/2023_en
+
+- [Back to Home](landing.html)

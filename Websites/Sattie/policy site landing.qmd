@@ -1,0 +1,39 @@
+---
+title: "Policy Website"
+author: "Sattie Sanderson"
+format: html
+editor: visual
+---
+
+**European Union's Involvement in the Russo-Ukraine Conflict and Impacts on EU Citizens: Temporary Protection and Public Opinion** *(landing page)*
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(ggplot2)
+```
+
+```{r}
+#| include: FALSE
+# Install and load the 'png' package
+install.packages("png", repos = "https://cran.rstudio.com/")
+library(png)
+
+# Load the PNG image file
+img <- readPNG("~/Desktop/data vis/policy website/ukraine.jpeg")
+
+# Plot the image
+plot(1:2, type="n", xlab="", ylab="", axes=FALSE)
+rasterImage(img, 1, 1, 2, 2)
+
+
+```
+
+This website seeks to use data visualizations to show the relationship between temporary protection granted by European Union (EU) Member States to Ukrainian refugees and European public opinion on the EU's involvement in the conflict. Data will be sourced from Eurobarometer, a series of public opinion surveys conducted by the European Commission, and Eurostat, a European Union-operated site that provides data on Europe. By showing the relationship between the two variables, a pattern will potentially show regional differences in public opinion on the conflict and temporary protection granted by member states.

@@ -1,0 +1,71 @@
+---
+title: "What is this policy area about?"
+author: "sattie sanderson"
+format: html
+editor: visual
+---
+
+## High education and high employment levels are indicators of a strong country.
+
+**Member states within the European Union should feel supported and stronger because of the European Union...right?**
+
+As political parties with nationalist ideologies take more and more seats within the European Parliament and dominate national elections, we begin to wonder about the *legitimacy* of the European Union. The research to determine common demographic themes within those who like and dislike the EU and its role in their lives is sparse, and this website hopes to add more context.
+
+```{r}
+#|include: FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(ggplot2)
+```
+
+```{r}
+#|include: FALSE
+EB_trust <- EB %>% 
+  select(isocntry, qa6_4) %>% 
+  mutate(qa6_4L = as_factor(qa6_4))
+
+head(EB_trust)
+
+```
+
+```{r}
+library(ggplot2)
+library(scales)
+
+EB_trust %>%
+   ggplot(aes(x = isocntry, fill = qa6_4L)) +
+   geom_bar(position = "fill") +
+   labs(title = "Trust in EU Institutions", 
+        x = "Country", 
+        y = "Percentage Responding") +
+   guides(fill = guide_legend(title = "EU Institutions: Member State Trust"))
+
+```
+
+This figure shows the levels of trust in EU institutions across countries. There is a pretty even split between
+
+```{r}
+EB_direction <- EB %>% 
+  select(isocntry, d73_1) %>% 
+  mutate(d73_1L = as_factor(d73_1))
+  
+head(EB_direction)
+```
+
+```{r}
+EB_direction %>%
+   ggplot(aes(x = isocntry, fill = d73_1L)) +
+  geom_bar(position = "fill")+
+    labs(title = "Direction of the EU", x = "Country", y = "Percentage Responding")+
+    guides(fill=guide_legend(title="In the EU..."))
+```
+
+This figure shows how the surveyed countries feel about the direction of "things" in the European Union. Are things going the right way? Are things going terribly? Somewhere in between?
+
+We can tell that a large percentage of respondents think things are going in the wrong direction. Are these people from highly educated countries, or financially strong countries? Or the opposite? Perhaps we can use data from Eurostat regarding educational attainment and employment in 2023 to see if there's a relationship.

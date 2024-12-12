@@ -1,0 +1,148 @@
+---
+title: "Education and Employment in Europe, 2023"
+format: pdf
+editor: source
+---
+
+## Euro-skepticism is on the rise in Europe. Can we figure out why?
+
+As the European Union grows with further enlargement, the need for unity becomes stronger. Without its member states understanding, trusting, and feeling confident in these institutions, the Union becomes fragmented and weak. This is especially relevant in the wake of Russia's invasion of Ukraine.
+
+Distrust in the institutions that are meant to protect citizens act as a threat to everyone involved.
+
+Is there a relationship in trust in these institutions and employment and education rates? If so, more resources should be placed into countries with lower trust levels to legitimize the EU as a policymaker.
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(ggplot2)
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+education <- get_eurostat_data(
+"sdg_04_20") %>%
+  filter(time=="2023")
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+ggplot(education, aes(x = reorder(geo, values), y = values, fill = values)) +
+  geom_bar(stat = "identity") +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +  # Gradient for percentage
+  coord_flip() +  # Flip the coordinates
+  theme_minimal() +
+  labs(
+    title = "Post-Secondary Educational Attainment in 2023",
+    x = "Percentage",
+    y = "Country",
+    fill = "Percentage"
+  )
+
+
+
+
+```
+
+This figure shows us a wide spread of post-secondary education rates throughout European countries. EU member states with the lowest rates of education include Romania (RO), Hungary (HU), Italy (IT), and Czech Republic (CZ).
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+employment <- get_eurostat_data(
+"lfsa_ergan"
+) %>%
+  filter(time=="2023", sex=="T" , citizen=="TOTAL" , age=="Y25-59")
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+# Filter the employment dataset
+employment2023 <- employment %>%
+  filter(
+    time == 2023,      
+    age == "Y25-59",   
+    citizen == "TOTAL",
+    sex == "T"        
+  )
+
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+ggplot(employment2023, aes(x = reorder(geo, values), y = values, fill = values)) +
+  geom_bar(stat = "identity") +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +  # Gradient for percentage
+  coord_flip() +  # Flip the coordinates
+  theme_minimal() +
+  labs(
+    title = "Employment Rates in 2023, ages 25-59",
+    x = "Percentage",
+    y = "Country",
+    fill = "Percentage"
+  )
+
+```
+
+Employment rates in the surveyed countries are strong, but there are still some that lag behind. Among the lowest employment rates in EU member states include Italy (IT), Greece (EL), Estonia (ES), and Romania (RO).
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+# Load dplyr for the join function
+library(dplyr)
+
+# Merge the datasets by "geo" and "time"
+merged_data <- education %>%
+  inner_join(employment2023, by = c("geo", "time" , "sex"))
+
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+# Load ggplot2 for visualization
+library(ggplot2)
+
+# Create the scatterplot with labels
+ggplot(merged_data, aes(x = values.x, y = values.y)) +
+  geom_point(color = "blue", alpha = 0.7) +  # Scatter points
+  geom_text(aes(label = geo), vjust = -0.5, size = 3.5) +  # Add labels for geo
+  labs(
+    title = "Scatterplot of Secondary Education Attainment vs. Employment (2023)",
+    x = "Education Values",
+    y = "Employment Values"
+  ) +
+  theme_minimal()
+
+
+```
+
+This scatterplot shows a positive relationship between post-secondary education and employment in European countries. This means that as education rates increase, employment rates increase.
+
+We can also see overlap in the countries with lower employment and education rates. Now, let's explore specifics about the relationships between our variables.

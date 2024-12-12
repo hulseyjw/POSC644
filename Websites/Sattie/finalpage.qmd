@@ -1,0 +1,214 @@
+---
+title: "Who is affected?"
+format: html
+editor: visual
+---
+
+## Is there a relationship?
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+library(tidyverse)
+library(haven)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(ggplot2)
+```
+
+
+![Photo from PNG Tree](finalpage.jpg)
+
+We have examined trends in trust in European institutions, satisfaction with democracy in the EU, employment rates, post-secondary educational attainment, lions, tigers, and bears, oh my!
+
+The theme in general public opinion is that the EU is perceived as a legitimate power.... about 50% of the time.
+
+Countries with lower post-secondary education rates and lower employment rates tend to be somewhere in the middle, tending to trust or not feeling very detached. The figures below seek to determine a relationship between public opinion of the EU and education and employment, respectively.
+
+The chosen gauge of public opinion in "trust in EU institutions". So, are post-secondary education rates and trust in EU institutions related?
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+EB <- read_dta("~/Desktop/data_vis/assignment 7/ZA8779_v1-0-0.dta")
+```
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+EB_trust <- EB %>% 
+  select(isocntry, qa6_4) %>% 
+  mutate(qa6_4L = as_factor(qa6_4))
+
+```
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+educationtrust <- EB_trust %>%
+
+  rename(geo = isocntry) %>% 
+
+  mutate(TendToTrust = qa6_4L %in% c("Tend to trust"), #this creates a new variable that is true if q2L is "Very well informed"
+
+        TendNotToTrust = qa6_4L %in% c("Tend not to trust")) #this creates a new variable that is true if q2L is "Fairly well informed"
+educationtrust_mean <- educationtrust %>% #starts with our dataset
+
+  group_by(geo) %>% #this defines geo as the group we care about. 
+
+    summarise(TendToTrust = mean(TendToTrust), #this calculates the mean of the variable VeryWellInformed by geo
+
+              TendNotToTrust = mean(TendNotToTrust)) #this calculates the mean of the variable FairlyWellInformed by geo
+
+```
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+education <- get_eurostat_data(
+"sdg_04_20") %>%
+  filter(time=="2023")
+```
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+educationmeans <- merge(education, educationtrust_mean, by = "geo", all = TRUE)
+
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+educationmeans_2023 <- educationmeans %>%
+  filter(sex == "T" )
+
+# Create the plot
+ggplot(data = educationmeans_2023, aes(x = values, y = TendToTrust, label = geo, fill = geo)) +
+  geom_text(size = 3) +  
+  scale_fill_viridis_d(guide = "none") +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(
+    title = "Scatterplot of Trust vs. Educational Attainment (2023)",
+    x = "Educational Attainment Rates",
+    y = "Trust"
+  ) +
+  theme_minimal()
+```
+
+This scatterplot shows a (very) weak relationship between educational attainment and trust in EU institutions, meaning that with more education there is a higher level of trust.
+
+Let's look at employment:
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+employmenttrust <- EB_trust %>%
+
+  rename(geo = isocntry) %>% 
+
+  mutate(TendToTrust = qa6_4L %in% c("Tend to trust"), #this creates a new variable that is true if q2L is "Very well informed"
+
+        TendNotToTrust = qa6_4L %in% c("Tend not to trust")) #this creates a new variable that is true if q2L is "Fairly well informed"
+employmenttrust_mean <- employmenttrust %>% #starts with our dataset
+
+  group_by(geo) %>% #this defines geo as the group we care about. 
+
+    summarise(TendToTrust = mean(TendToTrust), #this calculates the mean of the variable VeryWellInformed by geo
+
+              TendNotToTrust = mean(TendNotToTrust))
+```
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+employment <- get_eurostat_data(
+"lfsa_ergan")
+```
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+# Assuming your datasets are named 'employment' and 'employmenttrust_mean'
+# Make sure the 'geo' column exists in both datasets and has the same type.
+
+employmentmeans <- merge(employment, employmenttrust_mean, by = "geo", all = TRUE)
+
+# Explanation of parameters:
+# - `by = "geo"`: Specifies the common column to merge on.
+# - `all = TRUE`: Includes all rows from both datasets (full outer join).
+#   If you want an inner join, exclude `all` or set it to `all = FALSE`.
+#   Use `all.x = TRUE` for a left join or `all.y = TRUE` for a right join.
+
+# View the resulting dataset
+
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+library(ggplot2)
+library(dplyr)
+
+# Filter the data to only include values from 2023 and remove NA values
+employmentmeans_filtered <- employmentmeans %>%
+  filter(time == 2023, sex == "T", citizen == "TOTAL", age == "Y25-54") %>%
+  filter(!is.na(values) & !is.na(TendToTrust))  # Remove rows with NA values
+
+# Create the plot with a linear trendline
+ggplot(data = employmentmeans_filtered, aes(x = values, y = TendToTrust, label = geo, fill = geo)) +
+  geom_text(size = 3) +  
+  scale_fill_viridis_d(guide = "none") +
+  scale_y_continuous(limits = c(0, 1)) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue", linetype = "solid") +  # Linear trendline
+  labs(
+    title = "Scatterplot of Trust vs. Employment Rates",
+    x = "Employment Rates",
+    y = "Trust"
+  ) +
+  theme_minimal()
+
+
+
+                # Optional: Clean minimal theme
+
+```
+
+This scatterplot also suggests a weak positive relationship between employment rates and levels of trust. Countries with higher employment rates *could* have higher levels of trust in European institutions than fellow member states with lower employment rates.
+
+While the relationship between employment, educational attainment, and an overall positive view of the European Union is weak, it is still worth examining. The findings from these data visualizations highlight the need for the EU to address these disparities in engagement by focusing on policies that foster inclusivity and improve the lived experiences of those in lower-income or less-educated parts of Europe.
+
+## *Works Cited*
+
+Eurostat. (n.d.). *Education and training statistics: SDG 4.2.0 - Proportion of children under 5 years of age who are developmentally on track in health, learning, and psychosocial well-being, by sex* \[Dataset\]. Eurostat. https://ec.europa.eu/eurostat/web/sdg/education-and-training
+
+Eurostat. (n.d.). *Labour Force Survey: Employment rates by sex, age, and educational attainment* \[Dataset\]. Eurostat. https://ec.europa.eu/eurostat/web/lfs/data
+
+PNGTree. (n.d.). *Euroscepticism - Detail of silky flag of blue European Union (EU) flag drapery with question mark* \[Stock photo\]. PNGTree. https://pngtree.com/freebackground/euroscepticism---detail-of-silky-flag-of-blue-european-union-eu-flag-drapery-with-question-mark-photo_2302183.html
+
+- [Back to Home](landing.html)

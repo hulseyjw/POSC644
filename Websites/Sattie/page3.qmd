@@ -1,0 +1,153 @@
+---
+title: "What does this have to do with the European Union?"
+format: html
+editor: visual
+---
+
+## Europeans deserve to feel represented in the European Union's institutions.
+
+![Photo from Euronews](page3.jpg)
+
+Member states grant the European Union power to operate as a supranational entity. It is commonly known that the EU and citizens of the member states could be more connected. By pointing out trends in education and employment in member states that do not approve of how things are operating, the EU could discover ways to serve their citizens better.
+
+The figures below gauge public opinion on satisfaction with democracy in the EU and attachment to the EU, filtering out the countries that we determined have lower education and employment rates – Italy, Greece, Estonia, Hungary, and Romania.
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(ggplot2)
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+EB <- read_dta("~/Desktop/data_vis/assignment 7/ZA8779_v1-0-0.dta")
+```
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+EB_democracy <- EB %>%
+  select(isocntry, sd18b) %>%
+  mutate(sd18bL = as_factor(sd18b))
+
+
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+EB_democracy %>%
+   ggplot(aes(x = isocntry, fill = sd18bL)) +
+  geom_bar(position = "fill")+
+    labs(title = "Satisfaction with Democracy in the EU", x = "Country", y = "Percentage Responding")+
+    guides(fill=guide_legend(title="Feelings on Democracy in the EU")) +
+   theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 4) # Adjust size here
+  )
+```
+
+Let's look at country-specific responses to this question, knowing what we know about education and employment rates.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+
+# Filter out specific countries and then plot
+EB_democracy %>%
+  filter(isocntry %in% c("IT", "EL", "ES", "RO", "HU", "CZ")) %>%
+  ggplot(aes(x = isocntry, fill = sd18bL)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Satisfaction with Democracy in the EU",
+    x = "Country",
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "Democracy in the EU"))
+
+  
+```
+
+Respondents indicated that they were either 'fairly satisfied' or 'not very satisfied' with the EU’s democratic processes. The data reveals a general sense of ambivalence or mild dissatisfaction with the state of democracy within the EU, suggesting that while there is some degree of contentment, there are also notable concerns about the functioning of democratic governance across member states.
+
+```{r}
+#| include: false
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+EB_attachment <- EB %>%
+  select (isocntry , qc1_3 ) %>%
+  mutate(qc1_3L = as_factor(qc1_3 ))
+
+```
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+EB_attachment %>%
+  ggplot(aes(x = isocntry, fill = qc1_3L)) +  # Closing parenthesis added here
+  geom_bar(position = "fill") +
+  labs(
+    title = "Attachment to the European Union",
+    x = "Country",
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "Feelings of Attachment to the EU")) +
+   theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 4) # Adjust size here
+  )
+
+```
+
+There is much variation on the subject of attachment to the European Union. Let's look at our specific member states to see if there is a trend.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+
+# Filter out specific countries and then plot
+EB_attachment %>%
+  filter(isocntry %in% c("IT", "EL", "ES", "RO", "HU", "CZ")) %>%
+  ggplot(aes(x = isocntry, fill = qc1_3L))+
+  geom_bar(position = "fill") +
+  labs(
+    title = "Attachment to the European Union",
+    x = "Country",
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "Attachment Levels"))
+```
+
+This figure shows us that respondents with lower levels of employment and education reported being either 'fairly attached' or 'not very attached' to the European Union. This pattern suggests a potential disconnect between the EU and certain demographic groups. For these respondents, lower socioeconomic status might contribute to feelings of disconnection or disillusionment with the EU, possibly due to perceived barriers to access, economic insecurity, or a lack of direct benefits from EU policies.
+
+## *Works Cited*
+
+Euronews. (2024, March 4). *From gains to grumbles: Euroscepticism in the Baltic States*. Euronews. https://www.euronews.com/2024/03/04/from-gains-to-grumbles-euroscepticism-in-the-baltic-states
+
+Eurostat. Education and training statistics: SDG 4.2.0 - Proportion of children under 5 years of age who are developmentally on track in health, learning, and psychosocial well-being, by sex \[Dataset\]. Eurostat. https://ec.europa.eu/eurostat/web/sdg/education-and-training
+
+Eurostat. Labour Force Survey: Employment rates by sex, age, and educational attainment \[Dataset\]. Eurostat. https://ec.europa.eu/eurostat/web/lfs/data
+
+- [Back to Home](landing.html)

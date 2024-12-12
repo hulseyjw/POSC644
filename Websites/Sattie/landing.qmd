@@ -1,0 +1,21 @@
+---
+title: "Educational Attainment, Employment, and Public Opinion in the EU: An interdisciplinary analysis"
+format: html
+---
+
+# Are there predicting factors for positive public opinion of the European Union?
+
+![Photo from carnegiecouncil.org](eurosceptic.jpg)
+
+This website seeks to show the relationship between employment rates, educational attainment, and public opinion of the E.U. This information can be beneficial in determining the overall demographics of Euro-skeptic or distrustful Europeans, especially considering the rise of populism and nationalist ideology in Europe.
+
+This website uses data from Eurostat and Eurobarometer to create visualizations demonstrating the relationship between the variables in the hope to provide context to this ongoing issue in Europe. If there's data to show a pattern in the demographics of those who are distrustful, policy development and citizens initiatives can be created to address their grievances.
+
+-   [What do Europeans think about the European Union?](page1.html)
+-   [Euro-skepticism is on the rise in Europe](page2.html)
+-   [Europeans deserve to feel represented in the European Union's institutions](page3.html)
+-   [Is there a relationship?](finalpage.html)
+
+## *Works Cited*
+
+Carnegie Council for Ethics in International Affairs. Carnegie Council, [carnegiecouncil.org](https://carnegiecouncil.org). Accessed November 20, 2024.
