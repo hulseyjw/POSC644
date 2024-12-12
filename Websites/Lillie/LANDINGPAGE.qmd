@@ -5,7 +5,7 @@ format: html
 editor: visual
 ---
 
-![](images/EU%20MAP.jpeg)
+![](EU%20MAP.jpeg)
 
 When examining inflation rates in the European Union (EU), it is important to also examine all potential contributing factors the affects of said inflation. Inflation rates have steadily been increasing, so it is more important than ever that we examine them.
 
@@ -15,4 +15,10 @@ Next, I will examine the relationship between government debt and inflation rate
 
 I will also compare the annual average rate of inflation change between the 27 EU Member States and the 2020 Euro Area countries.
 
-\[Page Topic Name\](/Otherpagename.html)
+[Inflation Rates and The Cost of Living](/PAGE1.html)
+
+[Government Debt and Inflation Rates](/PAGE2.html)
+
+[Inflation in the Euro Area](/PAGE3.html)
+
+[Annual Average Rate of Change](/PAGE4.html)
