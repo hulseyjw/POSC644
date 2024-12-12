@@ -2,12 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Lillie Grimsley">
 
-<title>POSC 644 Data Visualization and Analysis for Policy Professionals</title>
+<title>Government Debt and Inflation Rates</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,16 +24,16 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="index_files/libs/clipboard/clipboard.min.js"></script>
-<script src="index_files/libs/quarto-html/quarto.js"></script>
-<script src="index_files/libs/quarto-html/popper.min.js"></script>
-<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="index_files/libs/quarto-html/anchor.min.js"></script>
-<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="PAGE2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="PAGE2_files/libs/quarto-html/quarto.js"></script>
+<script src="PAGE2_files/libs/quarto-html/popper.min.js"></script>
+<script src="PAGE2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="PAGE2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="PAGE2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="PAGE2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="PAGE2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="PAGE2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="PAGE2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -45,13 +46,19 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">POSC 644 Data Visualization and Analysis for Policy Professionals</h1>
+<h1 class="title">Government Debt and Inflation Rates</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Lillie Grimsley </p>
+          </div>
+  </div>
     
   
     
@@ -62,12 +69,26 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="web-pages" class="level2">
-<h2 class="anchored" data-anchor-id="web-pages">Web Pages</h2>
-<p><a href="./Websites/Annika/LandingPage.html">Annika Anderson</a></p>
-<p><a href="./Websites/Lillie/LANDINGPAGE.html">Lillie Grimsley</a></p>
-<p><a href="./Websites/Sattie/LandingPage.html">Sattie Sanderson</a></p>
-</section>
+<p>The following graph and illustration demonstrate the link between government debt and inflation rates. Most Member States tend to stay within the same region in terms of both government debt and interest rates. For the most part, Member States with low inflation rates tend to have relatively low government debt, but this is not always the case. There cannot be a clearly demonstrated causal relationship between government debt and inflation rates, but it is important to compare the two since they each have significant impacts on the economic state of a nation.</p>
+<p><img src="GOVERNMENT%20DEBT%20.jpeg" class="img-fluid"></p>
+<p><em>Source: <a href="https://www.weforum.org/stories/2019/05/european-countries-with-most-government-debt-chart/">Eurostat</a></em></p>
+<p>This chart displays the percentage of government debt to GDP ratio in EU Member States in 2023.</p>
+<p>Although not all of these countries are reported in the graph below, it is important to recognize the percentage of government debt to GDP ratio that each Member State had in 2023 before examining this debt compared to inflation rates.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="PAGE2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This graph shows the relationship between government debt and inflation rates within the 27 European Union Member States in 2023. The graph displays that there was very little correlation between government debt and interest rates in 2023.</p>
+<p>However, on average, a lower amount of government debt may be caused by inflation rates. We can see this at the first half of the graph as most Member States have low rates of both government debt and inflation rates.</p>
+<p>There will always be outliers and this is clearly exemplified through Member States such as France and Hungary. While France has a relatively low government debt, they have the highest interest rates. Comparatively, Hungary has the highest government debt but has one of the lowest interest rates among the 27 Member States.</p>
+<p>Most Member States have very similar government debt and interest rates with Hungary, France, Italy, Denmark, and Spain being outside of the norm.</p>
+<p><strong>Bibliography</strong></p>
+<p>Wood, Johnny. 2019. These EU countries have the most government debt. World Economic Forum. 8 May. <a href="https://www.weforum.org/stories/2019/05/european-countries-with-most-government-debt-chart/" class="uri">https://www.weforum.org/stories/2019/05/european-countries-with-most-government-debt-chart/</a></p>
 
 </main>
 <!-- /main column -->
@@ -106,7 +127,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -138,29 +170,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -168,7 +178,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
@@ -497,3 +507,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 </body></html>
+<script>window.backupDefine = window.define; window.define = undefined;</script>
+<script type="text/javascript" src="quarto-preview.js"></script>
+<script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+<script type="text/javascript">
+  const options = {
+    origin: "",
+    search: "",
+    inputFile: "/Users/lilliegrimsley/Desktop/WEBSITE FINAL/PAGE2.qmd",
+    isPresentation: false
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    window.QuartoPreview.init(options);
+  });
+</script>

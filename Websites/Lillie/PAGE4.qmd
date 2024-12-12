@@ -1,0 +1,102 @@
+---
+title: "Annual Average Rate of Change"
+author: Lillie Grimsley 
+format: html
+editor: visual
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(haven) 
+library(dplyr)
+library(data.table)
+library(tidyr)
+```
+
+```{r}
+#| echo: false
+
+IR <- get_eurostat_data("tec00118")
+```
+
+```{r}
+#| echo: false 
+#| include: false
+
+IRdsd <- get_eurostat_dsd("tec00118")
+```
+
+The annual average rate of change refers to the change (in percentage) of inflation rates in comparison to the same month in the previous year.
+
+By examining the average annual rate of change, we can see the evolution of interest rates. This is extremely important when studying inflation rates over time. By looking at outside factors, such as pandemics and crises, we can infer the reasoning behind changes in inflation rates.
+
+It is important to understand and consider outside factors so that we can have a more comprehensive understand of how and why inflation rates change over time.
+
+```{r}
+#| echo: false 
+
+DBT <- get_eurostat_data("gov_10dd_ggd")
+```
+
+```{r}
+#| echo: false 
+#| include: false 
+
+DBTF <- DBT %>% 
+  filter(na_item=="GD", sector=="S1_S2", maturity=="TOTAL", unit=="MIO_EUR")
+
+IR_DBTF <- IR %>%
+  inner_join(DBTF, by=c("geo"="geo", "time"="time"))
+
+head(IR_DBTF)
+```
+
+```{r}
+#| echo: false 
+IR %>%
+  
+ filter(geo=="EU27_2020", time=="2020" | time=="2021" | time=="2022" | time=="2023") %>%
+  ggplot(aes(x = time, y = values)) +
+  geom_point(color= "blue", size = 3) +
+  labs(title = "Inflation Rates in the 27 EU Member States", x = "Year", y = "Annual Average Rate of Change") + 
+  theme_minimal()
+
+```
+
+This graph shows the annual average rate of change from 2020 to 2023. As we can see, inflation rates were at a low in 2020 and slightly increased in 2021. It can be inferred that the low rate of change in 2020 was due to the COVID-19 Pandemic.
+
+By 2022, the annual average rate of change was at a high. By 2023, the rate had decreased again.
+
+It is important to examine the annual average rate of change over time in order to understand the progression of inflation rates. By examining the political and societal climate during a given year, we can better understand what affects inflation rates.
+
+```{r}
+#| echo: false 
+
+IR %>%
+  filter(time== "2020" | time== "2021" | time== "2022" | time== "2023", geo== "LT" | geo== "LV" | geo== "EU27_2020" | geo== "ME" | geo== "MK") %>%
+  ggplot(aes(x = values, y = time, label=geo)) +
+   geom_text(check_overlap = TRUE) +
+  labs(title = "Inflation Rates Over Time", x = "Annual Rate of Change", y = "Year")
+
+```
+
+This graph displays the annual rate of change in select EU Member States and the 27 EU Member States as a whole between 2020 to 2023.
+
+The selected Member States include: Lithuania (LT), Montenegro (ME), North Macedonia (MK), Latvia (LV). These Member States were selected because they had among the highest annual average rate of change in the selected years.
+
+As seen in the graph, the EU as a whole had lower interest rates out of the selected nations in 2022.
+
+In 2022, Lithuania saw the highest annual average rate of change. Although Lithuania's GDP per capita saw in increase compared to 2021 levels, the economic growth was down by nearly seven points compared to that of 2021 ([Focus Economics 2024](https://www.focus-economics.com/countries/lithuania/#:~:text=Main%20Economic%20Indicators&text=The%20economy%20recorded%20average%20annual,go%20to%20our%20dedicated%20page.&text=Lithuania's%20fiscal%20deficit%20averaged%201.2,in%20the%20decade%20to%202022.)). Another factor that could have contributed to the changes in Lithuania is that they saw a sharp decrease in imports and exports. This decrease in trade may be a contributing factor to the increased annual average rate of change.
+
+Examining Member States' economic growth, debt, and trade to understand the full picture of the annual average rate of change.
+
+**Bibliography**
+
+Focus Economics. 2024. Lithuania Economic Data & Projections. Focus Economics. [https://www.focus-economics.com/countries/lithuania/#:\~:text=Main%20Economic%20Indicators&text=The%20economy%20recorded%20average%20annual,go%20to%20our%20dedicated%20page.&text=Lithuania's%20fiscal%20deficit%20averaged%201.2,in%20the%20decade%20to%202022.](https://www.focus-economics.com/countries/lithuania/#:~:text=Main%20Economic%20Indicators&text=The%20economy%20recorded%20average%20annual,go%20to%20our%20dedicated%20page.&text=Lithuania's%20fiscal%20deficit%20averaged%201.2,in%20the%20decade%20to%202022.)

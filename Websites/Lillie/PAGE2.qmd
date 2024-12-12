@@ -1,0 +1,76 @@
+---
+title: "Government Debt and Inflation Rates"
+author: Lillie Grimsley 
+format: html
+editor: visual
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+
+```
+
+```{r}
+#| echo: false
+#| inlcude: false 
+IR <- get_eurostat_data("tec00118")
+```
+
+```{r}
+#| echo: false 
+
+DBT <- get_eurostat_data("gov_10dd_ggd")
+
+```
+
+The following graph and illustration demonstrate the link between government debt and inflation rates. Most Member States tend to stay within the same region in terms of both government debt and interest rates. For the most part, Member States with low inflation rates tend to have relatively low government debt, but this is not always the case. There cannot be a clearly demonstrated causal relationship between government debt and inflation rates, but it is important to compare the two since they each have significant impacts on the economic state of a nation.
+
+![](GOVERNMENT%20DEBT%20.jpeg)
+
+*Source: [Eurostat](https://www.weforum.org/stories/2019/05/european-countries-with-most-government-debt-chart/)*
+
+This chart displays the percentage of government debt to GDP ratio in EU Member States in 2023.
+
+Although not all of these countries are reported in the graph below, it is important to recognize the percentage of government debt to GDP ratio that each Member State had in 2023 before examining this debt compared to inflation rates.
+
+```{r}
+#| echo: false 
+#| include: false 
+
+DBTF <- DBT %>% 
+  filter(na_item=="GD", sector=="S1_S2", maturity=="TOTAL", unit=="MIO_EUR")
+
+IR_DBTF <- IR %>%
+  inner_join(DBTF, by=c("geo"="geo", "time"="time"))
+
+head(IR_DBTF)
+```
+
+```{r}
+#| echo: false 
+ 
+IR_DBTF %>%
+  filter(time=="2023") %>%
+  ggplot(aes(x = values.x, y = values.y, label=geo)) +
+   geom_text(check_overlap = TRUE) +
+  labs(title = "Inflation Rates & Government Debt", x = "Government Debt", y = "Inflation Rate")
+```
+
+This graph shows the relationship between government debt and inflation rates within the 27 European Union Member States in 2023. The graph displays that there was very little correlation between government debt and interest rates in 2023.
+
+However, on average, a lower amount of government debt may be caused by inflation rates. We can see this at the first half of the graph as most Member States have low rates of both government debt and inflation rates.
+
+There will always be outliers and this is clearly exemplified through Member States such as France and Hungary. While France has a relatively low government debt, they have the highest interest rates. Comparatively, Hungary has the highest government debt but has one of the lowest interest rates among the 27 Member States.
+
+Most Member States have very similar government debt and interest rates with Hungary, France, Italy, Denmark, and Spain being outside of the norm.
+
+**Bibliography**
+
+Wood, Johnny. 2019. These EU countries have the most government debt. World Economic Forum. 8 May. <https://www.weforum.org/stories/2019/05/european-countries-with-most-government-debt-chart/>

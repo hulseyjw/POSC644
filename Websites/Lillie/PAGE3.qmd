@@ -1,0 +1,96 @@
+---
+title: "Inflation Rates in the EU and Euro Area"
+format: html
+editor: visual
+author: Lillie Grimsley 
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(haven)
+```
+
+There is an apparent link between a country's involvement in the Euro Area (Euro Zone) and their annual average rate of inflation change. This shows that countries who are involved in an organized, structured monetary union, on average, have lower rates of inflation. Not only does joining the Euro Area lead to a shared currency and organized monetary structure, but it is apparent that it also leads to lower inflation rates. By joining the Euro Area, countries can potentially lower their inflation rates in comparison to EU Member States that are not a part of the Euro Area.
+
+```{r}
+#| echo: false
+
+
+IR <- get_eurostat_data("tec00118")
+```
+
+```{r}
+#| echo: false 
+
+DBT <- get_eurostat_data("gov_10dd_ggd")
+```
+
+```{r}
+#| echo: false 
+#| include: false 
+
+DBTF <- DBT %>% 
+  filter(na_item=="GD", sector=="S1_S2", maturity=="TOTAL", unit=="MIO_EUR")
+
+IR_DBTF <- IR %>%
+  inner_join(DBTF, by=c("geo"="geo", "time"="time"))
+
+head(IR_DBTF)
+```
+
+```{r}
+#| echo: false 
+
+DBTdsd <- get_eurostat_dsd("gov_10dd_ggd")
+```
+
+```{r}
+#| echo: false 
+
+IRdsd <- get_eurostat_dsd("tec00118")
+```
+
+```{r}
+#| echo: false 
+
+COL <- read_dta("~/Desktop/POSC 644/WEBSITE/ZA5929_v3-0-0.dta")
+```
+
+```{r}
+#| echo: false 
+#| include: false 
+COL_LS <- COL %>% 
+  select(isocntry, qa2_5) %>% 
+  mutate(qa2_5L = as_factor(qa2_5))
+  
+head(COL_LS)
+```
+
+```{r}
+#| echo: false 
+
+IR %>%
+  filter(geo== "EU27_2020"| geo== "EA20", unit== "RCH_A_AVG") %>%
+ggplot(aes(x = geo, y = values)) +
+  geom_bar(stat="identity", fill= "blue") +
+  labs(title= "Inflation Rates in the Euro Area and EU as a Whole", x = "Countries", y = "Values") 
+```
+
+*Source: [Eurostat](https://ec.europa.eu/eurostat/web/products-datasets/-/tec00118)*
+
+This graph compares the annual average rate of inflation change between the Euro Are (otherwise known as the Euro Zone) and the 27 European Union Member States.
+
+As you can see in the graph, the annual average rate of change in the Euro Area is slightly lower than that of the 27 EU Member States combined.
+
+Based on this graph, one could infer that interest rates are lower among countries that are part of the Euro Zone than they are in EU Member States as a whole. This could, in part, be because of the stability and support that being a member of the Euro Area brings to nations.
+
+![](images/Euro Area.png)
+
+[This image](https://x.com/amazingmap/status/558559045091868673/photo/1) outlines which EU Member States are included in the Euro Area.

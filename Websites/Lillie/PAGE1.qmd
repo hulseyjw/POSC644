@@ -1,0 +1,93 @@
+---
+title: "Inflation Rates and the Cost of Living"
+author: "Lillie Grimsley"
+format: html
+editor: visual
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(haven)
+```
+
+```{r}
+#| echo: false 
+
+IR <- get_eurostat_data("tec00118")
+
+```
+
+```{r}
+#| echo: false 
+
+DBT <- get_eurostat_data("gov_10dd_ggd")
+
+```
+
+```{r}
+#| echo: false 
+
+DBTdsd <- get_eurostat_dsd("gov_10dd_ggd")
+
+```
+
+```{r}
+#| echo: false 
+
+IRdsd <- get_eurostat_dsd("tec00118")
+
+```
+
+```{r}
+#| echo: false 
+
+COL <- read_dta("~/Desktop/POSC 644/WEBSITE/ZA5929_v3-0-0.dta")
+
+```
+
+```{r}
+#| echo: false 
+#| include: false 
+COL_LS <- COL %>% 
+  select(isocntry, qa2_5) %>% 
+  mutate(qa2_5L = as_factor(qa2_5))
+  
+head(COL_LS)
+```
+
+The cost of living is directly affected by inflation rates, so it is important to examine it when looking at inflation rates. The cost of living has a direct effect on the overall satisfaction and quality of life for citizens within a nation. By examining the cost of living, we can see how drastically inflation rates are affecting the people directly. The cost of living is essentially a display of interest rates in action.
+
+![](images/Inflation.png)
+
+As displayed in [the above image](https://www.investopedia.com/articles/personal-finance/081514/how-inflation-affects-your-cost-living.asp), one of the most direct outcomes of rising inflation rates is a rising cost of living. Overall, there are many factors that contribute to the cost of living, but inflation is at the root of all these problems.
+
+```{r}
+#| echo: false 
+#| inclulde: false 
+COL_LS %>%
+filter(qa2_5==1|qa2_5==2|qa2_5==3|qa2_5==4, isocntry=="BE"|isocntry=="DK"|isocntry=="GR") %>%
+ggplot(aes(x=isocntry, fill=qa2_5L)) +
+geom_bar(position="fill")+
+labs(title="Cost of Living",)+
+guides(fill=guide_legend(title="Cost of Living"))
+ 
+```
+
+As seen in the graph above, citizens in Belgium and Germany are faced with an overall "bad" cost of living. This concept of a "bad" cost of living is broken down into the categories of "Very bad" and "Rather bad". In Belgium, a remarkable amount of citizens claim that their cost of living is "Rather bad". Comparatively, in Germany, an overwhelming amount of citizens claim that the cost of living is "Very bad".
+
+When examining Denmark, we find that over half of the responding citizens claimed the cost of living is "good". When broken down further we see that most citizens responded the cost of living was "Rather good" while few responded that it was "Very good".
+
+This graph shows a comparison between the cost of living in Belgium, Denmark, and Germany. Through this graph we can see that, of the three, Denmark citizens claimed to the have the best cost of living.
+
+**Bibliography**
+
+Ullman, Michelle. 2024. How Inflation Affects Your Cost of Living. Investopedia. 31 October.
+
+<https://www.investopedia.com/articles/personal-finance/081514/how-inflation-affects-your-cost-living.asp>

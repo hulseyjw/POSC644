@@ -1,0 +1,18 @@
+---
+title: "Inflation Rates in the European Union"
+author: Lillie Grimsley 
+format: html
+editor: visual
+---
+
+![](images/EU%20MAP.jpeg)
+
+When examining inflation rates in the European Union (EU), it is important to also examine all potential contributing factors the affects of said inflation. Inflation rates have steadily been increasing, so it is more important than ever that we examine them.
+
+I will start by examining the cost of living in select EU Member States to display the consequences of inflation.
+
+Next, I will examine the relationship between government debt and inflation rates in the EU Member States.
+
+I will also compare the annual average rate of inflation change between the 27 EU Member States and the 2020 Euro Area countries.
+
+\[Page Topic Name\](/Otherpagename.html)
