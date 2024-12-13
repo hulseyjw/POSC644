@@ -1,0 +1,60 @@
+---
+title: "What is Human Trafficking?"
+format: html
+editor: visual
+---
+
+![](images/HT_MAIN_IMAGE2.jpg)
+
+## 
+
+The crime of trafficking of persons can be categorized into three types: Trafficking in persons for sexual exploitation; Trafficking in persons for forced labor or services; Trafficking in persons for other purposes. These vary in frequency within the overall crime rates in EU member states. The type of trafficking with the highest rates throughout time is trafficking for sexual exploitation. Sex trafficking of EU citizens and those residing within EU member states has been on the rise significantly the last few years. While some nations don't observe the much of forced labor trafficking, the overall trend of forced labor is also on the rise and comprehensively a bigger problem than the last type of trafficking: trafficking of persons for other purposes.
+
+EU countries all experience far higher than acceptable rates of human trafficking. However, countries like Italy, France, and Denmark have significantly larger quantities of trafficking crimes, especially within the last decade. This can most likely be attributed to the locations of major cities within these member states in relation to each nation's major highway and port systems. A related and very likely other variable is the geography of each nation and where it's located on the map and who the neighboring countries are.
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+
+
+```
+
+```{r}
+#| echo: false
+#| 
+CRIM %>%
+filter(time=="2022") %>%
+  ggplot(aes(x=geo, y=values, group=citizen, fill=citizen)) +
+  geom_bar(stat="identity", position="dodge")+
+  labs(title="Victims of trafficking in human beings by citizenship in 2022",
+       x="European Country",
+       y="Victims")
+    theme_minimal()
+```
+
+```{r}
+#| echo: false
+
+TYPE %>%
+ggplot(aes(x = geo, y = values, fill = iccs)) +
+  geom_bar(stat = "identity") +               
+  labs(
+    title = "Rates of Different Trafficking Types",
+    x = "EU Country",
+    y = "Number of Victims"
+  ) +   #
+  theme_minimal()   
+```
+
+Bibliography
+
+Eurostat. “Victims of Trafficking in Human Beings by All Forms of Exploitation.” Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/crim_thb_vexp/default/table?lang=en&category=crim.crim_thb (November 20, 2024b).
+
+Eurostat. “Victims of Trafficking in Human Beings by Citizenship.” Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/crim_thb_vctz/default/bar?lang=en (November 20, 2024c).

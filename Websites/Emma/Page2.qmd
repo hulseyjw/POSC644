@@ -1,0 +1,68 @@
+---
+title: "Why is This Relevant?"
+format: html
+editor: visual
+---
+
+![](images/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques,_Paris_août_2014_(2).jpg)
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+```
+
+```{r}
+#| include: FALSE
+
+CRIM <- get_eurostat_data ("crim_thb_vctz")
+HUMAN <- get_eurostat_data("crim_thb_sex") 
+TYPE <- get_eurostat_data("crim_thb_vexp")
+```
+
+```{r}
+#| echo: FALSE
+
+CRIM %>%
+filter(geo=="AT" | geo=="BE" | geo=="BG" | geo=="HR" | geo=="CY" | geo=="CZ" | geo=="DK" | geo=="FI" | geo=="FR" | geo=="DE" | geo=="HU" | geo=="IE" | geo=="IT" | geo=="LV" | geo=="LT" | geo=="LU" | geo=="MT" | geo=="NL" | geo=="PL" | geo=="PT" | geo=="RO" | geo=="SK" | geo=="SE" | geo=="ES") %>% 
+    ggplot(aes(x=time, y=values, fill=geo)) +
+  geom_bar(stat="identity", position="stack") +
+    labs(title="Human Trafficking Rates Overtime in EU Countries", caption="Source: Eurostat",
+       x="Time",
+       y="Number of Trafficked Persons")
+```
+
+This visual demonstrates the overall rise in human trafficking rates across all EU countries from 2008 to 2022. We can see major spikes in crimes in years 2010, 2012, 2016, and 2022. Countries like Hungary, Iceland, Italy, and Lithuania are experiencing growing rates of overall trafficking at a faster rate than other EU countries. Countries like Austria, Belgium and Bulgaria have observed consistently lower rates of trafficking compared to their EU counterparts like Denmark, Finland, and France, who have all consistently produced higher rates of the crime. While the proportionality of crimes across the EU member states used to be very uneven, the trend as of 2022 is that all countries (in general) are experiencing higher rates in the crime, with once smaller level countries growing in criminal trends. Major cities like Paris experience the highest rates of trafficking.
+
+```{r}
+#| echo: FALSE
+
+HUMAN %>%
+filter(time=="2019" | time=="2020" | time=="2021" | time=="2022", geo=="AT" | geo=="BE" | geo=="BG" | geo=="HR" | geo=="CY" | geo=="CZ" | geo=="DK" | geo=="FI" | geo=="FR" | geo=="DE" | geo=="HU" | geo=="IE" | geo=="IT" | geo=="LV" | geo=="LT" | geo=="LU" | geo=="NL" | geo=="PL" | geo=="PT" | geo=="RO" | geo=="SK" | geo=="SE" | geo=="ES") %>%
+ggplot(aes(x=time, y=values)) +
+geom_bar(stat="identity", fill="blue")+
+  facet_wrap(~geo)+
+labs(title="Human Trafficking Rates in the EU from 2019-2022", caption="Data from Eurostat")+
+guides(fill=guide_legend(title="High rates of trafficked persons"))+
+    theme_minimal()+
+  theme(plot.title=element_text(color="blue", size=12, face="bold"),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=5),
+        )
+```
+
+This visual is a quick and simple demonstration of the recent growth of trafficking rates in the countries France, Denmark, Italy, the Netherlands, Romania, and Spain. While Italy, France, and the Netherlands are both experiencing similar trends in growth (or lack thereof) of the crime rate, France and Italy have much bigger numbers of crimes to handle. Denmark has been experiencing a general increase in trafficking rates throughout the last few years.
+
+Bibliography
+
+Eurostat. “Persons Involved in Trafficking in Human Beings by Legal Status and Sex.” Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/crim_thb_sex\_\_custom_13837540/default/table?lang=en (November 20, 2024a).
+
+Eurostat. “Victims of Trafficking in Human Beings by Citizenship.” Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/crim_thb_vctz/default/bar?lang=en (November 20, 2024c).
