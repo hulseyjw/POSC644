@@ -1,0 +1,85 @@
+---
+title: "Page 3"
+format: html 
+---
+
+# Why Job Opportunities are so Important in the European Union
+
+![](https://atozserwisplus.pl/uploads/blog1606687654.jpg){fig-align="center" width="665"}
+
+##### <https://atozserwisplus.pl/uploads/blog1606687654.jpg>
+
+## Job Opportunities are Critical for Recent Immigrants
+
+#### Member states of the European Union have seen a recent serge of immigrants joining their communities. For the success of integrating recent immigrants into member states, it is important for housing, schooling, and employment opportunities to be available.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+```{r}
+#| include: false
+AWH <- get_eurostat_data("lfst_rimgecga")
+```
+
+```{r}
+#| include: false
+RIS <- get_eurostat_data("lfst_rimgpnga")
+```
+
+```{r}
+#| include: false
+dsd <- get_eurostat_dsd("lfst_rimgecga")
+```
+
+```{r}
+#| include: false
+DSD <- get_eurostat_dsd("lfst_rimgpnga")
+```
+
+```{r}
+#| echo: false
+
+AWH %>%
+  filter(unit == "PC_EMP", sex %in% c("M", "F"), geo == "EU27_2020", age == "Y20-64", time == "2022") %>%
+  ggplot(aes(x = sex, y = values, fill = sex)) +
+  geom_bar(stat = "identity", position = "dodge", show.legend = FALSE, width = .8) +  # Adjust bar width for better clarity
+  labs(
+    title = "Percentage of Jobs Held by Immigrants in 2022",
+    subtitle = "Data for EU27, Age 20-64",
+    x = "Sex",
+    y = "Total Percentage",
+    caption = "Data from Eurostat"
+  ) +
+  scale_fill_manual(values = c("pink", "#1f77b4")) +  # Custom colors (pink and a better blue)
+  theme_minimal(base_size = 14) +  # Use a minimalist theme with a larger base font size
+  theme(
+    plot.title = element_text(face = "bold", size = 12, color = "#3e3e3e", hjust = 0.5),  # Title customization
+    plot.subtitle = element_text(face = "italic", size = 12, color = "#3e3e3e", hjust = 0.5),  # Subtitle customization
+    plot.caption = element_text(size = 10, color = "#3e3e3e", hjust = 1),  # Caption customization
+    axis.title.x = element_text(size = 14, face = "bold", color = "#3e3e3e"),  # X-axis title
+    axis.title.y = element_text(size = 14, face = "bold", color = "#3e3e3e"),  # Y-axis title
+    axis.text.x = element_text(size = 12, color = "#3e3e3e"),  # X-axis tick labels
+    axis.text.y = element_text(size = 12, color = "#3e3e3e"),  # Y-axis tick labels
+    panel.grid.major = element_line(color = "gray90", linewidth = 0.5),  # Light grid lines for better readability
+    panel.grid.minor = element_blank()  # No minor grid lines
+  ) 
+```
+
+This graph shows the percentage of recent immigrants that have been employed in the year 2022 across EU member states. The graph is divided between female and male immigrants. From the graph, we can observe that more males have been employed than females, but not by a strikingly large percentage.
+
+## What job opportunities provide...
+
+Job opportunities provide monetary stability for recent immigrants, making it easier to settle into their new communities. With economic stability, comes peace of mind and the opportunity to join in community activities in other ways. Recent immigrants benefit from having options as to how they can positively contribute to their new area's economy and social community. Furthermore, having a stable income allows for their families and themselves to have happy and healthy lives.
+
+-   [What does this policy area entail?](Page2.html)
+
+-   [Why are job opportunities so important?](Page3.html)
+
+-   [How does this affect the European Union?](Page4.html)
+
+-   [Who is affected?](Page5.html)

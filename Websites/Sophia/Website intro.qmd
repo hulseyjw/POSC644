@@ -1,0 +1,67 @@
+---
+title: "Home Page"
+format: html 
+---
+
+## Introduction
+
+This website analyzes trends in immigration throughout Europe. Specifically, it studies the job opportunities and employment levels of immigrants in their new countries. This research is helpful to understand the broader picture of immigration throughout Europe, while also learning which countries have the most job opportunities and economic mobility open to new residents. Having a reliable income is an important factor of facilitating a smooth transition of recent immigrants into their new communities.
+
+![](https://immigration-portal.ec.europa.eu/sites/default/files/styles/embed_large_2x/public/2017-12/istock-487152196-small.jpg?itok=QTuBHt7u)
+
+<https://immigration-portal.ec.europa.eu/sites/default/files/styles/embed_large_2x/public/2017-12/istock-487152196-small.jpg?itok=QTuBHt7u>
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(RColorBrewer)
+```
+
+```{r}
+#| echo: FALSE
+
+# Load necessary libraries
+library(tidyverse)
+library(restatapi)
+
+# Get the data
+AWH <- get_eurostat_data("lfst_rimgecga")
+RIS <- get_eurostat_data("lfst_rimgpnga")
+
+# Filter the data
+filtered_RIS <- RIS %>%
+  filter(
+    geo %in% c("EU27_2020_FOR", "TOTAL", "DE", "FR", "IT"),  # Select relevant geographies
+    time == "2022",                                        # Select year 2022
+    sex == "T",                                            # Total for both sexes
+    age == "Y15-64",                                       # Working age population
+    unit == "PC_POP"                                       # Values are percentages
+  )
+
+# Create a bar graph
+filtered_RIS %>%
+  ggplot(aes(x = geo, y = values, fill = geo)) +  # Geo on x-axis, values on y-axis
+  geom_bar(stat = "identity") +                  # Use identity for actual values
+  labs(
+    title = "Proportion of Population that is Recent Immigrants",
+    x = "Geography",
+    y = "Percent of Population"
+  ) +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2")
+```
+
+This graph shoes the percentage of member states' populations that are recent immigrants. I chose Germany, France, and Italy as three countries to observe for a first look into the varying distribution of immigrants joining member state communities. Some countries are highly affected by the rising levels of recent immigrants, whereas others have barely experienced this change.
+
+-   [Home Page](Website%20intro.html)
+
+-   [What does this policy area entail?](Page2.html)
+
+-   [Why are job opportunities so important?](Page3.html)
+
+-   [How does this affect the European Union?](Page4.html)
+
+-   [Who is affected?](Page5.html)

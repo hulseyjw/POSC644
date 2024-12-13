@@ -1,0 +1,260 @@
+---
+title: "Website Page 4"
+format: html 
+---
+
+# What does this have to do with the European Union?
+
+![](https://ipiaget.org/wp-content/uploads/2023/01/Bandeira-UE_1920x1080.jpg)
+
+## Job Opportunities for Recent Immigrants in the European Union
+
+#### The rise in immigrants moving to the EU has an affect on member state communities. For immigrants to become high functioning members of their new communities, economic opportunity is crucial. Member states have also been receiving recent immigrants at a disproportionate rate. Some member states welcome high levels of immigrants, while others barely feel this new wave of migration. Check the map below to view which member states have had the highest immigration levels.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+```
+
+```{r}
+#| include: false
+AWH <- get_eurostat_data("lfst_rimgecga")
+```
+
+```{r}
+#| include: false
+RIS <- get_eurostat_data("lfst_rimgpnga")
+```
+
+```{r}
+#| include: false
+dsd <- get_eurostat_dsd("lfst_rimgecga")
+```
+
+```{r}
+#| include: false
+DSD <- get_eurostat_dsd("lfst_rimgpnga")
+```
+
+```{r}
+#| include: false 
+
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+cntrys <- giscoR::gisco_get_countries(
+    year = "2020",
+    resolution = "3",
+    region = c("Europe")
+) |>
+    sf::st_transform(crsLONGLAT)
+plot(sf::st_geometry(cntrys))
+```
+
+```{r}
+#| include: false
+summary(cntrys) 
+```
+
+```{r}
+#| include: false 
+
+
+AWH1 <- AWH %>% 
+  filter(sex=="T", age=="Y_GE15", unit == "PC_RIMG", time=="2022")
+cntrys_AWH1 <- cntrys %>%
+  left_join(AWH1, by=c("CNTR_ID"="geo"))
+
+head(AWH1)
+```
+
+```{r}
+#| echo: false 
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(
+    sf::st_polygon(
+        list(
+            cbind(
+                c(
+                    xmin,
+                    xmax,
+                    xmax,
+                    xmin,
+                    xmin
+                ),
+                c(
+                    ymin,
+                    ymin,
+                    ymax,
+                    ymax,
+                    ymin
+                )
+            )
+        )
+    ), crs = 4326
+)
+
+lambert_bbox <- sf::st_transform(
+    bbox,
+    crs = crs_lambert
+)
+
+bb <- sf::st_bbox(lambert_bbox)
+```
+
+```{r}
+#| echo: false
+
+cntrys_AWH1 %>%
+  ggplot() +
+  geom_sf(
+    data = cntrys_AWH1,
+    mapping = aes(
+      fill = values
+    ),
+    color = "white",
+    size = .15
+  ) + 
+  scale_fill_gradient(
+    low = "lightblue",  # Light color for the lowest value
+    high = "darkblue"   # Dark color for the highest value
+  ) +
+  coord_sf(
+    crs = crs_lambert,
+    xlim = c(bb["xmin"], bb["xmax"]),
+    ylim = c(bb["ymin"], bb["ymax"]),
+  ) +  
+  theme_minimal() +
+  labs(title = "Percent of Population that are Recent Immigrants") +
+  theme_minimal()
+```
+
+## Map Explained
+
+#### The graph above shows the percent of the total population of each member state that is made up by recent immigrants in the year 2022. As we can see, some member states have much higher percentages of recent immigrants than others. Now lets see if the same countries also have high percentages of total employment.
+
+```{r}
+#| include: false 
+
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+cntrys <- giscoR::gisco_get_countries(
+    year = "2020",
+    resolution = "3",
+    region = c("Europe")
+) |>
+    sf::st_transform(crsLONGLAT)
+plot(sf::st_geometry(cntrys))
+```
+
+```{r}
+#| include: false
+summary(cntrys) 
+```
+
+```{r}
+#| include: false 
+
+
+AWH1 <- AWH %>% 
+  filter(sex=="T", age=="Y_GE15", unit == "PC_EMP", time=="2022")
+cntrys_AWH1 <- cntrys %>%
+  left_join(AWH1, by=c("CNTR_ID"="geo"))
+
+head(AWH1)
+```
+
+```{r}
+#| include: false 
+
+cntrys_AWH1 <- cntrys_AWH1 %>%
+  mutate(values = ifelse(values > 3, 3, values))  # Cap values at 3
+```
+
+```{r}
+#| echo: false 
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(
+    sf::st_polygon(
+        list(
+            cbind(
+                c(
+                    xmin,
+                    xmax,
+                    xmax,
+                    xmin,
+                    xmin
+                ),
+                c(
+                    ymin,
+                    ymin,
+                    ymax,
+                    ymax,
+                    ymin
+                )
+            )
+        )
+    ), crs = 4326
+)
+
+lambert_bbox <- sf::st_transform(
+    bbox,
+    crs = crs_lambert
+)
+
+bb <- sf::st_bbox(lambert_bbox)
+```
+
+```{r}
+cntrys_AWH1 %>%
+  ggplot() +
+  geom_sf(
+    data = cntrys_AWH1,
+    mapping = aes(
+      fill = values
+    ),
+    color = "white",
+    size = .15
+  ) + 
+  scale_fill_gradient(
+    low = "lightblue", 
+    high = "darkblue",  # Reverse the light and dark colors
+    limits = c(1, 3), 
+    oob = scales::squish
+  ) + 
+  coord_sf(
+    crs = crs_lambert,
+    xlim = c(bb["xmin"], bb["xmax"]),
+    ylim = c(bb["ymin"], bb["ymax"]),
+  ) +
+  theme_minimal() +
+  labs(title = "Percent of Population that is Employed") +
+  theme_minimal()
+```
+
+## Map Explained
+
+#### This map uses the same scale, year, and values as the previous, but shows the percentage of member state populations that are employed. We can see some similarities between where immigrants are moving and where there is high opportunity for work. It is interesting to compare where recent immigrants are moving and where they would likely find the most opportunities to find employment.
+
+-   [What does this policy area entail?](Page2.html)
+
+-   [Why are job opportunities so important?](Page3.html)
+
+-   [How does this affect the European Union?](Page4.html)
+
+-   [Who is affected?](Page5.html)

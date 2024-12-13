@@ -1,0 +1,50 @@
+---
+title: "Who is Affected?"
+format: html
+editor: visual
+---
+
+![](images/youngwomen.jpeg)
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+```
+
+```{r}
+#| include: false
+
+CRIM <- get_eurostat_data ("crim_thb_vctz")
+HUMAN <- get_eurostat_data("crim_thb_sex") 
+TYPE <- get_eurostat_data("crim_thb_vexp")
+```
+
+```{r}
+#| echo: FALSE
+
+HUMAN %>%
+filter(sex=="F"|sex=="M") %>% 
+    ggplot(aes(x=time, y=values, fill=sex)) +
+  geom_bar(stat="identity", position="stack") +
+    labs(title="Human Trafficking Rates Overtime in EU Countries", caption="Source: Eurostat",
+       x="Time",
+       y="Number of Trafficked Persons")
+```
+
+This visual demonstrates the difference in trafficking rates of females versus men in the EU overall. In the last decade we have witnessed a major jump in crimes involving female and male victims, especially since 2014. Interestingly, we can see from this graph that the ratio of female to male victims is switching to male dominated compared to women being the majority of human trafficking victims in the first decade of the century. Especially in the last eight years, European men have increasingly became more likely to be subjected to the heinous crime of human trafficking compared to their female counterparts.
+
+
+This visual demonstrates the rate of victims of human trafficking over time in EU member states.
+
+Bibliography
+
+Eurostat. “Persons Involved in Trafficking in Human Beings by Legal Status and Sex.” Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/crim_thb_sex\_\_custom_13837540/default/table?lang=en (November 20, 2024a).
+
+Eurostat. “Victims of Trafficking in Human Beings by Citizenship.” Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/crim_thb_vctz/default/bar?lang=en (November 20, 2024c).

@@ -1,0 +1,157 @@
+---
+title: "Why is Human Trafficking an EU Problem?"
+format: html
+editor: visual
+---
+
+![](images/2024%20Human%20Trafficking%20Update%20Size%20981.jpg)
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+```
+
+```{r}
+#| include: FALSE
+
+CRIM <- get_eurostat_data ("crim_thb_vctz")
+HUMAN <- get_eurostat_data("crim_thb_sex") 
+TYPE <- get_eurostat_data("crim_thb_vexp")
+```
+
+This is a European Union problem to address because human trafficking affects every member state with scary numbers. The EU is the best equipped institution that had the oversight and resources to adequately address this issue. Especially given the EU Human Rights Charter the EU has a responsibility as the supranational institution to uphold its moral standards for all citizens. EU citizens also feel that crime is very important to be taken care of by the EU, as shown by survey results in the map below.
+
+```{r}
+#| include: FALSE
+
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" # this creates a variable with information about the projection we want our map to be. 
+
+cntrys <- giscoR::gisco_get_countries( # this function gets the country-level maps from GISCO
+    year = "2020",
+    resolution = "3",
+    region = c("Europe", "Asia")
+) |>
+    sf::st_transform(crsLONGLAT) # this function transforms our new shape file into the projection we want.
+
+#names(cntrys)
+
+plot(sf::st_geometry(cntrys))
+```
+
+```{r}
+#| include: False
+
+rsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" # this creates a variable with information about the projection we want our map to be. 
+
+cntrys <- giscoR::gisco_get_countries( # this function gets the country-level maps from GISCO
+    year = "2020",
+    resolution = "3",
+    region = c("Europe", "Asia")
+) |>
+    sf::st_transform(crsLONGLAT)
+```
+
+
+```{r}
+#| include: FALSE
+CRIM_HUM <- CRIM %>% 
+  left_join(HUMAN, by=c("geo"="geo", "time"="time"))
+
+head(CRIM_HUM)
+
+```
+
+```{r}
+#| include: FALSE
+
+CRIM_HUM_T <- CRIM_HUM %>% filter (time == "2022", leg_stat=="PER_VICT") %>%  mutate(Membership = recode(citizen, "EU27_2020_FOR" = "EU Citizen"))
+
+cntrys_CRIM <- cntrys %>%
+  left_join(CRIM_HUM_T, by=c("CNTR_ID"="geo"))
+
+
+head(cntrys_CRIM)
+```
+
+```{r}
+#| include: false
+
+
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(
+    sf::st_polygon(
+        list(
+            cbind(
+                c(
+                    xmin,
+                    xmax,
+                    xmax,
+                    xmin,
+                    xmin
+                ),
+                c(
+                    ymin,
+                    ymin,
+                    ymax,
+                    ymax,
+                    ymin
+                )
+            )
+        )
+    ), crs = 4326
+)
+
+lambert_bbox <- sf::st_transform(
+    bbox,
+    crs = crs_lambert
+)
+
+bb <- sf::st_bbox(lambert_bbox)
+```
+
+```{r}
+#| echo: false
+#| 
+cntrys_CRIM %>% 
+  ggplot() +
+  geom_sf(data = cntrys_CRIM,
+        mapping = aes(
+            fill = values.y
+        ),
+        color = "gray",
+        size = .15
+    ) +
+    coord_sf(
+        crs = crs_lambert,
+        xlim = c(bb["xmin"], bb["xmax"]),
+        ylim = c(bb["ymin"], bb["ymax"]),
+    )  +
+    scale_fill_gradientn(
+        name = "Trafficking Victims",
+        colors = brewer.pal(9, "Blues"),
+        na.value = "grey80"
+    ) + labs(title="Human Trafficking Victims in the EU", caption="Source: Eurostat")+
+  theme_minimal()
+
+```
+It is imperative for the EU to address this issue of human trafficking because it directly impacts the citizens of its member states, particularly nations like France, Italy, and the Netherlands. A supranational institution has the proper resources to handle such an issue and the EU has proven to be the most influential and effective when addressing major crises particularly ones that span across many member states. 
+
+
+Bibliography
+
+Eurostat. “Persons Involved in Trafficking in Human Beings by Legal Status and Sex.” Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/crim_thb_sex\_\_custom_13837540/default/table?lang=en (November 20, 2024a).
+
+Eurostat. “Victims of Trafficking in Human Beings by Citizenship.” Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/crim_thb_vctz/default/bar?lang=en (November 20, 2024c).

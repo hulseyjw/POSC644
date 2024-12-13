@@ -1,0 +1,114 @@
+---
+title: "Page 2"
+format: html  
+---
+
+# Immigration and Job opportunities
+
+![](http://guhc.net/wp-content/uploads/2017/11/Job-Opp.jpg){fig-align="center"}
+
+<https://guhc.net/wp-content/uploads/2017/11/Job-Opp.jpg>
+
+## Why does this issue need policy action?
+
+#### Across the European Union, member states have had significant numbers of immigrants join their communities. The job market has been over saturated in some fields, while other fields have many opportunities for prospective workers. This website analyzes which member states have the best job markets for recent immigrants seeking employment.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+```{r}
+#| include: false
+AWH <- get_eurostat_data("lfst_rimgecga")
+```
+
+```{r}
+#| include: false
+RIS <- get_eurostat_data("lfst_rimgpnga")
+```
+
+```{r}
+#| include: false
+dsd <- get_eurostat_dsd("lfst_rimgecga")
+```
+
+```{r}
+#| include: false
+dsd <- get_eurostat_dsd("lfst_rimgpnga")
+```
+
+```{r}
+#| include: false
+
+options(warn = -1)  # Suppresses all warnings
+```
+
+
+```{r}
+#| echo: FALSE
+
+RIS %>%
+filter() %>%
+ggplot(aes(x=sex, y=values, fill=sex)) +
+geom_bar(stat="identity")+ ylim(0, 1000) +
+  facet_wrap(~geo)+
+labs(title="Recent Immigrantion Levels by Sex", caption="Data from Eurostat")+
+guides(fill=guide_legend(title="Age"))+
+    theme_minimal()+
+  theme(plot.title=element_text(color="blue", size=12, face="bold"),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=5),
+        )
+```
+
+The graph above shows the levels of recent immigrants entering each member state by sex. This is an important phenomenon to observe before we begin to analyze the levels of employment in each member state. From the graph, we can see that Luxembourg, Cyprus, Switzerland, and Ireland have some of the highest levels of immigration.
+
+```{r}
+#| echo: FALSE
+
+RIS %>%
+  filter() %>%
+  # Summarize to get the total for each region and time
+  group_by(time, geo) %>%
+  summarise(total_values = sum(values, na.rm = TRUE), .groups = 'drop') %>%
+  ggplot(aes(x = time, y = total_values, group = geo, color = geo)) +  # Plot total values
+  geom_line(size = 1) +  # Use geom_line to show a continuous trend
+  scale_y_continuous(labels = scales::comma) +  # Adjust y-axis scale to better see values
+  facet_wrap(~geo) +  # Facet by geographical region
+  labs(
+    title = "Immigration Levels Over Time",
+    caption = "Data from Eurostat",
+    x = "Year",  # Label for x-axis
+    y = "Total Immigration Levels"  # Label for y-axis
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(color = "blue", size = 14, face = "bold"),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
+    axis.text.x = element_text(size = 0),
+    axis.text.y = element_text(size = 5)
+  )
+```
+
+This graph shows the trend in immigration levels in EU member states over time. The lines show that trend in recent immigrants has stayed somewhat steady in some countries, while others have seen lots of fluctuation or stark increase.
+
+### What does this policy area entail?
+
+There are several EU policies in place that try to increase support for recent immigrants in EU member states. Several of these policies developed by the Commission aim to help recent immigrants settle into their new communities in a productive way. One of the best ways to ensure recent immigrants are stable in their new areas is through job and economic security.
+
+#### 
+
+-   [What does this policy area entail?](Page2.html)
+
+-   [Why are job opportunities so important?](Page3.html)
+
+-   [How does this affect the European Union?](Page4.html)
+
+-   [Who is affected?](Page5.html)

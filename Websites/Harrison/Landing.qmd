@@ -1,0 +1,27 @@
+---
+title: "Landing Page" 
+format: html 
+editor: visual
+---
+
+![](images/field%20eu.jpeg)
+
+***The Common Agriculture Policy of the EU***
+
+The European Union's Common Agricultural Policy (CAP) is a vital framework that ensures the sustainability of farming, supports rural communities, and guarantees a stable supply of high-quality, affordable food for all. Since its creation in 1962, the CAP has evolved to address new challenges, from climate change to economic stability in agriculture, while remaining committed to its core values of fairness, sustainability, and innovation.
+
+This website is your guide to understanding the CAP’s significance in shaping the future of European agriculture and its impact on climate goals through its pursuit of sustainability. Whether you're a farmer, a consumer, or simply curious about the EU’s role in global food security, you'll find essential insights here. Explore how this policy affects you, the environment, and communities across Europe as we work together towards a greener, more sustainable future.
+
+[What is CAP About](/Page1.html)
+
+[Why you Should Care](/Page2.html)
+
+[CAP and the EU](/Page3.html)
+
+[Who is Affected](/Page4.html)
+
+![](images/fieldeu2.jpeg)
+
+Sources:
+
+“CAP at a Glance.” 2024. Agriculture and Rural Development. https://agriculture.ec.europa.eu/common-agricultural-policy/cap-overview/cap-glance_en.

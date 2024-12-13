@@ -1,0 +1,32 @@
+---
+title: "Website"
+format: html
+editor: visual
+---
+
+## The Growing Crisis of Human Trafficking in the European Union
+
+![](trafficking_in_human_beings_in_the_eu.jpg)
+
+Human trafficking rates are high throughout much of the European Union, particularly among women and youth male populations. Despite state and EU-funded initiatives to combat these high rates of human trafficking, the crime still creates thousands of victims per year. Why is this relevant? International crime is on the rise and has devastating impacts on even the most developed of communities like the European Union. Lack of proper border security policy and a lack of comprehensive EU approach to border policy only contributes to this crime. There is a dire need for stronger EU-wide border security. Trust in the EU's ability to secure its borders is lower than it should be.
+
+```{r}
+#| echo: FALSE
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+```
+
+```{r}
+#| echo: FALSE 
+
+CRIM <- get_eurostat_data ("crim_thb_vctz")
+HUMAN <- get_eurostat_data("crim_thb_sex") 
+TYPE <- get_eurostat_data("crim_thb_vexp")
+
+```

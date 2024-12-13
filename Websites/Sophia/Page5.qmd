@@ -1,0 +1,152 @@
+---
+title: "Who is affected?"
+format: html 
+---
+
+# Who is affected?
+
+![](https://media.istockphoto.com/id/1472932742/photo/group-of-multigenerational-people-hugging-each-others-support-multiracial-and-diversity.jpg?s=612x612&w=0&k=20&c=Zm1MthU_G_LzfjBFBaMORRnuBhMsCjPQ38Ksfg4zl9g=)
+
+## Throughout the European Union...
+
+##### The growing influx of immigrants into member state communities has EU citizens feeling mixed emotions about the rising populations. Member states have differing opinions on the rising levels of recent immigrants depending on how their country is affected by the growing population. When more people are in the job market, it lowers the work opportunities for everyone.
+
+#####  In a Eurobarometer survey, participants were asked to name their biggest concerns regarding the future of the European Union. There were 7 issues mentioned most by participants. Immigration was one of the top 7. The four following member states mentioned immigration most frequently as their most pressing concern for the future of the EU. 
+
+```{r}
+#| include: false 
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+library(haven)
+library(ggplot2)
+```
+
+```{r}
+#| include: false
+
+EMP <- read_dta("~/Desktop/644 Website/ZA4984_v1-0-0.dta")
+
+```
+
+
+
+```{r}
+#| include: false
+
+# Prepare the Dataset
+EMP_direction <- EMP %>%
+  select(q4a_7)
+
+# Rename Columns if Necessary
+colnames(EMP_direction)[colnames(EMP_direction) == "4a_7L"] <- "q4a_7L"
+
+# Convert to Factor
+EMP_direction$q4a_7 <- as.factor(EMP_direction$q4a_7)
+
+# Check the Dataset Structure (Optional)
+str(EMP_direction)
+```
+
+
+```{r}
+#| include: false
+
+EMP_direction <- EMP %>%
+  mutate(q4a_7L = as_factor(q4a_7))
+```
+
+```{r}
+#| include: false
+
+EMP_direction_two <- EMP_direction %>%
+  select(country, q4a_7L)
+```
+
+```{r}
+#| include: false
+ 
+columns_of_interest <- paste0("q4a_", 1:8)
+```
+
+
+
+
+
+
+```{r}
+#| echo: false 
+
+EMP_direction_two %>% 
+  filter(country == 8) %>%
+  ggplot(aes(x = country, fill = q4a_7L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Immigraton as a Key Issue",
+    x = "Italy",
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "In this country..."))
+```
+
+```{r}
+#| echo: false
+
+EMP_direction_two %>% 
+  filter(country == 25) %>%
+  ggplot(aes(x = country, fill = q4a_7L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Immigraton as a Key Issue",
+    x = "Slovenia",
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "In this country..."))
+```
+
+```{r}
+#| echo: false
+
+EMP_direction_two %>% 
+  filter(country == 5) %>%
+  ggplot(aes(x = country, fill = q4a_7L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Immigraton as a Key Issue",
+    x = "Spain",
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "In this country..."))
+```
+
+```{r}
+#| echo: false
+
+EMP_direction_two %>% 
+  filter(country == 9) %>%
+  ggplot(aes(x = country, fill = q4a_7L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Immigraton as a Key Issue",
+    x = "Luxembourg",
+    y = "Percentage Responding"
+  ) +
+  guides(fill = guide_legend(title = "In this country..."))
+```
+
+## Graphs Explained
+
+#### The red shows the proportion mentioning immigration, the green shows another top issue mentioned, and the blue represents did not respond. These four countries mentioned immigration most frequently as to their top concern with the future of the EU. 
+
+-   [What does this policy area entail?](Page2.html)
+
+-   [Why are job opportunities so important?](Page3.html)
+
+-   [How does this affect the European Union?](Page4.html)
+
+-   [Who is affected?](Page5.html)

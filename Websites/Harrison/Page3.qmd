@@ -1,0 +1,107 @@
+---
+title: "Page3"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(restatapi)
+library(knitr)
+library(scales)
+library(dplyr)
+```
+
+```{r}
+#| include: false
+EUcrop <- get_eurostat_data("org_cropar")
+
+summary(EUcrop)
+```
+
+***CAP and the EU***
+
+The Common Agricultural Policy (CAP) is closely aligned with the European Union’s broader environmental goals, particularly in its commitment to increasing organic and carbon farming land. As part of its strategy to reduce emissions and enhance sustainability, the EU has set ambitious targets to expand organic farming and implement carbon farming practices across Europe. CAP plays a critical role in achieving these goals by providing financial incentives to farmers who transition to organic methods or adopt carbon capture techniques such as reforestation, agroforestry, and regenerative agriculture. Through these efforts, the EU is not only reducing its carbon footprint but also promoting the integration of climate-friendly practices into agricultural systems, ensuring that farming remains a key player in the fight against climate change while contributing to a more sustainable, interconnected Europe.
+
+```{r}
+#| echo: false
+EUcrop %>%
+  filter(
+    geo == "EU27_2020",  
+    agprdmet == "TOTAL",
+    time %in% c("2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020")  
+  ) %>%
+  ggplot(aes(x = time, y = values, fill = agprdmet)) + 
+  geom_bar(stat = "identity", position = "dodge", color = "black", width = 0.7) +  
+  labs(
+    title = "Utilized Farmland (2012-2020)",  
+    x = "Year",  
+    y = "Hectares", 
+    fill = "Organic Agricultural 
+    Production Methods"  
+  ) + 
+  scale_y_continuous(labels = comma) +  
+  theme_minimal(base_size = 15) +  
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1), 
+    axis.title.x = element_text(size = 16),  
+    axis.title.y = element_text(size = 16),  
+    legend.position = "top",  
+    legend.title = element_text(size = 14),  
+    legend.text = element_text(size = 12))
+```
+
+The above graphic represents the growth of agricultural lands within the EU that produce organic products and are in line with the EU's carbon neutrality schema.
+
+```{r}
+#| include: false
+EUghg <- get_eurostat_data("env_air_gge")
+
+summary(EUghg)
+```
+
+```{r}
+#| include: false
+merged_data <- EUghg %>%
+  filter(
+    geo == "EU27_2020",  
+    airpol == "GHG",     
+    src_crf == "CRF3",   
+    time %in% c("2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022")  
+  ) %>%
+  left_join(
+    EUcrop %>%
+      filter(
+        geo == "EU27_2020",  
+        agprdmet == "TOTAL",
+        time %in% c("2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020")  
+      ),
+    by = "time"   # Assuming 'time' is the common column to join on
+  )
+```
+
+```{r}
+#| echo: false
+ggplot(merged_data, aes(x = time)) +  
+  geom_point(aes(y = values.x, color = "GHG Emissions"), size = 3) +  
+  geom_point(aes(y = values.y, color = "Utilized Farmland"), size = 3) +  
+  labs(
+    title = "EU Greenhouse Gas Emissions and Utilized Farmland (2012-2022)",  
+    x = "Year",  
+    y = "Values",  
+    color = "Category"  
+  ) + 
+  theme_minimal() +                                  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The dot graph above illustrates that an increase in organic/carbon friendly farmland in the EU, supported by the Common Agricultural Policy, contributes to a reduction in agricultural greenhouse gas (GHG) emissions. Organic farming practices, which emphasize crop rotation, reduced synthetic chemical use, and enhanced soil health, can lead to lower emissions compared to conventional methods. While organic farming generally has a smaller carbon footprint, the full effect on GHG reductions is influenced by the scale of conversion and complementary policies.
+
+[Homepage](/Landing.html)
+
+[What is CAP About](/Page1.html)
+
+[Why you Should Care](/Page2.html)
+
+[Who is Affected](/Page4.html)

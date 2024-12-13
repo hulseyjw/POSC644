@@ -1,0 +1,21 @@
+---
+title: "Website"
+format: html
+editor: visual
+---
+
+## Website
+
+Welcome to my website where I analyze terrorism rates in the EU. I specifically compare EU terrorism rates through varying lenses of age, sex, and EU member states. I will also compare EU terrorism rates with 
+
+```{r}
+#| include=FALSE 
+
+library(tidyverse)
+library(haven)
+library(knitr)
+```
+
+
+
+

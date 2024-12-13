@@ -1,0 +1,127 @@
+---
+title: "Page4"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(haven)
+library(knitr)
+```
+
+```{r}
+#| include: false
+
+AY <- read_dta("ZA8779_v1-0-0.dta")
+```
+
+```{r}
+#| include: false
+AY_opin <- AY %>% 
+  select(isocntry, qa5_11, qa5_13, qa5_3) %>% 
+  mutate(qa5_11 = as_factor(qa5_11),
+         qa5_13 = as_factor(qa5_13),
+         qa5_3 = as_factor(qa5_3))
+  
+head(AY_opin)
+```
+
+```{r}
+#| include: false
+summary(AY_opin$qa5_11)
+summary(AY_opin$qa5_13)
+summary(AY_opin$qa5_3)
+```
+
+***Who is Affected***
+
+```{r}
+#| echo: false
+AY_opin %>% 
+  filter(isocntry %in% c("AT", "AL", "GR", "IT", "PT", "FR", "PL", "TR", "NL", "ES", "BE")) %>%
+  ggplot(aes(x = isocntry, fill = qa5_13)) +
+  geom_bar(position = "fill", width = 0.7) +
+  geom_text(stat = "count", aes(label = scales::percent(..count../tapply(..count.., ..x.., sum)[..x..])), 
+            position = position_fill(vjust = 0.5), size = 2.5, color = "black") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Important Issues in the EU", 
+       x = "Country", 
+       y = "Percentage Responding", 
+       fill = "Policy Area") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    axis.title.x = element_text(size = 12, face = "bold"),
+    axis.title.y = element_text(size = 12, face = "bold"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.position = "top",
+    legend.title = element_text(face = "bold")
+  ) +
+  scale_y_continuous(labels = scales::percent)
+```
+
+```{r}
+#| echo: false
+ AY_opin %>% 
+  filter(isocntry %in% c("AT", "AL", "IT", "GR", "PT", "FR", "PL", "TR", "NL", "ES", "BE")) %>%
+  ggplot(aes(x = isocntry, fill = qa5_11)) +
+  geom_bar(position = "fill", width = 0.7) +
+  geom_text(stat = "count", aes(label = scales::percent(..count../tapply(..count.., ..x.., sum)[..x..])), 
+            position = position_fill(vjust = 0.5), size = 2.5, color = "black") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Important Issues in the EU", 
+       x = "Country", 
+       y = "Percentage Responding", 
+       fill = "Policy Area") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    axis.title.x = element_text(size = 12, face = "bold"),
+    axis.title.y = element_text(size = 12, face = "bold"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.position = "top",
+    legend.title = element_text(face = "bold")
+  ) +
+  scale_y_continuous(labels = scales::percent)
+```
+
+```{r}
+#| echo: false
+ AY_opin %>% 
+  filter(isocntry %in% c("AT", "AL", "IT", "GR", "PT", "FR", "PL", "TR", "NL", "ES", "BE")) %>%
+  ggplot(aes(x = isocntry, fill = qa5_3)) +
+  geom_bar(position = "fill", width = 0.7) +
+  geom_text(stat = "count", aes(label = scales::percent(..count../tapply(..count.., ..x.., sum)[..x..])), 
+            position = position_fill(vjust = 0.5), size = 2.5, color = "black") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Important Issues in the EU", 
+       x = "Country", 
+       y = "Percentage Responding", 
+       fill = "Policy Area") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    axis.title.x = element_text(size = 12, face = "bold"),
+    axis.title.y = element_text(size = 12, face = "bold"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    legend.position = "top",
+    legend.title = element_text(face = "bold")
+  ) +
+  scale_y_continuous(labels = scales::percent)
+```
+
+The graphics above represent a recent poll of EU citizens across a significant number of member states. Individually the policy areas were not shown to be the primary concern among citizens on their own, when aggregated these concerns become increasingly statistically significant. Public health, rising prices on the consumer index, and climate change are all directly affected by the EU's CAP and influence European citizens across the board.
+
+The Common Agricultural Policy (CAP) has far-reaching effects on public health, inflation, and climate change. By supporting sustainable farming practices, CAP ensures the production of healthier, more nutritious food while reducing the environmental impact of agriculture. This directly benefits consumers by providing access to safe, affordable food, helping to manage inflation in food prices. Additionally, CAP’s focus on emission reduction and environmental conservation contributes to the EU’s efforts to combat climate change, benefiting everyone by fostering a cleaner, greener future. Whether you're concerned about rising food prices, climate change, or the sustainability of your food choices, CAP is a crucial policy that impacts your everyday life and helps address the most pressing global challenges.
+
+[Home Page](/Landing.html)
+
+[What is the Common Agriculture Policy](/Page1.html)
+
+[Why you Should Care](/Page2.html)
+
+[CAP and the EU](/Page3.html)
+
+Sources: “Common Agricultural Policy - Performance.” European Commission. https://commission.europa.eu/strategy-and-policy/eu-budget/performance-and-reporting/programme-performance-statements/common-agricultural-policy-performance_en.

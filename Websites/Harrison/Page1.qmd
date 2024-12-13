@@ -1,0 +1,27 @@
+---
+title: "Page 1"
+format: html
+editor: visual
+---
+
+***What is the Common Agriculture Policy***
+
+The Common Agricultural Policy (CAP) is one of the European Union's oldest and most influential initiatives, launched in 1962 to secure a stable, affordable food supply for its citizens. At its core, the CAP is designed to support farmers, enhance rural development, and promote sustainable agricultural practices across the EU. It is built around two key pillars: direct payments to farmers, which ensure income stability and incentivize sustainable farming, and rural development programs, which fund innovation, modernization, and community projects in agricultural areas.
+
+![](images/CAP%20timeline.png)
+
+Over the years, the CAP has evolved to address emerging challenges such as climate change, environmental preservation, and biodiversity. Through reforms, it has shifted focus from purely economic goals to a broader vision of sustainability and environmental stewardship. Since the 2023 reforms, the CAP plays a critical role in helping Europe achieve its Green Deal objectives, ensuring that agriculture remains resilient, productive, and eco-friendly in the face of global challenges.
+
+![](images/objective%20wheel.jpeg)
+
+Today the CAP initiatives makes up less than 25% of the EU's annual budget but secures global supply chains, protects environmental standards, and reinforces the quality of life for EU citizens in both rural and urban areas.
+
+[Home Page](/Landing.html)
+
+[Why you Should Care](/Page2.html)
+
+[CAP and the EU](/Page3.html)
+
+[Who is Affected](/Page4.html)
+
+Sources: “Key Policy Objectives of the CAP 2023-27.” 2024. Agriculture and Rural Development. https://agriculture.ec.europa.eu/common-agricultural-policy/cap-overview/cap-2023-27/key-policy-objectives-cap-2023-27_en.
