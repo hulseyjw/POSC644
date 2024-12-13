@@ -6,7 +6,7 @@ editor: visual
 
 ## Crime in the European Union: Poverty Rates and Prison Capacity
 
-![](images/eu-flag-handcuffs-abstract-background-concept-crime-european-society_437105-2505-1-01.jpg)
+![](euhandcuffs.jpg)
 
 ## 
 
@@ -14,8 +14,8 @@ Hello and welcome to my website! This website is a resource for investigating po
 
 [**`Prison European Union Statistics`**](HarrisWebsitePage1.html)
 
-[**`Poverty Rates in EU Countries`**](Harris Website Page2.html)
+[**`Poverty Rates in EU Countries`**](HarrisWebsitePage2.html)
 
-[**`Crime Perceptions in the EU`**](Harris Website Page 3.html)
+[**`Crime Perceptions in the EU`**](HarrisWebsitePage3.html)
 
-[**`Comparing the Amount of Prisoners to Poverty Rates in EU Countries`**](Harris Website Page 4.html)
+[**`Comparing the Amount of Prisoners to Poverty Rates in EU Countries`**](HarrisWebsitePage4.html)

@@ -84,7 +84,6 @@ filter(geo=="AT" | geo=="BE" | geo=="BG" | geo=="HR" | geo=="CY" | geo=="CZ" | g
   )
 ```
 
-
 This graph illustrates the trends in prison populations across the European Union from 2008 to 2022, showing a gradual increase in the number of individuals incarcerated. This growth reflects a combination of factors, including changing crime rates, judicial policies, and socioeconomic conditions across member states. Among the EU countries, Austria consistently recorded the highest number of persons in prison during this period, followed closely by Belgium. These nations' higher prison populations can be attributed to factors such as their larger urban centers, stricter sentencing laws, and challenges related to managing cross-border crimes due to their geographic locations.On the other end of the spectrum, Slovakia and Sweden have maintained the lowest prison populations. Sweden’s progressive approach to criminal justice, emphasizing rehabilitation and alternatives to imprisonment, contributes to its smaller numbers. Similarly, Slovakia's smaller overall population and judicial practices have kept its prison rates among the lowest in the EU.
 
 These disparities highlight the influence of national policies, societal attitudes, and demographic factors on prison populations. While the overall trend suggests an increase in incarceration across the EU, the rates and underlying causes vary significantly, reflecting the diversity of justice systems within the union.
@@ -99,7 +98,7 @@ https://www.prisonstudies.org/country/austria
 
 https://www.prisonstudies.org/country/sweden
 
-[**`Poverty Rates in EU Countries`**](Harris%20Website%20Page2.html)
+[**`Poverty Rates in EU Countries`**](HarrisWebsitePage2.html) 
 [**Home Page**](HarrisWebsite.html)
 
 1
