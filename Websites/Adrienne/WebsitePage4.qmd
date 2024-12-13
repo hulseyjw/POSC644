@@ -6,7 +6,7 @@ editor: visual
 
 # Public Opinion
 
-![](images/Public Opinion.png)
+![](PublicOpinion.png)
 
 ###### Image courtesy of [Oxford Internet Institute](https://www.oii.ox.ac.uk/news-events/oxford-researchers-design-new-methods-for-tracking-changes-in-public-opinion/).
 
@@ -21,7 +21,7 @@ library(haven)
 
 ```{r}
 #| echo: FALSE
-EB <- read_dta("~/Documents/EUPS/POSC 644/Final Website/ZA6695_v2-0-0.dta")
+EB <- read_dta("ZA6695_v2-0-0.dta")
 ```
 
 ```{r}
@@ -72,4 +72,4 @@ summary(EB_violence$qb9_1)
 
 ###### “Suche.” *GESIS*. https://search.gesis.org/research_data/ZA6695 (December 10, 2024).
 
-###### “Oxford Researchers Design New Methods for Tracking Changes in Public Opinion.” 2021. *OII*. https://www.oii.ox.ac.uk/news-events/oxford-researchers-design-new-methods-for-tracking-changes-in-public-opinion/ (December 11, 2024). 
+###### “Oxford Researchers Design New Methods for Tracking Changes in Public Opinion.” 2021. *OII*. https://www.oii.ox.ac.uk/news-events/oxford-researchers-design-new-methods-for-tracking-changes-in-public-opinion/ (December 11, 2024).
