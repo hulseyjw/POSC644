@@ -5,7 +5,7 @@ format: html
 editor: visual
 ---
 
-![](EU%20MAP.jpeg)
+![](EUMAP.jpeg)
 
 When examining inflation rates in the European Union (EU), it is important to also examine all potential contributing factors the affects of said inflation. Inflation rates have steadily been increasing, so it is more important than ever that we examine them.
 
