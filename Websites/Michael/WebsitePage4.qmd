@@ -1,0 +1,63 @@
+---
+title: "Website Page 4"
+format: html
+editor: visual
+---
+
+```{r}
+#/echo: FALSE
+library(restatapi)
+library(tidyverse)
+library(haven)
+library(knitr)
+library(RColorBrewer)
+library(dplyr)
+DB <- get_eurostat_data("ext_st_eu27_2020sitc")
+```
+
+```{r}
+#/echo: FALSE
+DB %>% filter(partner=="NO"|partner=="CH"|partner=="EFTA", stk_flow=="BAL_RT", indic_et=="TRD_VAL", sitc06=="TOTAL", time=="2016-06"|time=="2017-06"|time=="2018-06"|time=="2019-06"|time=="2020-06")%>%
+ggplot(aes(x = time, y = values, group=partner)) +
+  geom_line(aes(color=partner)) +
+  theme_minimal() +
+  labs(title = "EU Single Market Trade Value with EFTA", x = "EU Member States", y = "Euros")
+```
+
+![](EFTA.png)
+
+-   Author:
+
+    Michael Devlin
+
+    EVALUATING THE CONDITION OF THE EUROPEAN UNION'S EFTA TRADE SITUATION
+
+-   This visualization is demonstrating the EU Single Market's total trade with the EFTA, the European Free Trade Association, which is a Single Market compliant grouping of non-EU countries.
+
+-   I decided to see what the overall development trend has been for the EU Single Market for its trade relations with non-EU countries in the EFTA, which are Norway, Iceland, Switzerland and
+
+-   It demonstrates that there is a consistent demand for foreign goods as a share of market activity.
+
+-   This is caused by a growing internal consumer demand for products from foreign trading partners.
+
+HOW DOES THIS AFFECT THE EU SINGLE MARKET'S FUNCTIONS AND EU CITIZEN'S?
+
+-   When considering why EFTA countries are important to the EU Single Market, the vitality is based on keeping the EFTA countries within the EU economic zone as wealthy trading partners
+
+-   This allows for the Single Market to gain access to the dual benefit of exports and imports to and from EFTA countries, which adds to the total economic power and reach of the EU
+
+-   The EFTA countries are very wealthy and while not having economies as larger as top EU member states, are still highly valued for the reciprocal market access they provide
+
+-   EU citizens are directly benefited from having goods compliant with Single Market standards with low import and export costs, which generates better trade relations and economic growth
+
+-   Overall, continued EU-EFTA trade relations are growing and remain mutually beneficial
+
+Data Source: Eurobarometer
+
+<https://ec.europa.eu/eurostat/data/database>
+
+Image Source: European Free Trade Association
+
+<https://www.efta.int/>
+
+[Website Landing Page](/WebsiteLandingPage.html)

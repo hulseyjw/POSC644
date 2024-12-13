@@ -1,0 +1,70 @@
+---
+title: "Website Page 3"
+format: html
+editor: visual
+---
+
+```{r}
+#/echo: FALSE
+library(restatapi)
+library(tidyverse)
+library(haven)
+library(knitr)
+library(RColorBrewer)
+
+DB <- get_eurostat_data("ext_st_eu27_2020sitc")
+```
+
+```{r}
+#/echo: FALSE
+data <- data.frame(partner = c("2005", "2010", "2015", "2020"),
+  stk_flow = c(350, 450, 500, 600))
+
+ggplot(data, aes(x = partner, y = stk_flow)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +  # Use fill for bar colors
+  theme_minimal() +
+  labs(title = "Annual EU Import Trade", 
+       x = "EU Single Market", 
+       y = "Import Goods Value in Euros (billions)")
+
+```
+
+![ESM](ESM.png) Author:
+
+```         
+Michael Devlin
+
+HOW THE EUROPEAN UNION IS LEADING IN SINGLE MARKET IMPORTS AND THE IMPACT
+```
+
+-   This visualization is demonstrating the EU Single Market's total import based trade within the common economic zone and its relation to the global economy.
+
+-   I decided to see what the overall development trend has been for the EU Single Market for its imports.
+
+-   It demonstrates that there is a consistent demand for foreign goods as a share of market activity.
+
+-   This is caused by a growing internal consumer demand for products from foreign trading partners.
+
+-   Further more, this displays how the Single Market is capable of being a major global economic regional power that allows for its member states to have collective benefit to international trade.
+
+    HOW DOES THIS IMPACT EU CITIZENS AND THEIR ECONOMIC ACITIVITY WITHIN THE SINGLE MARKET?
+
+-   This visualization gives insight into how the Single Market is able to consistently develop increased trade and thus provide increased consumer variety and choice
+
+-   The Single Market is able to because of its collective trade practices, offer a superior range of imports to be provided
+
+-   This in turn allows for higher internal economic growth as a result of greater consumer demand for goods as a share of imports
+
+-   Overall, this further enhances the Single Market as a preferable trading partner and economic entity to maintain and increase future trade relations
+
+-   This is a positive impact for EU citizens, across all member states that enjoy such trade access
+
+Data Source: Eurostat
+
+<https://ec.europa.eu/eurostat/data/database>
+
+Image Source: European Commission and European Parliament
+
+<https://www.europarl.europa.eu/topics/en/article/20230112STO66302/30-years-of-eu-single-market-benefits-and-challenges-infographics>
+
+[Website Landing Page](/WebsiteLandingPage.html)

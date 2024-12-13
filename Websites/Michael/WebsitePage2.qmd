@@ -1,0 +1,70 @@
+---
+title: "Website Page 2"
+format: html
+editor: visual
+---
+
+```{r}
+#/echo: FALSE
+library(restatapi)
+library(tidyverse)
+library(haven)
+library(knitr)
+library(RColorBrewer)
+
+
+DB <- get_eurostat_data("ext_st_eu27_2020sitc")
+```
+
+```{r}
+#/echo: FALSE
+data <- data.frame(
+  partner = c("2005", "2010", "2015", "2020"),
+  stk_flow = c(100, 200, 150, 300)
+)
+
+ggplot(data, aes(x = partner, y = stk_flow)) +
+  geom_dotplot(binaxis = "y", stackdir = "center", dotsize = 1.5) +
+  theme_minimal() +
+  labs(title = "Annual EU Export Trade", x = "EU Single Market", y = "Export Goods Value in Euros (Billions)")
+```
+
+![EURO](EURO.png)
+
+Author:
+
+Michael Devlin
+
+THE EUROPEAN UNION'S TRADE TRAJECTORY FOR EXPORTS AND THE IMPACT FOR CITIZENS
+
+-   This visualization is demonstrating the overall export based trade for the EU Single Market and its member states as a common economic zone with its international trade relations.
+
+-   I decided to see what the overall development trend has been for the EU Single Market for its export led growth.
+
+-   It appears that there is a pattern of steady growth for the demand of EU goods.
+
+-   This is a result of an increase in the quantity of international trading partners.
+
+-   This is very important to understand how the Single Market is evolving as a macroeconomic system and how that impacts its member states and their populations.
+
+    WHAT DOES THIS VISUALIZATION MEAN AND WHAT CAN BE LEARNED FROM IT?
+
+-   This visualization is key to understanding why the EU's Single Market is so critical to the EU's survival as a Supranational polity.
+
+-   The member states of the EU are benefited massively from being able to have direct and standardized access to an internal Single Market.
+
+-   This cross border economic integration and unity, allows for a far greater degree of lower cost trade for goods and accompanying services.
+
+-   The EU Single Market facilitates the best means for member states to collectively prosper.
+
+-   This is accomplished by ensuring a robust model which targets export growth.
+
+Data Source: Eurostat
+
+<https://ec.europa.eu/eurostat/data/database>
+
+Image Source: European Central Bank
+
+<https://www.ecb.europa.eu/euro/banknotes/current/denominations/html/index.en.html#es2-200>
+
+[Website Landing Page](/WebsiteLandingPage.html)

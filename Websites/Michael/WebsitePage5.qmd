@@ -1,0 +1,86 @@
+---
+title: "Website Page 5"
+format: html
+editor: visual
+---
+
+```{r}
+#/echo: FALSE
+library(restatapi)
+library(tidyverse)
+library(haven)
+library(knitr)
+library(RColorBrewer)
+library(dplyr)
+EB <- read_dta("~/Data Visualization & Analysis/ZA7997_v1-0-0.dta")
+```
+
+```{r}
+TradP<- EB %>% 
+  select(isocntry, qb2_3) %>% 
+  mutate(qb2_3L = as_factor(qb2_3)) 
+         
+summary(TradP$qb2_3L)
+TradP2 <- TradP %>%
+  rename(geo = isocntry) %>%
+  filter(qb2_3==1 | qb2_3==2) %>%
+  mutate(ForTrade = qb2_3L %in% c('For'))
+
+TradPMeans <- TradP2 %>% #starts with our dataset
+  group_by(geo) %>% #this defines geo as the group we care about. 
+    summarise(ForTrade = mean(ForTrade))
+```
+
+```{r}
+#/echo: FALSE
+
+TradPMeans %>% filter(geo=="AT"|geo=="FR"|geo=="LT"|geo=="CZ"|geo=="IT")%>%
+ggplot(aes(x = geo,y = ForTrade)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "EU Citizen Opinion on EU Single Market", x = "EU Citizens", y = "Variation of Positive vs. Negative Opinions")
+```
+
+-   
+
+    ![](EUMS.png)
+
+Author:
+
+```         
+Michael Devlin
+
+EU CITIZEN PUBLIC OPINION ABOUT THE SINGLE MARKET'S TRADE POLICIES AND ITS EFFECTS
+```
+
+-   This visualization is demonstrating the opinions of EU citizens about trade and EU trade policy.
+
+-   As a matter of policy that impacts the public, the EU Single Market has substantial effects.
+
+-   This is a result of how the trade policies pursued and applied can shift citizen attitudes.
+
+-   When reviewing the relationship between EU citizen opinions about Single Market trade, there is a trend of any increase in import costs and reduction of exports being negatively viewed.
+
+    HOW THIS CAN INFER FOR THE EU's TRADE POLICIES FOR IMPACTING PUBLIC OPINION
+
+-   Citizens of the EU Single Market being adversely impacted by trade policies are a concern.
+
+-   The EU's legitimacy as claiming a democratic mandate for its various institutions and policies, is either helped or harmed depending on how for the specific issue of trade citizens think and feel.
+
+-   This has potential political ramifications for those involved with EU Single Market regulations.
+
+-   As can be demonstrated, the collective economic unity of member states and citizen socio-economic well being is dependent on if the factors of Single Market trade is more beneficial.
+
+-   If particular trade policies are perceived as negative by EU citizens, then there is cause for concern that the Single Market will suffer from Eurosckepticism and Economic Nationalism.
+
+-   This threatens the internal harmony and collective benefit of the Single Market's purpose and continued existence as a unified economic bloc and the accompanying positive attributes.
+
+Data Source: Eurobarometer (GESIS)
+
+<https://data.europa.eu/data/datasets/s2993_100_3_sp544_eng?locale=en>
+
+Image Source: European Policy Institute
+
+https://www.epc.eu/en/publications/Going-beyond-the-Single-Market-Why-Europe-must-become-a-Single-Econom\~35b9e8
+
+[Website Landing Page](/WebsiteLandingPage.html)

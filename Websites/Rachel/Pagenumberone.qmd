@@ -1,0 +1,95 @@
+---
+title: ""
+format: html
+---
+
+# [What is Discrimination & Employment as a Policy Area?]{.underline}
+
+[![](images/European_Union_Flags_2a.jpg)](https://www.eumetsat.int/european-unioneuropean-commission)
+
+Employment and discrimination are two policy areas that are intertwined within the European Union. Thinking of when they are harmonized, it is a policy area that focuses on equal opportunity and treatment of all people both in the work place and in searching for a job. While discrimination is imposed on various groups, for the sake of simplicity and data currently available, this website explores gender bias and non-EU nationality specifically.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+```
+
+```{r}
+#| include: False 
+ UNE <- get_eurostat_data("lfsa_urgaed")
+ EMP <- get_eurostat_data("lfsa_ergaed")
+ GEG <- get_eurostat_data("tesem060")
+ ESNames <-read_csv ("~/Downloads/EUPS /644/Policy Website/ESNames.csv")
+DEP <-get_eurostat_data("lfso_21disc01")
+
+```
+
+
+```{r}
+#| echo: FALSE 
+#| results: "hide"
+ DEP %>%
+filter(reason=="GEND"|reason=="AGE"|reason=="ORI_FOR"|reason=="DIS") %>%
+ggplot(aes(x=sex, y=values, fill=reason)) +
+geom_bar(stat="identity", position="stack")+
+labs(x="Reason for Discrimination", #change x-axis lable
+     y="Per One Thousand People", #Change y-axis lable
+title="Self-percieved Discrimination in the Workplace",
+  caption= "GEND = Gender Discrimination | DIS = Disability | ORI_FOR = Foreign Orgin
+Data from Eurostat")+
+guides(fill=guide_legend(title="SEX"))+
+    theme_minimal()+
+  theme(plot.caption = element_text(hjust=0, size=6, color="black") )
+      
+```
+
+As seen in this graph, regardless of the reason for discrimination, women overall reported being discriminated against more often. More specifically, they were discriminated more frequently for every reason except for being of a foreign orgin.
+
+The European Union has a specific [strategy for Gender Equality](https://commission.europa.eu/strategy-and-policy/policies/justice-and-fundamental-rights/gender-equality/gender-equality-strategy_en) in which closing gaps in the labor market is a large component. It is about creating equal opportunity for women and closing the pay gap that exists as well.
+
+```{r}
+#| include: False 
+GEG_ESN <- GEG %>% # specifiies that we are storing the result of these steps back in EUEduc, which is a little dangerous
+  left_join(ESNames, by=c("geo"="CODE"))
+
+head(GEG_ESN)
+
+```
+
+```{r}
+#| echo: FALSE
+
+GEG_ESN %>%
+filter() %>%
+ggplot(aes(x=time, y=values, fill=subcategory)) +
+geom_bar(stat="identity", fill="pink")+
+  facet_wrap(~countryname)+
+labs(title="Gender Employment Gap in the EU Over Time", caption="Data from Eurostat")+
+guides(fill=guide_legend(title="Gender"))+
+    theme_minimal()+
+  theme(plot.title=element_text(color="blue", size=12, face="bold"),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=5),
+        )
+
+```
+
+-   [Why is it Important to Develop & Learn About this Policy Area?](pagenumbertwo.html)
+-   [Why is this and EU Issue?](pagenumberthree.html)
+-   [Who is most effected?](pagenumberfour.html)
+
+------------------------------------------------------------------------
+
+*References*:
+
+European Commission. 2023. "Gender Equality Strategy." *European Commission*. Available at <https://commission.europa.eu/strategy-and-policy/policies/justice-and-fundamental-rights/gender-equality/gender-equality-strategy_en>.
+
+Eurostat. 2023. "Self-Perceived Discrimination at Work – Statistics." *Eurostat Statistics Explained*. Available at <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Self-perceived_discrimination_at_work_-_statistics&oldid=579988>.

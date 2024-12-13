@@ -1,0 +1,109 @@
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+---
+title: "page 3"
+format: html
+---
+
+## How tourism affects Jobs and GDP
+
+![](images/page 3 pic .jpeg){fig-align="center" width="355"}
+
+People from around the world are looking to see where they want to travel each year. In this page of the website it will show how jobs affect the total GDP. This is to show that jobs that are related to tourism affect the total amount of GDP a lot more than what people thing it does. I want people to know that with the new rules that are coming into place could affect the overall GDP and jobs. If the EU does not take action to conduct safe travel and safe alternative to protect job then it will affect the EU for a long time.
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+
+```
+
+```{r}
+#| echo: FALSE
+
+GDP <- get_eurostat_data("nama_10_a10_e")
+```
+
+```{r}
+#| include: FALSE
+DSD <- get_eurostat_dsd("nama_10_a10_e")
+```
+
+```{r}
+#| include: FALSE 
+
+TOR <- get_eurostat_data("sbs_ovw_act")
+```
+
+```{r}
+#| include: FALSE 
+
+dsd <- get_eurostat_dsd("sbs_ovw_act")
+```
+
+```{r}
+#| include: FALSE 
+
+TOR <- GDP %>% 
+  filter(time=="2022", unit=="PC_TOT_PER", nace_r2=="G-I"|nace_r2=="TOTAL"| nace_r2=="C" |nace_r2=="R-U" | nace_r2=="O-Q" | nace_r2=="K" , na_item=="EMP_DC") %>%
+select(geo, na_item, nace_r2, unit = values)
+
+COMB <- TOR %>% left_join(GDP, by = "geo")
+```
+
+```{r}
+#| echo: FALSE 
+#| warning: FALSE
+
+
+COMB %>% 
+  filter(time=="2022"| time=="2023"| time=="2021", nace_r2.x=="G-I" | nace_r2.x=="C" | nace_r2.x=="R-U" | nace_r2.x=="TOTAL") %>%
+   mutate(nace_r2.x = recode(nace_r2.x, "G-I"="Jobs in tourism","C"="Manufacturing", "R-U"="Art and entertainment", "Total"="Whole GDP")) %>%
+  ggplot(aes(x=nace_r2.x, y=unit.x, label=geo, fill=nace_r2.x)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  labs(title = "How the GDP is Affected in total by Threee differnt jobs", x = "Jobs", y = "Total amount of affect on the GDP") + 
+  theme_minimal() +
+  scale_fill_manual(values = c("Jobs in tourism" = "skyblue", 
+                               "Manufacturing" = "orange", 
+                               "Art and entertainment" = "lightgreen", 
+                               "Whole GDP" = "purple"))
+```
+
+This graph is showing how the different jobs GDP compared to the overall GDP. When looking at tourism it is clear that impact that it has on the GDP is more significant than the other two jobs. With the new rules in place there will not be other jobs to take the place of tourism. If the EU does impact the tourism market then it will be interesting to see the future of how the GDP is affected.
+
+```{r}
+#| echo: FALSE 
+#| warning: FALSE
+
+
+COMB %>% 
+  filter(time=="2022"| time=="2023"| time=="2021", nace_r2.x=="G-I" | nace_r2.x=="O-Q" | nace_r2.x=="R-U" | nace_r2.x=="K" | nace_r2.x=="TOTAL") %>%
+   mutate(nace_r2.x = recode(nace_r2.x, "G-I"="Jobs in tourism","O-Q"="Gifts and Goods", "R-U"="Art and entertainment", "K"="Food", "Total"="Whole GDP")) %>%
+  ggplot(aes(x=nace_r2.x, y=unit.x, label=geo, fill=nace_r2.x)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  labs(title = "How the GDP is Affected in total by Threee differnt jobs", x = "Jobs", y = "Total amount of affect on the GDP") + 
+  theme_minimal() +
+  scale_fill_manual(values = c("Jobs in tourism" = "skyblue", 
+                               "Gifts and Goods" = "orange", 
+                               "Art and entertainment" = "lightgreen",
+                               "Food" = "red", 
+                               "Whole GDP" = "purple")) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) 
+```
+
+The goal of this graph is to show all of the jobs that have tourism ties affect the total GDP of the EU. It is clear that between all of these jobs that there is significant to the GDP of the EU. These new rules that are in place not only will affect jobs directly in tourism, but will also affect these other jobs. I think that it is important for people to understand how the EU's GDP is affected by tourism.
+
+-   [Jobs Through Tourism](Page2.html)
+
+-   [Cornerstone of the EU Market](Page1.html)
+
+-   [How Tourism Affects the Market](page3.html)
+
+-   [Why Picking a Destination is Important](page4.html)

@@ -1,0 +1,106 @@
+---
+title: ""
+format: html
+editor: visual
+---
+
+# [Why is This an EU issue?]{.underline}
+
+[![](images/eu_charter_conference.jpg)](https://www.google.com/url?sa=i&url=https%3A%2F%2Funipd-centrodirittiumani.it%2Fen%2Fkeywords%2Feuropean-union%2Fnews%3Fpage%3D4&psig=AOvVaw2hvXqW4AA7EiaVLXBmy_XI&ust=1732195979013000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIixyIOD64kDFQAAAAAdAAAAABAE)
+
+[The Charter of Fundamental Rights of The European Union](https://www.europarl.europa.eu/charter/pdf/text_en.pdf) is a standard EU Law that became legally binding after the Treaty of Lisbon. It enshrines the rights of every EU citizen. In [Title III "Equality"](https://fra.europa.eu/en/eu-charter/title/title-iii-equality), it is stated that any discrimination on any ground, such as sex (...) shall be prohibited.
+
+In turn, this creates a duty for the EU institutions to do everything in its power to ensure that its citizens are protected from discrimination. It has set precedent in EU law, making this a policy area that in which EU intervention is legal and necessary.
+
+```{r}
+#| include: False 
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+library(haven)
+```
+
+```{r}
+#| include: False 
+GDV <- read_dta("~/Downloads/ZA4976_v3-0-0.dta")
+YUE <- get_eurostat_data("tesem140")
+PRS <- get_eurostat_data("tesov110")
+
+
+```
+
+```{r}
+#| include: False 
+YUE_PRS <- YUE %>% 
+  left_join(PRS, by = c("sex"="sex", "geo"="geo", "time"="time")) 
+  
+head(YUE_PRS)
+```
+
+```{r}
+#| echo: FALSE
+YUE_PRS %>%
+  filter(sex=="F"| sex=="M", time=="2023") %>%
+   ggplot(aes(x=values.y, y=values.x, label=geo, color=sex)) +
+  geom_text(check_overlap = TRUE) +
+  labs(title="Poverty rate vs. Youth Unemployment Rate in the EU by sex 2023", caption="Data from EUROSTAT",
+       x="Youth Unemployment Rate",
+       y="Poverty Rate")+
+ theme_minimal()+
+  stat_smooth(method = "lm", 
+              formula = y ~ x, 
+              geom = "smooth") 
+
+```
+
+This graph displays a comparison between in work at-risk-of poverty rate and youth unemployment rate in the European Union in the year 2023. As seen here, there is two points for each country, which displays the differences for men and women. As demonstrated, there is a higher poverty rate overall for women. It is also clear that where a higher youth unemployment rate is seen, a greater poverty risk is also seen.
+
+It is important that discrimination is eliminated from the youth level up, discouraging ongoing disproportional hardship based on sex.
+
+```{r}
+#| include: False 
+
+GDVR <- GDV %>% 
+  select(v281, v299, v277) %>% 
+  mutate(v281L = as_factor(v281), v299L = as_factor(v299),v277L = as_factor(v277))
+  
+head(GDVR)
+
+```
+
+```{r}
+#| echo: false 
+#| results: hide 
+ GDVR %>% 
+  filter(v281==1| v281==3, v277==2| v277==1) %>%
+  ggplot(aes(x = v281L, fill=v277L)) +
+  geom_bar( position = "fill",)+
+    labs(title = "Perception of EU influence and Role in Gender Equality", caption="Data from GESIS", x = "Heard of EU Action to Combat Gender Inequality", y = "")+
+    guides(fill=guide_legend(title="Government Decisions on Gender
+    Equality Should Be Made..."))
+     theme_minimal()+
+  theme(plot.title=element_text( size=12, face="bold"),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=5),
+        )
+
+```
+
+Citizens who have heard about EU action to combat Gender Inequality are more likely to perceive that decisions made about gender equality should involve the EU. It is critical that the EU employs education and wide spread communication of policy development to ensure support from EU citizens in the implementation of anti-discrimination policy.
+
+-   [SEE HERE WHO THIS ISSUE EFFECTS](pagenumberfour.html)
+-   [Back to homepage](pagenumberone.html)
+
+------------------------------------------------------------------------
+
+*References*:
+
+European Parliament. n.d. *Charter of Fundamental Rights of the European Union.* Accessed November 25, 2024. <https://www.europarl.europa.eu/charter/pdf/text_en.pdf>.
+
+European Union Agency for Fundamental Rights. n.d. “Title III: Equality.” *EU Charter of Fundamental Rights.* Accessed November 25, 2024. <https://fra.europa.eu/en/eu-charter/title/title-iii-equality>.

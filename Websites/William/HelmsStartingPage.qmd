@@ -1,0 +1,25 @@
+---
+title: "Website"
+author: "William Helms"
+format: html
+editor: source
+---
+
+# ***Tourism the Global Enterprise***
+
+## **Introduction**
+
+On this website the goal is to explore how the tourism market benifits the whole EU, Member States and even down to the average day person living in the EU. With this being said the goal of this is to allow people to gain their own understand of how people are affected on a local level and even the national level. Overall this website is aimed for people interested in tourism in Europe.
+
+![](https://banner2.cleanpng.com/20180330/uze/avic7d59d.webp)
+
+The impact on travel is not just on the nations that people decide to visit, but it also has an affect on the people that visit these countries. Europe is not just a destination that people choose for vacation because it has a lot of historical, educational, and religious site, but also because it provides people with cultural experience that they are not able to experience in their own countries.
+
+-   [Jobs Through Tourism](Page2.html)
+
+-   [Cornerstone of the EU Market](Page1.html)
+
+-   [How Tourism Affects the Market](page3.html)
+
+-   [Why Picking a Destination is Important](page4.html)
+

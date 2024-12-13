@@ -1,0 +1,39 @@
+---
+title: "Website for Data Visualization and Analysis"
+format: html
+editor: visual
+---
+
+21ST CENTURY EUROPEAN UNION ECONOMICS AND TRADE
+
+Author:
+
+Michael Devlin
+
+European Union - Single Market - International Trade
+
+A Data Driven Dive into the Trends of the European Union's Import-Export Balance
+
+An Empirical Analysis of the Short and Long Term Impacts of EU Economic Activity
+
+![EU Flag](EUFlag) 
+
+WHY DOES THIS POLICY AREA MATTER?
+
+The policy area being demonstrated is of the Single Market. This economic and financial trade area, consisting of 27 member states, is a massive economic powerhouse, with wide ranging implications for global trade as a whole. The European Union began as the idea of European nation-states being able to eventually integrate and standardize their economies for mutual benefit, and to ensure lasting peace and stability on the continent. This project which began seven decades ago, has flourished into one of the largest free trade areas in the world. It has became a vital part of the modern, globalized economy, and serves as an example of the policy developments which has facilitated the greatest degree of cooperation, prosperity and peace in Europe's history. With almost \$20 trillion worth of GDP, the European Union's Single Market has allowed cross border investment, innovation, growth and collaboration for hundreds of millions of Europeans. The global effects of the European Single Market are of great importance to many other economies around the world and their populations as well, that are heavily invested in the Single Market with international trade and partnerships to expand cooperation and mutual benefit.
+
+WHO DOES THIS POLICY AREA BEING STUDIED BENEFIT?
+
+While the European Single Market has existed for three decades so far, it has had its issues in relation to recessions, inflation, productivity, imports and export growth, and other macroeconomic conditions that have influence how the Single Market has evolved and responded to the difficulties of the shifting trends in the global economy. Policy analysts that specialize in the Single Market, are always looking for indicators about the overall condition of the market and what current issues are affecting the market as a massive source of economic growth and investment in the world economy. Thus, the ability to understand how short versus long term fluctuations impact the Single Market, is of great value to policy analysts.
+
+HOW CAN UNDERSTANDING THE SINGLE MARKET IMPROVE POLICY OUTCOMES?
+
+The Single Market takes into account the interests of those that operate in and are provided by the market. The European Union's competencies concerning the Single Market are well established and are enforced to ensure all member states are compliant with any necessary modification or addition to the market. The affects of market policies upon laborers are considered. The affects of market policies upon consumers are considered. The affects of market policies on the environment are considered. This allows for the Single Market to be more than just an economic zone, and to become a policy informed mechanism for positively impacting the livelihoods of all interacting with the Single Market, especially EU citizens who are supposed to be the primary and direct beneficiaries.
+
+Page Links:
+
+[European Union Export Trade](/WebsitePage2.html)
+[European Union Import Trade](/WebsitePage3.html)
+[European Union and E.F.T.A Trade](/WebsitePage4.html)
+[European Union Citizen Opinions on Trade](/WebsitePage5.html)
+

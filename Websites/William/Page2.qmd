@@ -1,0 +1,74 @@
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+---
+title: "Jobs Growing in Tourism"
+format: html
+editor: visual
+---
+
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdUllHAZPLDBL-l5cW-aLLELZKUbyzyduLqw&s){fig-align="center" width="566"}
+
+## Jobs Through Tourism
+
+Tourism throughout Europe is on the rise since the COVID-19 pandemic. This has lead to more jobs being available in Europe. Jobs for people lead to them being able to have a long prosperity for their families, countries, and all of Europe. With the new laws that are coming into force in 2025 the job market in Europe may be affected in a way that may not be able to recover from.
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+
+```
+
+```{r}
+#| echo: FALSE
+
+TOR <- get_eurostat_data("sbs_ovw_act")
+```
+
+```{r}
+#| include: FALSE
+DSD <- get_eurostat_dsd("sbs_ovw_act")
+```
+
+```{r}
+#| echo: FALSE
+
+TOR %>%
+  filter(geo %in% c("EL", "FI", "SE", "HR"),
+         time %in% c("2020", "2021", "2022"),
+         nace_r2 %in% c("TI", "C", "F")) %>%
+  mutate(nace_r2 = recode(nace_r2, 
+                          "TI" = "Total Jobs from Tourism", 
+                          "F" = "Construction", 
+                          "C" = "Manufacturing"),
+         geo = recode(geo, 
+                      "EL" = "Greece", 
+                      "FI" = "Finland", 
+                      "SE" = "Sweden", 
+                      "HR" = "Croatia")) %>%
+  ggplot(aes(x = time, y = values, group = nace_r2, color = nace_r2)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  facet_wrap(~geo) +
+  labs(title = "Jobs from Three Major Sectors in the EU", y = "Job Growth Rate") +
+  theme_minimal() +
+  theme(axis.title.x = element_blank()) +
+  guides(color = guide_legend(title = "Job Types"))
+```
+
+This graph is showing how in countries that have a lot of tourism that jobs are increasing more and more. Whereas in countries that do not have as much tourism that jobs are staying steady. With the new rules going in place jobs could see a significant decrease in the rear future. Countries like Greece where tourism is very popular jobs have increased significantly from 2021 to 2022. Not only does the job market help people but it also affects the total GDP of the country. The next page will have a more in depth look into the GDP of each country in the EU.
+
+
+-   [Jobs Through Tourism](Page2.html)
+
+-   [Cornerstone of the EU Market](Page1.html)
+
+-   [How Tourism Affects the Market](page3.html)
+
+-   [Why Picking a Destination is Important](page4.html)

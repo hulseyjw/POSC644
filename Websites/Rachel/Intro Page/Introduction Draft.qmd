@@ -1,0 +1,26 @@
+---
+title: ""
+author: "Rachel Morris"
+format: html
+editor: visual
+---
+
+# [Unemployment & Job Discrimination Policy in the European Union]{.underline}
+
+[![](images/European_Union-608x405.webp)](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.teacheracademy.eu%2Fcourse%2Fthe-european-union-explained%2F&psig=AOvVaw15bSM6AKmFmsNFP9q9ggvj&ust=1732195436888000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJiGuICB64kDFQAAAAAdAAAAABAE)
+
+Explore various unemployment in the European Union specifically regarding different groups that face discrimination via visualization and contextualization of data from [Eurostat](https://ec.europa.eu/eurostat/data/database) and [GESIS surveys](https://search.gesis.org/research_data/ZA8779#variables%7Cexploredata-ZA8779_Vard15a_r1%7C0%7Cvariable_name_sorting.keyword%7Casc).
+
+Employment is a critical factor in livelihood and life satisfaction of citizens in the European Union. It is also crucial to supporting economies and boosting the wealth of nations and the EU as a whole. This website aims to look at the various variables within employment, public interpretation of the employment situation, and the prevalence of job vacancy to determine how policy created in the job sector should be directed.
+
+What is Discrimination and Employment as a Policy Area?
+
+Why is it Important to Develop and Learn About this Policy Area?
+
+How is this a European Union Issue?
+
+Who is most effected?
+
+------------------------------------------------------------------------
+
+*References*:

@@ -1,0 +1,60 @@
+---
+title: "page 4"
+format: html
+---
+
+## Why Picking a Destination is Important
+
+![](https://www.shutterstock.com/image-photo/dart-vintage-map-600nw-380799673.jpg){fig-align="center"}
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(haven)
+
+```
+
+```{r}
+#| include: FALSE 
+
+TB <- read_dta("~/Desktop/Grad School /pols 644 /ZA7807_v1-0-0.dta")
+```
+
+```{r}
+#| include: FALSE
+
+TB_direction <- TB %>% 
+  select(isocntry, q4a) %>% 
+  mutate(q4aL = as_factor(q4a))
+  
+head(TB_direction)
+```
+
+```{r}
+#| echo: FALSE
+
+  TB_direction %>% 
+  filter(q4a==1 |q4a==11 | q4a==3 | q4a==4 | q4a==5, isocntry=="AT"|isocntry=="IT"|isocntry=="FR" | isocntry=="DE") %>%
+  ggplot(aes(x = isocntry, fill = q4aL)) +
+  geom_bar(position = "fill")+
+    labs(title = "What is Important for People to concider when Traveling ", x = "Country", y = "Rate of Imporantance")+
+    guides(fill=guide_legend(title="Importancy Catigories"))
+```
+
+This is showing why it is important to consider all aspects of a detestation before picking where to go. In this we can see that it can be more important to go to places that offer cultural experiences are of the most important for people to take into account. If the EU is taking its policy steps to restrict traveling people will need to take into more account on why picking a destination is important.
+
+-   [Jobs Through Tourism](Page2.html)
+
+-   [Cornerstone of the EU Market](Page1.html)
+
+-   [How Tourism Affects the Market](page3.html)
+
+-   [Why Picking a Destination is Important](page4.html)
+
+

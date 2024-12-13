@@ -1,0 +1,86 @@
+---
+title: ""
+format: html
+editor: visual
+---
+
+# [Who is Most Affected?]{.underline}
+
+[![](images/360_F_646575906_MDnebaOnk7Ukp0EtM5kYQ8H8nxI2XZLD.jpg)](https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dwomen%2Bdifferent%2Braces&psig=AOvVaw1Pxo9-afk6ibjH9xWuxois&ust=1732195908542000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLDG6-GC64kDFQAAAAAdAAAAABAE)
+
+Women suffer from gender discrimination the most. It effects them disproportionately to men in general, but also in terms of discrimination in employment and in the workplace.
+
+```{r}
+#| include: False 
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+library(haven)
+```
+
+```{r}
+#| include: False 
+
+UNE <- get_eurostat_data("lfsa_urgaed")
+EMP <- get_eurostat_data("lfsa_ergaed")
+```
+
+```{r}
+#| echo: false
+#| 
+UNE %>%
+  filter(time=="2023", geo=="IT"|geo=="DE"|geo=="FR"|geo=="HU"|geo=="LU"|geo=="EU27_2020"| geo=="NL"| geo=="AT"|geo=="IE") %>% 
+  mutate(geo = recode(geo, "IT"="Italy", "DE"="Germany", "FR"="France", "ES"="Spain", "EU27_2020"= "EU
+Total", "LU"="Luxem.", "HU"="Hungary","IE"="Ireland", "AT"="Austria"))%>% 
+    ggplot(aes(x=geo, y=values, fill=sex)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(x="Country", #change x-axis lable
+     y="Percentage", #Change y-axis lable
+      title="Unemployment in 2023 (% of Population Ages 25-64)",
+     caption= "Data from Eurostat")+
+  guides(fill=guide_legend(title="Sex"))+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        )+
+  theme_minimal()+
+theme(plot.caption = element_text(hjust=1, size=6, color="black"))
+```
+
+This graph shows that a larger percentage of women are unemployed in the EU compared to men. In the EU as a whole, the percentage of women that are unemployed is greater than that of men and the EU population as a whole.
+
+### Perception of Discrimination:
+
+People that have experienced or witnessed gender discrimination at work also say that the most frequent place for sexist stereotypes is in the workplace, compared to those who have not experienced or witnessed gender discrimination :
+
+```{r}
+#| include: False 
+
+ ESNames <-read_csv ("~/Downloads/EUPS /644/Policy Website/ESNames.csv")
+GDV <- read_dta("~/Downloads/ZA4976_v3-0-0.dta")
+
+GDVR <- GDV %>% 
+  select(v313, v258, v268, v267, v270) %>% 
+  mutate(v313L = as_factor(v313), v258L = as_factor(v258), v268L = as_factor(v268), v267L = as_factor(v267), v270L = as_factor(v270))
+  
+head(GDVR)
+```
+
+```{r}
+#| echo: False 
+ GDVR %>% 
+  filter(v313==1|v313==2| v313==3, v258==1|v258==0) %>%
+  ggplot(aes(x = v258L, fill = v313L)) +
+  geom_bar( position = "fill",)+
+    labs(title = "Victims of Gender Discrimination at Work vs. Sexist Stereotypes in Working Life ", caption="Data from GESIS", x = "Sexist Stereotypes Most Frequently Found at Work", y = "")+
+    guides(fill=guide_legend(title="Victim of Gender Discrimination"))
+```
+
+-   [Back to homepage](pagenumberone.html)
+
+------------------------------------------------------------------------
+
+*References*:
