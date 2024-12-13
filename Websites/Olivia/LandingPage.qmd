@@ -1,0 +1,20 @@
+---
+title: "POSC644 Website"
+author: "Olivia Redman"
+format: html
+editor: visual
+---
+
+# Asylum Seeking Policy in the European Union 
+
+![](https://scd.infomigrants.net/media/resize/my_image_big/f8d276861b1e01398e858d2a52ae2d3b0f359eeb.jpg)
+
+
+One of the most controversial and relevant policy areas in the European Union is currently policy regulating the asylum seeking process. With the recent migration crisis of 2015, this policy area has been heavily debated, especially in regard to how much the EU should be involved. This website will explore the current status of the European Union's policy on the asylum seeking process through analysis of data from Eurostat and Eurobarometer. The sections of the website, which are linked below, will include facts and figures that further explain the European Union's policy area on asylum seekers and discuss the impacts of the current state of the asylum seeking process. Through these different sections, a thorough analysis of the fundamentals of this policy area, its changes over time, and its variation across the European Union will be provided.  
+
+# Menu: 
+[What is This Policy Area About](/WhatIsThisPolicyAreaAbout.html)    
+[What Does This Have to Do With the European Union](/WhatDoesThisHaveToDoWithTheEuropeanUnion.html)  
+[Why Should I Care](/WhyShouldICare.html)    
+[Who is Affected](/WhoIsAffected.html)    
+

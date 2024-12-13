@@ -23,7 +23,7 @@ My page will explore:
 
 ### Pages
 
--   [What is Digital Policy About?](AntashWhatIsPolicyPage.html)
+-   [What is Digital Policy About?](AntashWhatisPolicyPage.html)
 
 -   [Why Should I care?](AntashWhyShouldICarePage.html)
 

@@ -7,6 +7,22 @@ format: html
 
 ## Web Pages
 
-[Annika Anderson](/Websites/Annika/LandingPage.html)
+[Annika Anderson - European Citizenship and Democracy](/Websites/Annika/LandingPage.html)
 
-[Sattie Sanderson](/Websites/Sattie/LandingPage.html)
+[George Antash - Data Protection in the EU](/Websites/George/AntashLandingPage.html)
+
+[Cade Bennett - Covid 19 Response](/Websites/Cade/Website%20Draft.html)
+
+[Lillie Grimsley - Inflation Rates in the EU](/Websites/Lillie/LANDINGPAGE.html)
+
+[Camryn Harris - Prison and Poverty in the EU](/Websites/Camryn/HarrisWebsite.html)
+
+[Adrienne Livingston - Femicide in the EU](/Websites/Adrienne/Website.html)
+
+[Carter Payne - Education and Training in the EU](/Websites/Carter/WebsiteLandingPage.html)
+
+[Olivia Redman - Asylum Seeking Policy in the EU](/Websites/Olivia/LandingPage.html)
+
+[Prema Subramaniam - Energy Poverty in the EU](/Websites/Prema/policywebsite.html)
+
+[Sattie Sanderson - Educational Attainment, Employment and Public Opinion in the EU](/Websites/Sattie/landing.html)

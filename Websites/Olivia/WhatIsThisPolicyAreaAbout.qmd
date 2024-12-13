@@ -1,0 +1,83 @@
+---
+title: "What is this Policy Area About?"
+author: "Olivia Redman"
+format: html
+editor: visual
+---
+
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqnHV_sj1CiYH_l9iuasrtRKc19K9MOZZo7g&s)
+
+# Explaining Asylum Policy In the EU
+
+Migration has been a major challenge for the EU since the migration crisis of 2015, and it has remained a primary policy problem area in the wake of several major crisis, such as Russia's war in Ukraine. Asylum-seeking is a specific subset of this problem that is increasingly relevant for EU policy-makers as they continue to try and manage the ongoing challenges associated with the rise in asylum applications over time.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+library(leaflet)
+library(htmlwidgets)
+library(htmltools)
+library(scales)
+
+```
+
+```{r}
+#| include: false
+
+ASYLUMAPP <- get_eurostat_data('migr_asyappctza')
+
+```
+
+```{r}
+#| include: false
+
+DUBDEC <- get_eurostat_data('migr_dubduni')
+```
+
+```{r}
+#| echo: FALSE
+
+ASYLUMAPP %>%
+  filter(age == "TOTAL", citizen == "EXT_EU27_2020", unit == "PER") %>%
+  group_by(time) %>%  
+  summarize(total_applications = sum(values, na.rm = TRUE)) %>%
+  mutate(time = as.numeric(as.character(time))) %>%
+  ggplot(aes(x = time, y = total_applications)) +
+  geom_point(na.rm = TRUE) +
+  geom_line(linewidth = 1, color = "#C71585", na.rm = TRUE) +
+  labs(title = "Total Asylum Applications over Time (2008 to 2022)", caption = "Source: Eurostat",
+       x = "",
+       y = "Total Applications") + 
+  theme_minimal() +
+  scale_x_continuous(breaks = seq(2008, 2022, by = 1)) + 
+  scale_y_continuous(labels = label_number(accuracy = 1)) +
+  theme(text = element_text(family = "serif"),
+        plot.title = element_text(hjust = 0.5), 
+        axis.text.x = element_text(size = 8), 
+        axis.text.y = element_text(size = 8))
+
+```
+
+The total number of asylum applications in the EU peaked around the 2015 migration crisis. The migration crisis resulted from the "diverse increase in the flow of refugees and illegal immigrants" from "countries of North Africa, the Middle East and South Asia and the EU's not readiness to receive and distribution them," and it was the largest crisis of this type since World War II (Gladysh and Sychov 2020, 9). In response to the crisis, the EU has attempted to enact policy reforms, such as further cooperation with third countries and providing more legal ways to refugees to enter Europe (European Commission 2017). While the EU did face criticism for its handling of the crisis, there was a noticeable drop in the number of total asylum applications in the following years. However, the number of applications have increased once again after the COVID-19 pandemic and the onset of Russia's invasion of Ukraine. The EU issued a temporary protection directive, which provided protection for over 4.2 million Ukrainians and was also meant to "reduce pressure on the national asylum systems of EU countries" (General Secretariat of the Council 2024). However, there has been strain on EU resources, and the EU continues to reform and create migration and asylum policy in response to these various crises and the increase in asylum seekers.
+
+# Sources:
+
+European Commission. 2017. "The EU and the Migration Crisis." Publications Office of the European Union. https://data.europa.eu/doi/10.2775/330525\
+General Secretariat of the Council. 2024. "Refugees from Ukraine in the EU." European Council and Council of the European Union. https://www.consilium.europa.eu/en/infographics/ukraine-refugees-eu/\
+Eurostat. 2024. "Asylum and First-Time Asylum Applicants by Citizenship, Age, and Sex – Annual Aggregated Data (Rounded)." https://ec.europa.eu/eurostat/databrowser/view/migr_asyappctza/default/table?lang=en&category=migr.migr_asy.migr_asyapp.\
+Eurostat. 2024. "Transfers of Applicants for International Protection According to the Dublin Regulation – Annual Data (Rounded)." https://ec.europa.eu/eurostat/databrowser/view/migr_dubduni/default/table?lang=en&category=migr.migr_asy.migr_dub.migr_dubdec.\
+Gladysh, Marianna, and Viktor Sychov. 2020. "The Influence of the Migration Crisis of 2015 on the EU Migration Policy." Studia Europejskie - Studies in European Affairs. https://doi.org/10.33067/SE.3.2020.1
+
+# Menu:
+
+[Home Page](/LandingPage.html)\
+[What Does This Have to Do With the European Union](/WhatDoesThisHaveToDoWithTheEuropeanUnion.html)\
+[Why Should I Care](/WhyShouldICare.html)\
+[Who is Affected](/WhoIsAffected.html)

@@ -1,0 +1,154 @@
+---
+title: "Who Is Affected?"
+author: "Olivia Redman"
+format: html
+editor: visual
+---
+
+# Who Does the EU's Asylum Policy Affect
+
+![](https://carnegie-production-assets.s3.amazonaws.com/static/media/images/GettyImages-494683712_refugee_605-1.jpg)
+
+The EU's policies on asylum-seeking affect many areas of European life, especially with the recent rise in asylum-seekers due to the Russian invasion of Ukraine and other geopolitical conflicts. Asylum policy impacts two main groups of stakeholders: those already in the EU and those attempting to enter the EU and seek asylum.
+
+```{r}
+#| include: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+library(leaflet)
+library(htmlwidgets)
+library(htmltools)
+library(scales)
+library(haven)
+```
+
+```{r}
+#| include: false
+
+ASYLUMAPP <- get_eurostat_data('migr_asyappctza')
+
+```
+
+```{r}
+#| include: false
+
+DUBDEC <- get_eurostat_data('migr_dubduni')
+```
+
+```{r}
+#| include: FALSE
+
+EB <- read_dta("~/POSC644/Final/ZA8779_v1-0-0.dta") 
+```
+
+```{r}
+#| include: FALSE
+
+EB_asylumop <- EB %>% 
+  select(isocntry, qb2_4) %>% 
+  mutate(qb2_4L = as_factor(qb2_4))
+  
+head(EB_asylumop)
+```
+
+```{r}
+#| include: FALSE
+
+summary(EB_asylumop$qb2_4L)
+summary(EB_asylumop$qb2_4)
+```
+
+```{r}
+#| include: FALSE
+
+head(ASYLUMAPP)
+head(EB_asylumop)
+
+colnames(ASYLUMAPP)
+colnames(EB_asylumop)
+
+```
+
+```{r}
+#| include: FALSE
+ASYLUM_agg_2023 <- ASYLUMAPP %>%
+  filter(age == "TOTAL", citizen == "EXT_EU27_2020", unit == "PER", time == "2023") %>%
+  group_by(geo, time) %>%  
+  summarize(total_applications = sum(values, na.rm = TRUE), .groups = "drop") %>%
+  mutate(time = as.numeric(as.character(time)))
+```
+
+```{r}
+#| include: FALSE
+
+EB_agg <- EB_asylumop %>%
+  filter(qb2_4L %in% c("For", "Against", "Refusal (SPONTANEOUS)", "DON'T KNOW (SPONTANEOUS)")) %>%
+  group_by(isocntry) %>% 
+  summarise(
+    total_responses = n(),  
+    for_responses = sum(qb2_4L == "For", na.rm = TRUE),  
+    total_for_percentage = (for_responses / total_responses) * 100,  
+    .groups = "drop" 
+  )
+```
+
+```{r}
+#| include: FALSE
+ASYLUM_agg_2023 <- ASYLUM_agg_2023 %>%
+  left_join(EB_agg, by = c("geo" = "isocntry"))
+
+```
+
+```{r}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+
+library(ggrepel) 
+
+ggplot(ASYLUM_agg_2023, aes(x = total_for_percentage, y = total_applications, label = geo)) +
+  geom_text_repel(aes(color = geo), alpha = 0.7) + 
+  geom_smooth(method = "lm", aes(color = "Regression Line"), se = TRUE, linetype = "solid", size = 1) +
+  labs(
+    title = "Total Asylum Applications vs. Support for Migration Policy",
+    x = "Percentage of Support for Common Migration Policy (%)",
+    y = "Total Asylum Applications",
+    color = "Country", 
+     caption = "Source: Eurostat and Eurobarometer"
+  ) +
+  theme_minimal() +  
+  theme(
+    text = element_text(family = "serif"), 
+    axis.text.x = element_text(angle = 45, hjust = 1),  
+    plot.title = element_text(hjust = 0.5), 
+    legend.position = "none"  
+  ) + 
+   scale_y_continuous(
+    limits = c(1, 800000),  
+    breaks = seq(0, 800000, by = 90000),  
+    labels = scales::comma      
+  )
+```
+
+Member states with more asylum applications tend to have a stronger support basis for EU-level migration policy, showing that those who are most impacted by the problem tend to want more EU involvement. EU citizens in countries with high levels of asylum-seekers - namely Spain, France, and Italy - have some of the highest levels of support for common migration policy in the whole EU. These citizens are the ones who are most impacted by the policy problem, along with those who are seeking asylum, and they are some of the most important stakeholders. The migration crisis has been a strong incentive to move toward a common migration policy, and "searching for common solutions is more important than ever" and it is essential for member states to "create a shared experience through international cooperation and exchanges of practice" (Jakobson and Lauren 2018). Member states who are more strongly impacted by the migration crisis tend to support the search for a common policy, highlighting how the most impacted stakeholders want to work with their partners to foster cooperation and work toward reforming migration policy.
+
+# Sources:
+
+European Commission. 2023. Standard Eurobarometer 100: Public Opinion in the European Union. Survey requested by the European Commission, co-ordinated by Directorate-General for Communication (DG COMM Unit ‘Media Monitoring and Eurobarometer’). https://europa.eu/eurobarometer/surveys/detail/3053.\
+Eurostat. 2024. Asylum and First-Time Asylum Applicants by Citizenship, Age, and Sex – Annual Aggregated Data (Rounded). https://ec.europa.eu/eurostat/databrowser/view/migr_asyappctza/default/table?lang=en&category=migr.migr_asy.migr_asyapp.\
+Eurostat. 2024. "Transfers of Applicants for International Protection According to the Dublin Regulation – Annual Data (Rounded)." https://ec.europa.eu/eurostat/databrowser/view/migr_dubduni/default/table?lang=en&category=migr.migr_asy.migr_dub.migr_dubdec. Jakobson, Mari-Liis, and Ave Lauren. 2018. "European Migration Policy or Migration Policy in Europe?" International Centre for Defence and Security. https://icds.ee/en/european-migration-policy-or-migration-policy-in-europe/
+
+# Menu:
+
+[Home Page](/LandingPage.html)\
+[What is This Policy Area About](/WhatIsThisPolicyAreaAbout.html)\
+[What Does This Have to Do With the European Union](/WhatDoesThisHaveToDoWithTheEuropeanUnion.html)\
+[Why Should I Care](/WhyShouldICare.html)

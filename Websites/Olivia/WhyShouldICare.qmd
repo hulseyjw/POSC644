@@ -1,0 +1,84 @@
+---
+title: "Why Should I Care?"
+author: "Olivia Redman"
+format: html
+editor: visual
+---
+
+# Importance of Asylum Policy in the EU
+
+![](https://static.dw.com/image/54926357_605.jpg)
+
+Asylum policy remains a very relevant issue for both European citizens and those actively seeking asylum, and it is an issue area that European policymakers need to continue to analyze and address. Tackling the migration crisis has been an EU priority since its onset, but there is still much work to be done. One of the EU's major goals has been to establish a common asylum policy to manage the system at the EU level, which has been largely supported by the EU population.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+library(leaflet)
+library(htmlwidgets)
+library(htmltools)
+library(scales)
+library(haven)
+```
+
+```{r}
+#| include: FALSE
+
+EB <- read_dta("~/POSC644/Final/ZA8779_v1-0-0.dta") 
+```
+
+```{r}
+#| include: FALSE
+
+EB_asylumop <- EB %>% 
+  select(isocntry, qb2_4) %>% 
+  mutate(qb2_4L = as_factor(qb2_4))
+  
+head(EB_asylumop)
+```
+
+```{r}
+#| include: FALSE
+
+summary(EB_asylumop$qb2_4L)
+summary(EB_asylumop$qb2_4)
+```
+
+```{r}
+#| echo: FALSE
+
+  EB_asylumop %>% 
+  filter(qb2_4==1|qb2_4==2|qb2_4==3| qb2_4==4|qb2_4==5, isocntry=="IT"|isocntry=="ES"|isocntry=="FR") %>%
+  ggplot(aes(x = isocntry, fill = qb2_4L)) +
+  geom_bar(position = "fill")+
+     scale_fill_manual(values = c("#B19CD9", "#66C2A5", "#1F77B4", "#FF1493")) + 
+    labs(title = "Do You Support a Common European Policy on Migration? (2023)", x = "Country", y = "Percentage Responding",
+         caption = "Source: Eurostat and Eurobarometer")+
+    guides(fill=guide_legend(title="")) +
+    theme_minimal() +
+  theme(text = element_text(family = "serif")
+  )
+```
+
+In three of the member states with the highest numbers of asylum requests - Spain, France, and Italy - there was overwhelming support for EU level policy to manage migration in 2023. In 2024, the EU passed its Pact on Migration and Asylum, which are a new set of rules that further regulate the asylum process at the EU level while upholding European values. The Pact intends "to they are designed to "manage and normalise migration for the long term, providing EU countries with the flexibility to address the specific challenges they face, and necessary safeguards to protect people in need" (Directorate-General for Migration and Home Affairs 2024). The new rules under the Pact will go in place in 2026, and while it represents a step toward further European integration in the realm of asylum policy, there is obviously a lot of work to be done in this policy area. Asylum requests remain on the rise across Europe, and with rising geopolitical tensions, there are likely still to be challenges in this policy problem area. European citizens will remain to care about this issue, as will the rising number of asylum-seekers attempting the enter the EU. Policymakers need to continue to care about this issue because it impacts a variety of people already in the EU and coming into the EU, and it remains a core concern for everyone involved.
+
+# Sources:
+
+Directorate-General for Migration and Home Affairs. 2024. "Pact on Migration and Asylum." European Commission. https://home-affairs.ec.europa.eu/policies/migration-and-asylum/pact-migration-and-asylum_en\
+European Commission. 2023. Standard Eurobarometer 100: Public Opinion in the European Union. Survey requested by the European Commission, co-ordinated by Directorate-General for Communication (DG COMM Unit ‘Media Monitoring and Eurobarometer’). https://europa.eu/eurobarometer/surveys/detail/3053.\
+Eurostat. 2024. Asylum and First-Time Asylum Applicants by Citizenship, Age, and Sex – Annual Aggregated Data (Rounded). https://ec.europa.eu/eurostat/databrowser/view/migr_asyappctza/default/table?lang=en&category=migr.migr_asy.migr_asyapp.\
+Eurostat. 2024. "Transfers of Applicants for International Protection According to the Dublin Regulation – Annual Data (Rounded)." https://ec.europa.eu/eurostat/databrowser/view/migr_dubduni/default/table?lang=en&category=migr.migr_asy.migr_dub.migr_dubdec.
+
+# Menu:
+
+[Home Page](/LandingPage.html)\
+[What is This Policy Area About](/WhatIsThisPolicyAreaAbout.html)\
+[What Does This Have to Do With the European Union](/WhatDoesThisHaveToDoWithTheEuropeanUnion.html)\
+[Who is Affected](/WhoIsAffected.html)

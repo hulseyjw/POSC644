@@ -1,0 +1,170 @@
+---
+title: "What Does This Have to Do with The European Union?"
+author: "Olivia Redman"
+format: html
+editor: visual
+---
+
+![](https://www.statewatch.org/media/3336/eu-asylum-practices.jpg) \# Relevance of Asylum Policy to the EU
+
+Challenges with asylum-seeking directly impact all member states within the EU, and the EU has taken an active role in tackling the migration issue as a whole. Creating a cohesive European migration and asylum policy has become one of the main tasks of the EU in the wake of the 2015 migration crisis. Between 2015 and 2016, the EU "experienced an unprecedented influx of refugees and immigrants" and the EU has recognized that it has a "legal an moral obligation to protect those in need" (European Commission 2017).
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+library(leaflet)
+library(htmlwidgets)
+library(htmltools)
+library(scales)
+library(haven)
+```
+
+```{r}
+#| include: false
+
+ASYLUMAPP <- get_eurostat_data('migr_asyappctza')
+
+```
+
+```{r}
+#| include: false
+
+DUBDEC <- get_eurostat_data('migr_dubduni')
+```
+
+```{r}
+#| include: false
+
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" 
+
+cntrys <- giscoR::gisco_get_countries( 
+    year = "2020",
+    resolution = "3",
+    region = c("Europe", "Asia")
+) |>
+    sf::st_transform(crsLONGLAT) 
+
+
+
+plot(sf::st_geometry(cntrys)) 
+```
+
+```{r}
+#| include: FALSE
+
+ASYLUMAPP1 <- ASYLUMAPP %>% filter(time=="2023", unit=="PER", citizen == "EXT_EU27_2020", age=="TOTAL", asyl_app == "ASY_APP", sex == "T") 
+cntrys_ASYLUMAPP1 <- cntrys %>%
+  left_join(ASYLUMAPP1, by=c("CNTR_ID"="geo"))
+
+
+head(ASYLUMAPP1)
+```
+
+```{r}
+#| include: FALSE
+cntrys_ASYLUMAPP1 <- st_transform(cntrys_ASYLUMAPP1, crs = 4326)
+```
+
+```{r}
+#| echo: false
+
+lower_limit <- 0
+upper_limit <- 50000
+cntrys_ASYLUMAPP1$values_clipped <- pmin(pmax(cntrys_ASYLUMAPP1$values, lower_limit), upper_limit)
+
+color_palette <- colorNumeric("PuRd", domain = c(lower_limit, upper_limit))
+
+m <- leaflet(cntrys_ASYLUMAPP1) %>%
+  addProviderTiles(providers$CartoDB) %>%
+  addPolygons(
+    fillColor = ~ifelse(is.na(values), "#D3D3D3", color_palette(values_clipped)), 
+    fillOpacity = 0.8,
+    color = "white",
+    weight = 1,
+    popup = ~paste("Country: ", NAME_ENGL, "<br>",
+                   "Asylum Applications in 2023:",
+                   ifelse(is.na(values), "Data Not Available", round(values, 2)))
+  ) %>%
+  setView(lng = 10, lat = 50, zoom = 3.5)
+
+title <- tags$div(
+  style = "font-size: 24px; font-weight: bold; text-align: center; margin-top: 5px;",
+  "Asylum Applications in Europe (2023)"
+)
+
+caption <- tags$div(
+  style = "font-size: 14px; text-align: center; position: absolute, bottom: 10px; right: 10px: 5px; z-index: 1000",
+  "Data Source: Eurostat"
+)
+
+combined_map <- tagList(title, m, caption)
+
+combined_map <- tags$div(
+  style = "position: relative; height: 100%",
+  combined_map,
+  tags$style(HTML("
+    .leaflet-control.legend {
+      font-size: 10px !important;
+      width: 100px !important;
+      padding: 5px !important;
+    }
+  "))
+)
+
+combined_map
+
+```
+
+There were high numbers of asylum applications of all types in the EU and and in the Schengen zone in 2023, with applications concentrated in Germany, France, Spain, and Italy, as well as in Greece and Austria. However, all member states received at least some number of applications during the year. Additionally, with free movement between EU and Schengen area member states, asylum-seekers can also migrate within the EU beyond their intial country of application. The 2015 crisis impacted all member states, and the ongoing challenges of regulating asylum-seekers while providing support remains relevant for all member states.
+
+One of the major pieces of asylum-seeking legislation has been the Dublin III Regulation (Regulation No.604/2013). Dublin III extends the Dublin system which was established in the 1990s, and it aims to update the procedure of helping a member state determine "if and when it is responsible for handling an asylum claim" and ensuring quick access to the asylum procedures and the examination of an application on the merits by a single, clearly determined EU country" (Directorate-General for Migration and Home Affairs n.d.).
+
+```{r}
+#| echo: false
+
+DUBDEC %>%
+  filter(applicant == "TOTAL", leg_prov == "SOV_171") %>%
+  group_by(time) %>%  
+  summarize(total_applications = sum(values, na.rm = TRUE)) %>%
+  mutate(time = as.numeric(as.character(time))) %>%
+  ggplot(aes(x = time, y = total_applications)) +
+  geom_point(na.rm = TRUE) +
+  geom_line(linewidth = 1, color = "#C71585", na.rm = TRUE) +
+  labs(title = "Dublin Decisions using Sovereignty Clause (2014 to 2023)", 
+       caption = "Source: Eurostat",
+       x = "",
+       y = "Total Applications") + 
+  theme_minimal() +
+  theme(text = element_text(family = "serif"),
+      plot.title = element_text(hjust = 0.5), 
+       axis.text.x = element_text(size = 9, hjust = 1), 
+       axis.text.y = element_text(size = 9),
+      axis.title.y = element_text(size = 8)
+  )
+
+```
+
+Dublin III introduced Article 17(1), or the Sovereignty Clause, which "allows a Member State to examine an application for international protection lodged by a third-country national or a stateless person, even if such an examination is not its responsibility under the criteria laid down in the regulation" (European Union Agency for Asylum n.d.). Essentially, it allows a member state to take volunteer to take responsibility for an asylum-seeker, providing a new method for streamlining the asylum-seeking process. The usage of the Sovereignty Clause spiked during the migration crisis, and overall declined since. While the updated framework of Dublin III provided an innovative framework, ultimately new updated procedures are necessary. Usage of the Sovereignty Clause dropped greatly, despite a slight rise after the pandemic, which may potentially result from member states' dissatisfaction with the procedure or perhaps because it was simply becoming irrelevant. The EU has already attempted to move beyond the Dublin Regulations with new regulations, namely its New Pact on Migration and Asylum in 2020 and 2024's proposed Crisis and Force Majeure Regulation, but the impacts of those on the migration issue and asylum process remain to be seen.
+
+The upcoming European Commission will continue to focus on the EU's continued migration challenge and its responsibilities in creating a framework for member states to address asylum applications. In the mission letter to Magnus Brunner, the proposed new Commissioner for Internal Affairs and Migration, Commission President Ursula von der Leyen writes that "Europe has made a lot of progress when it comes to establishing a united approach to migration, asylum, and borders. However, migration will continue to be a challenge and delivering on it remains a priority for Europeans" (von der Leyen 2024).
+
+# Sources:
+
+Directorate-General for Migration and Home Affairs. n.d. "Country responsible for asylum application (Dublin Regulation)." European Commission. https://home-affairs.ec.europa.eu/policies/migration-and-asylum/common-european-asylum-system/country-responsible-asylum-application-dublin-regulation_en\
+European Commission. 2017. "The EU and the Migration Crisis." Publications Office of the European Union. https://data.europa.eu/doi/10.2775/330525\
+European Union Agency for Asylum. n.d. "4.2.5. Use of the discretionary clause." https://euaa.europa.eu/asylum-report-2023/425-use-discretionary-clause\
+Eurostat. 2024. "Asylum and First-Time Asylum Applicants by Citizenship, Age, and Sex – Annual Aggregated Data (Rounded)." https://ec.europa.eu/eurostat/databrowser/view/migr_asyappctza/default/table?lang=en&category=migr.migr_asy.migr_asyapp. Eurostat. 2024. "Transfers of Applicants for International Protection According to the Dublin Regulation – Annual Data (Rounded)." https://ec.europa.eu/eurostat/databrowser/view/migr_dubduni/default/table?lang=en&category=migr.migr_asy.migr_dub.migr_dubdec. von der Leyen, Ursula. 2024. "Mission Letter: Commissioner-designate for Internal Affairs and Migration." European Commission. https://www.statewatch.org/media/4612/eu-com-mission-letter-brunner-09-24.pdf
+
+# Menu:
+
+[Home Page](/LandingPage.html)\
+[What is This Policy Area About](/WhatIsThisPolicyAreaAbout.html)\
+[Why Should I Care](/WhyShouldICare.html)\
+[Who is Affected](/WhoIsAffected.html)

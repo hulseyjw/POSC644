@@ -6,7 +6,7 @@ editor: visual
 
 ## Crime in the European Union: Poverty Rates and Prison Capacity
 
-![](euhandcuffs.jpg)
+![](EUhandcuffs.jpg)
 
 ## 
 
