@@ -1,0 +1,38 @@
+---
+title: "Antash Landing Page"
+author: "George Antash"
+format: html
+editor: visual
+---
+
+# **Data Protection in the EU**
+
+## Introduction to GDPR
+
+Welcome to page discussing Data Protection in the European Union, with a focus on the \*\*General Data Protection Regulation (GDPR)\*\* and its implementation. Since coming into force in 2018, the GDPR has set a new standard for data privacy laws in the EU, protecting the personal information of EU citizens and holding organizations accountable for data misuse.
+
+GDPR provides European individuals with rights over their data, including the right to access, delete, or transfer personal information, while enforcing strict requirements on companies to also protect and manage data responsibly. Non-compliance with GDPR can result in fines.
+
+My page will explore:
+
+-   An overview of GDPR and its impact on data privacy.
+
+-   Trends in GDPR compliance and fines issued across the EU.
+
+-   The relationship between digital skills and GDPR awareness and compliance in different member states.
+
+### Pages
+
+-   [What is Digital Policy About?](AntashWhatIsPolicyPage.html)
+
+-   [Why Should I care?](AntashWhyShouldICarePage.html)
+
+-   [What Does This Have to Do with the EU?](AntashWhatDoesThisHavetoDowiththeEuropeanUnion.html)
+
+-   [Who Does This Impact?](AntashWhoisAffected.html)
+
+## Why is GDPR Important?
+
+In the modern world data is collected, stored, and analyzed at unprecedented levels, data protection has become crucial for privacy and security. GDPR aims to protect individuals control over their data, ensuring accountability in how organizations handle personal information.
+
+![](images/gdpr-general-data-protection-regulation-background-free-vector.jpg){fig-align="center" width="235"}

@@ -1,0 +1,143 @@
+---
+title: "Antash Who is Affected?"
+author: "George Antash"
+format: html
+editor: visual
+---
+
+## **Broad Reach of GDPR**
+
+The General Data Protection Regulation (GDPR) impacts nearly everyone in the European Union. It applies to individuals and organizations alike, creating a framework to protect personal data and ensure transparency in how that data is handled. From private citizens to global corporations, GDPR holds all stakeholders accountable for respecting data privacy.
+
+This page explores how GDPR affects individuals and organizations, shedding light on the critical role digital skills and enforcement play in its success.
+
+### **The Impact on Individuals**
+
+The GDPR and digital protection policy is an EU level issue as it impacts both EU citizens as well as businesses. The GDPR helps EU citizens gain greater control over their personal data, particularly granting the rights of access, correction, erasure, and portability. In an increasingly virtual world, these protections ensure that individuals can make informed decisions regarding the collection and use of their data. Under the GDPR, citizens can request to see what data a company holds about them as well as demand its deletion. As personal information grows in importance and data becomes the new oil, these safeguards provide a much needed protection for EU citizens in the new digital world.
+
+The GDPR and similar digital protection policy aims to level the playing field for all EU citizens, regardless of their digital literacy. The EU aims to protect all of its residents, from a tech-savvy user to someone unfamiliar with data privacy practices. This scope is crucial to ensuring fairness across residents of different member-states and in fostering trust in the digital serveries used everyday.
+
+### **The Impact on Organizations**
+
+The GDPR does more than protect EU citizens, it also sets clear and uniform standards for business. These standards help reduce legal uncertainty and simplifies compliance, particularly for businesses operating in multiple member-states. This has resulted in companies complying through measures like data protection by design, appointing data protection officers, and conducting impact assessment to avoid potential violations.
+
+These regulations are relevant as in the period of the GDPR's existence there have been major instances on non-compliance. These violations can lead to substantial financial penalties as well as damages to a company's reputation in the eyes of EU residents. Corporations like Amazon and Meta have had record-breaking fines due to the GDPR which serve to reinforce its legitimacy. The GDPR gives businesses the opportunity to build consumer trust and gain an edge in an increasingly privacy oriented digital marketplace.
+
+![](images/MicrosoftTeams-image%20(9).webp){fig-align="center" width="503"}
+
+### Take Aways
+
+GDPR affects everyone in the EU, but its success depends on two critical factors: individual awareness and effective enforcement. Citizens must understand and exercise their rights, while organizations must commit to robust compliance practices.
+
+The relationship between digital literacy and regulatory enforcement underscores the importance of both education and accountability. Countries with higher digital skills may have populations that are better able to leverage GDPR protections, but strong enforcement is necessary to ensure companies across the EU follow the rules. By bridging the gaps in skills and enforcement, GDPR can continue to protect citizens and foster trust in the digital age.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(restatapi)
+
+
+digital_skills <- get_eurostat_data("isoc_ci_cfp_fu")
+
+digital_skills_summary <- digital_skills %>%
+  filter(
+    indic_is == "I_CDAY",       
+    time == 2017,              
+    unit == "PC_IND"           
+  ) %>%
+  mutate(geo = as.character(geo)) %>%   
+  group_by(geo) %>%
+  summarize(avg_daily_use = mean(values, na.rm = TRUE))
+
+
+gdpr_data <- read_csv("C:\\Users\\ganta\\Downloads\\topic\\GDPR Dataset.csv")
+
+
+country_mapping <- tibble(
+  full_name = c("Austria", "Belgium", "Bulgaria", "Germany", "Greece", "Spain", "Poland", "Romania", "Latvia", "Sweden"),
+  iso_a2 = c("AT", "BE", "BG", "DE", "GR", "ES", "PL", "RO", "LV", "SE")
+)
+
+fines_by_country <- gdpr_data %>%
+  left_join(country_mapping, by = c("country" = "full_name")) %>%
+  group_by(iso_a2) %>%
+  summarize(total_fines = sum(price, na.rm = TRUE))
+
+
+merged_data <- fines_by_country %>%
+  mutate(iso_a2 = as.character(iso_a2)) %>%  
+  inner_join(digital_skills_summary, by = c("iso_a2" = "geo"))
+
+
+# Define custom colors for each country
+custom_colors <- c(
+  "AT" = "#1f77b4",  # Austria
+  "BE" = "#ff7f0e",  # Belgium
+  "BG" = "#2ca02c",  # Bulgaria
+  "DE" = "#d62728",  # Germany
+  "GR" = "#9467bd",  # Greece
+  "ES" = "#8c564b",  # Spain
+  "PL" = "#e377c2",  # Poland
+  "RO" = "#7f7f7f",  # Romania
+  "LV" = "#bcbd22",  # Latvia
+  "SE" = "#17becf"   # Sweden
+)
+
+ggplot(merged_data, aes(x = avg_daily_use, y = total_fines, fill = iso_a2, label = iso_a2)) +
+  geom_point(shape = 21, size = 6, alpha = 0.8, color = "black") +
+  geom_text(vjust = -1.5, size = 3, fontface = "bold") +  # Add country labels
+  scale_fill_manual(
+    values = custom_colors, 
+    name = "Country", 
+    labels = country_mapping$full_name  # Map ISO codes to full country names
+  ) +
+  coord_cartesian(xlim = c(40, 80), ylim = c(0, 70000000)) +
+  scale_y_continuous(
+    labels = scales::label_number(scale = 1e-6, suffix = "M"),
+    name = "Total GDPR Fines (€M)"
+  ) +
+  scale_x_continuous(name = "Average Daily Computer Use (%)") +
+  labs(
+    title = "Digital Skills vs GDPR Fines: A Comparative View",
+    subtitle = "Do countries with higher daily computer usage face more fines?",
+    caption = "Sources: Eurostat, GDPR Dataset"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12),
+    axis.title = element_text(size = 12),
+    legend.position = "right",
+    legend.key.size = unit(0.5, "cm"),
+    legend.text = element_text(size = 10),
+    legend.title = element_text(size = 12)
+  )
+
+
+```
+
+This chart compares the average daily computer usage of nine EU countries with their total GDPR fines in millions of euros. Initially, I expected a more pronounced relationship, either that increased daily computer use would correlate with more frequent violations and higher fines, or that greater digital engagement would promote stronger digital literacy, resulting in fewer fines. However, no clear pattern emerges across these countries. Germany stands out as an outlier, aligning with the first hypothesis by showing both high daily computer usage and substantial GDPR penalties. For the other nations, the expected correlation simply does not hold. This suggests that the interplay between digital skills and GDPR fines may be more complex than originally anticipated.
+
+### Sources
+
+-   European Parliament. 2016. *Regulation (EU) 2016/679 of the European Parliament and of the Council.* Official Journal of the European Union. <https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679>.
+
+-   Dataprivacymanager.net. *What Are Data Subject Rights According to the GDPR?* <https://dataprivacymanager.net/what-are-data-subject-rights-according-to-the-gdpr/>.
+
+-   Emotiv Blog. *GDPR Glossary.* <https://www.emotiv.com/blogs/glossary/gdpr>.
+
+-   Staedean. *Best Practices for GDPR Compliance: 10 Steps.* <https://staedean.com/data/blog/best-practices-gdpr-compliance-10-steps>.
+
+-   GitHub. *GDPR Fines Dataset (2018–2021).* <https://github.com/datasets>.
+
+-   Eurostat. *Individuals Who Have Basic or Above Basic Digital Skills by Sex.* <https://ec.europa.eu/eurostat/databrowser/view/isoc_sk_dskl_i21/default/table>.
+
+-   Eurostat. *Security Incidents and Consequences by Size Class of Enterprise.* <https://ec.europa.eu/eurostat/databrowser/view/isoc_cisce_ic/default/table>.
+
+[Homepage](AntashLandingPage.html)

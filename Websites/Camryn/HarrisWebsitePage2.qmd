@@ -148,6 +148,7 @@ This graph shows the poverty rates across European Union countries. It showed in
 The graph also shows that countries located along the EU's external borders tend to fall in the middle range of poverty rates. Nations such as Poland, Hungary, and Romania exhibit moderate poverty levels due to transitional economies that have significantly improved since joining the EU but still face structural challenges. These border countries often balance economic development pressures with their role as gateways for trade and migration, impacting their overall poverty metrics.
 
 [**`Crime Perceptions in the EU`**](HarrisWebsitePage3.html) 
+
 [**Home Page**](HarrisWebsite.html)
 
 **Sources:**

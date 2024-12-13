@@ -1,0 +1,165 @@
+---
+title: "Antash Assignment 7"
+author: "George Antash"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+
+library(tidyverse)
+library(haven)
+library(knitr)
+
+
+```
+
+#\| echo: false
+
+```{r}
+#| echo: false
+
+EB <- read_dta("C:/Users/ganta/Downloads/ZA8779_v1-0-0.dta") 
+
+```
+
+```{r}
+#| echo: False
+
+EB_direction <- EB %>% 
+  select(isocntry, d73_1, qa5_7) %>% 
+  mutate(
+    d73_1L = as_factor(d73_1),
+    qa5_7L = as_factor(qa5_7)
+  )
+
+head(EB_direction)
+
+```
+
+```{r}
+#| echo: False
+qa5_7_factor <- as_factor(EB$qa5_7)
+levels(qa5_7_factor)
+
+d73_2_factor <- as_factor(EB$d73_2)
+levels(d73_2_factor)
+
+
+
+
+```
+
+```{r}
+#| echo: false
+table(qa5_7_factor)
+
+table(d73_2_factor)
+
+```
+
+```{r}
+#| echo: false
+selected_countries <- c("AT", "IT", "FR")  # Austria, Italy, France
+
+EB_direction_subset <- EB_direction %>%
+  filter(isocntry %in% selected_countries)
+
+EB_direction_subset <- EB_direction %>%
+  filter(isocntry %in% selected_countries)
+
+EB_direction_subset <- EB_direction_subset %>%
+  filter(!is.na(qa5_7L))
+
+EB_direction_subset <- EB_direction_subset %>%
+  mutate(
+    qa5_7L = fct_recode(qa5_7L,
+      "Mentioned" = "The EU's influence in the world",
+      "Not Mentioned" = "Not mentioned"
+    )
+  )
+
+ggplot(EB_direction_subset, aes(x = isocntry, fill = qa5_7L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Importance of EU's Influence in the World by Country",
+    x = "Country",
+    y = "Proportion of Respondents",
+    fill = "Response"
+  ) +
+  theme_minimal()
+
+```
+
+This graph looks at the EB dataset's qa5_7 variable, which respondents consider "The EU's influence in the world" as one of the most important issues facing the European Union. It is a categorical variable with two primary responses: Mentioned or Not Mentioned.
+
+The bar graph for qa5_7 displays the proportion of respondents in Austria (AT), Italy (IT), and France (FR) who mentioned or did not mention the EU's influence as an essential issue. This visualization highlights differences in perceptions across these countries regarding the EU's role on the global stage.
+
+For further analysis of this variable, I would compare proportions across the countries, possibly choosing some other nations to provide a larger context. Furthermore, exploring any underlying factors as to why the countries have "high" or "low" percentages of respondents mentioning this issue would be interesting. Many factors are at play, though it is essential not to do that on this graph, as all three look relatively small. Still, "The EU's influence in the world" was only one of many options for them, leading to fewer people not mentioning it. To improve this graph, I would get a better idea of what data to include to solve the issue of the graph being deceiving at first glance. This would require me to decide how to handle the other issues mentioned and the "Don't Know" responses.
+
+```{r}
+#| echo: false
+EB_direction_subset <- EB_direction_subset %>%
+  mutate(d73_1L = fct_recode(d73_1L,
+    "Right Direction" = "Things are going in the right direction",
+    "Wrong Direction" = "Things are going in the wrong direction",
+    "Neither" = "Neither the one nor the other (SPONTANEOUS)",
+    "Don't Know" = "Don't know (SPONT.)"
+  ))
+
+ggplot(EB_direction_subset, aes(x = isocntry, fill = d73_1L)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Perception of Country's Direction by Country",
+    x = "Country",
+    y = "Proportion of Respondents",
+    fill = "Response"
+  ) +
+  theme_minimal()
+
+```
+
+```{}
+```
+
+The second variable, d73_1, captures respondents' perceptions of the overall direction their country is heading. It includes the following response categories:
+
+-   Right Direction: The respondent feels things are going well in their country.
+
+-   Wrong Direction: The respondent believes that things are not going well.
+
+-   Neither: The respondent feels that things are neither good nor bad.
+
+-   Don't Know: The respondent is still determining the direction.
+
+The corresponding bar graph illustrates the distribution of these perceptions among respondents in the same three countries. This allows for a comparative analysis of national sentiment.
+
+Further analysis of this variable involves determining the overall positivity or negativity of the respondents and trying to understand how individuals made this decision. Once again, it is vital to incorporate more nations to get a broader idea of the responses. Incorporating more nations may also expose some other conditions responsible for the differences, such as economics or political climate. Finally, In this graph, deciding whether to keep the neutral or uncertain responses based on the target audience and message is crucial. If these responses are left out, it paints a clear black-and-white picture of the public view; however, it leaves out data.
+
+```{r}
+#| echo: false
+EB <- read_dta("C:/Users/ganta/Downloads/ZA8779_v1-0-0.dta")
+
+EB %>% 
+  select(qa5_7, d73_1) %>% 
+  mutate(
+    qa5_7L = as_factor(qa5_7),
+    d73_1L = as_factor(d73_1)
+  ) %>%
+  mutate(
+    qa5_7L = fct_recode(qa5_7L, 
+                        "Mentioned" = "The EU's influence in the world",
+                        "Not Mentioned" = "Not mentioned"),
+    d73_1L = fct_recode(d73_1L, 
+                        "Right Direction (Country)" = "Things are going in the right direction",
+                        "Wrong Direction (Country)" = "Things are going in the wrong direction", 
+                        "Neither (Country)" = "Neither the one nor the other (SPONTANEOUS)", 
+                        "Don't know (Country)" = "Don't know (SPONT.)")
+  ) %>%
+  group_by(d73_1L, qa5_7L) %>%
+  tally() %>%
+  spread(key = qa5_7L, value = n, fill = 0) %>% 
+  kable(caption = "Frequency Table of Responses Combining qa5_7L and d73_1L")
+
+```

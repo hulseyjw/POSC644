@@ -1,7 +1,6 @@
 ---
-title: "Page 1"
 format: html
-editor: visual
+editor: source
 ---
 
 # Prison European Union Statistics
@@ -29,7 +28,7 @@ library(RColorBrewer)
 CRI<- get_eurostat_data("crim_pris_cap")
 CIV<- get_eurostat_data("ilc_mddw03")
 
-ESNames <- read_csv("~/Desktop/JMU/POSC 644/Week 3/ESNames.csv", show_col_types = FALSE)
+ESNames <-read_csv('https://raw.githubusercontent.com/hulseyjw/POSC644/refs/heads/main/Week3/ESNames.csv', col_types = "ffffnf")
 
 ```
 
@@ -99,6 +98,7 @@ https://www.prisonstudies.org/country/austria
 https://www.prisonstudies.org/country/sweden
 
 [**`Poverty Rates in EU Countries`**](HarrisWebsitePage2.html) 
+
 [**Home Page**](HarrisWebsite.html)
 
-1
+

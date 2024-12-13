@@ -1,0 +1,169 @@
+---
+title: "Antash What Does This Have to Do with the European Union?"
+author: "George Antash"
+format: html
+editor: visual
+---
+
+## **What Does This Have to Do with the European Union?**
+
+#### **The EU’s Leadership in Data Protection**
+
+The European Union is at the forefront of global data protection efforts, with the General Data Protection Regulation (GDPR) as its hallmark achievement. Implemented in 2018, GDPR was designed to provide data protection for individuals across all member-states. This has been a major move towards protecting individual's data and privacy rates in an increasingly digital world.
+
+By harmonizing data protection laws, GDPR not only protects EU citizens but also strengthens the digital single market, building trust in cross-border digital security. With the introduction of the GDPR, the EU has made an internal move to protect its citizens but also set a global standard for digital privacy legislation. The adoption of the GDPR has influenced other nations including Brazil, Japan, and the United States (California’s CCPA).
+
+![](images/GDPR-Timeline-opensenselabs (1).jpg){fig-align="center" width="813"}
+
+### **Why GDPR Requires EU-Level Regulation**
+
+The General Data Protection Regulation (GDPR) is more than just a policy; it is a major component of the European Union’s strategy to safeguard citizens’ rights in an increasingly digital world. Its implementation at the EU level addresses challenges that transcend national borders and ensures a unified approach to data protection.
+
+**Harmonizing Data Protection Across Member States**
+
+Before the GDPR, individual EU member states had their own data protection laws, creating a fragmented and inconsistent legal landscape. This patchwork of regulations made compliance difficult for businesses operating across borders and left individuals with uneven levels of protection. The GDPR resolves this by creating a single, standardized framework that applies to all 27 member states, ensuring consistency in data protection standards while simplifying compliance for businesses operating within the digital single market.
+
+**Strengthening the Digital Single Market**
+
+Data is at the heart of the EU’s Digital Single Market strategy, and a unified approach to data protection is essential for its success. By fostering trust in digital services, the GDPR enables consumers to confidently engage in cross-border transactions, while businesses benefit from clear and predictable rules.
+
+**Defense Agaisnt External Threats**
+
+In an age where data breaches and misuse can cause global disruptions, the GDPR serves as a robust defense mechanism. Its strict standards for data processing and severe penalties for non-compliance deter misuse by both domestic and international entities. By requiring companies outside the EU to comply with its rules when handling EU citizens’ data, the GDPR reinforces the EU’s commitment to protecting its residents, regardless of where their data is processed.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(scales)
+
+gdpr_data <- read_csv("C:\\Users\\ganta\\Downloads\\topic\\GDPR Dataset.csv")
+
+fines_by_country <- gdpr_data %>%
+  group_by(country) %>%              
+  summarize(total_fines = sum(price, na.rm = TRUE)) %>% 
+  arrange(desc(total_fines)) %>%      
+  slice_head(n = 10)                  
+
+custom_colors <- c(
+  "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+  "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+)
+
+
+ggplot(fines_by_country, aes(x = reorder(country, -total_fines), y = total_fines, fill = country)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = scales::comma(total_fines)), vjust = -.25, size = 3, color = "black") + 
+  scale_y_continuous(labels = label_number(scale_cut = cut_short_scale())) + # 
+  scale_fill_manual(values = custom_colors) +
+  labs(
+    title = "Total GDPR Fines by Country (2018–2021)",
+    subtitle = "Top 10 EU countries by total GDPR fines issued",
+    x = "Country",
+    y = "Total Fines (€)",
+    fill = "Country",
+    caption = "Source: GDPR Dataset"
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1), 
+    legend.position = "none",                         
+    plot.margin = margin(10, 10, 10, 10)             
+  )
+
+```
+
+This chart provides a detailed comparison of total GDPR fines, in euros, among the ten EU countries with the highest penalties from 2018 to 2021. The large contrast between nations, ranging from Italy at the top to Poland at the tenth position, demonstrates that significant data protection violations can occur across the regions. Additionally, the drop in fines after the United Kingdom’s departure from the EU and subsequent declines beyond countries like Spain highlight how GDPR enforcement varies widely across Europe. Overall, this visualization emphasizes the widespread relevance of the GDPR and the differing levels of data protection enforcement in different European nations.
+
+### **Why GDPR is Essential as an EU Policy**
+
+The General Data Protection Regulation (GDPR) reflects the European Union’s commitment to protecting its citizens’ rights in an increasing digital world. Through the GDPR and other data protection policies, the EU is able to level the playing field and ensure that both individuals and business get and operate under a consistent, fair, and transparent framework. The harmonization of the policy serves numerous purposes, it protects personal privacy, but also strengthens the EU's digital single market across borders.
+
+Data protection policy such as the GDPR is an EU level issue as it addresses challenges no single nation could tackle alone. As the world and Europe continues to globalize and as the digital economy becomes more interconnected, the EU's leadership in setting these data protection standards positions itself as a model for other nations. The GDPR represents more than just regulation, but is a statement of the EU's dedication to fairness, accountability, innovation and protection of its citizens' rights.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+library(sf)
+library(ggplot2)
+library(rnaturalearth)
+library(dplyr)
+library(tibble)
+library(scales)
+
+# Load GDPR fines dataset
+gdpr_data <- read_csv("C:\\Users\\ganta\\Downloads\\topic\\GDPR Dataset.csv")
+
+# Create a country mapping table
+country_mapping <- tibble(
+  full_name = c("Austria", "Belgium", "Bulgaria", "Germany", "Greece", "Spain", "Poland", "Romania", "Latvia", "Sweden"),
+  iso_a2 = c("AT", "BE", "BG", "DE", "GR", "ES", "PL", "RO", "LV", "SE")
+)
+
+# Summarize GDPR fines by ISO A2 country codes
+fines_by_country <- gdpr_data %>%
+  left_join(country_mapping, by = c("country" = "full_name")) %>%
+  group_by(iso_a2) %>%
+  summarize(total_fines = sum(price, na.rm = TRUE))
+
+# Load map of Europe
+europe_map <- ne_countries(scale = "medium", returnclass = "sf", continent = "Europe") %>%
+  left_join(fines_by_country, by = c("iso_a2" = "iso_a2"))
+
+# Replace missing data (countries without fines)
+europe_map$total_fines[is.na(europe_map$total_fines)] <- 0
+
+# Define map limits for Europe
+xlim_vals <- c(-10, 40)
+ylim_vals <- c(35, 70)
+
+# Plot the improved map
+ggplot(europe_map) +
+  geom_sf(aes(fill = total_fines), color = "white", size = 0.15) +
+  scale_fill_gradient(
+    low = "lightblue", high = "darkblue", 
+    name = "Total Fines (€)", 
+    labels = scales::comma,
+    na.value = "lightgray"  # Color for countries with €0 fines
+  ) +
+  coord_sf(xlim = xlim_vals, ylim = ylim_vals, expand = FALSE) +
+  labs(
+    title = "GDPR Fines Across European Countries",
+    subtitle = "Total fines issued by country (2018–2021)",
+    caption = "Source: GDPR Dataset (GitHub)"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.major = element_blank(),
+    plot.title = element_text(size = 18, face = "bold"),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10)
+  )
+
+```
+
+This map displays the total amount of GDPR fines imposed by European countries between 2018 and 2021. By highlighting the variation in penalties across different regions, it shows the comprehensive reach of the GDPR and the importance of ensuring data protection compliance throughout Europe.
+
+### **Sources**
+
+1.  European Commission. *General Data Protection Regulation (GDPR)*. 2016. <https://ec.europa.eu/info/law/law-topic/data-protection_en>.
+
+2.  GitHub. *GDPR Fines Dataset (2018–2021)*. Accessed November 2024. <https://github.com>.
+
+3.  OpenSense Labs. "GDPR User Rights and Business Guidelines." *OpenSense Labs Blog*. Accessed November 27, 2024. <https://opensenselabs.com/blog/gdpr-user-rights-business-guidelines>.
+
+4.  Ritchie, Hannah et al. *Our World in Data: Internet and Digital Skills in Europe*. Accessed November 2024. <https://ourworldindata.org>.
+
+5.  Eurostat. *Individuals Who Have Basic or Above Basic Digital Skills by Sex*. 2023. <https://ec.europa.eu/eurostat>.
+
+6.  European Parliament. *Understanding GDPR Enforcement: Role of the European Data Protection Board*. Accessed November 2024. <https://www.europarl.europa.eu>.
+
+[Homepage](AntashLandingPage.html)
