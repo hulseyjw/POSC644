@@ -1,0 +1,35 @@
+---
+title: "Femicide in the EU"
+format: html
+editor: visual
+---
+
+![](Website%20Image.jpg)
+
+# Female Homicide Rates in the EU
+
+AUTHOR
+
+Adrienne Livingston
+
+The term "femicide," the murder of women, is becoming a term used more and more often. The rates of femicide around the world are growing. In the EU, the amount of women killed in 2022 reached 2016 levels which was 4.3 per million women, according to the European Commission. In comparison, the rate of male homicides is 1.9 per million men. Is the EU taking the initiative to reduce these homicides and protect its women, or will women have to continue to suffer before action is taken?
+
+This website will answer:
+
+-   Who is most affected?
+
+-   What is the crime rate against women over time?
+
+-   Why is this an EU problem?
+
+-   Why should you care?
+
+Links to Other Pages:
+
+[How Are Women Affected?](WebsitePage1.html)
+
+[Why Must the European Union Be Involved?](WebsitePage2.html)
+
+[Victimology](WebsitePage3.html)
+
+[Public Opinion](WebsitePage4.html)

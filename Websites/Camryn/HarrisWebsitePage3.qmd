@@ -1,0 +1,67 @@
+---
+title: ""
+format: html
+editor: visual
+---
+
+# **Crime Perceptions in the EU**
+
+![](download.jpg){width="473"}
+
+```{r}
+#| include: false 
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(dplyr)
+library(haven)
+
+```
+
+```{r}
+#| include: FALSE
+CRIME <- read_dta("ZA8779_v1-0-0.dta")
+
+```
+
+```{r}
+#| include: FALSE
+
+CRIME_V <- CRIME %>% 
+  select(qa3_1, isocntry) %>% 
+  mutate(qa3_1L = as_factor(qa3_1))
+  
+  
+head(CRIME_V)
+```
+
+In the European Union, perceptions of crime as an important issue vary significantly between countries. Factors such as crime rates, media coverage, and public policy priorities influence these perceptions. Countries like Sweden, Luxembourg, and Denmark, which reported the highest levels of police-recorded offences in 2022, tend to place a stronger emphasis on crime as a critical issue. For example, Sweden recorded 3,584 offences per 100,000 inhabitants, Luxembourg had 3,255, and Denmark registered 3,058. This suggests that higher crime rates could influence the prioritization of crime in public discourse and policymaking. Countries like Bulgaria, Romania, and Slovakia, with significantly lower rates of reported offences (below 500 per 100,000 inhabitants), may not view crime as an equally pressing concern. Additionally, attitudes towards crime reporting and differences in law enforcement approaches could also impact how important crime is perceived in various EU nations.
+
+```{r}
+#| echo: false 
+#| results: hide 
+ CRIME_V %>% 
+  filter(isocntry=="BG" | isocntry=="LU" | isocntry=="SE" | isocntry=="SK" | isocntry=="FR" | isocntry=="DK")  %>% 
+  ggplot(aes(x = isocntry, fill=qa3_1L)) +
+  geom_bar( position = "fill",)+
+    labs(title = "Perception of EU on Crime", caption="Data from GESIS", x = "Country", y = "")+
+    guides(fill=guide_legend(title="Is Crime important?"))
+     theme_minimal()+
+  theme(plot.title=element_text( size=12, face="bold"),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=5),
+        )
+```
+
+This graph highlights varying perceptions of crime as an important issue across six EU countries: Bulgaria, Denmark, France, Luxembourg, Sweden, and Slovakia. Sweden stands out, with its citizens considering crime the most critical issue among the six, reflecting a heightened concern likely linked to its relatively high crime rates. Slovakia shows the lowest concern for crime, suggesting a perception of greater safety or a cultural tendency to deprioritize crime relative to other issues. This aligns with its lower reported crime rates and potentially differing socio-political priorities. Countries like Luxembourg and Denmark rank between these extremes but lean towards higher concern, likely influenced by their similarly high levels of recorded offences. France and Bulgaria represent more moderate perceptions, reflecting nuanced factors such as public trust in law enforcement and varying definitions of "important issues."
+
+[**`Comparing the Amount of Prisoners to Poverty Rates in EU Countries`**](HarrisWebsitePage4.html)
+
+[**Home Page**](HarrisWebsite.html)
+
+**:** https://ec.europa.eu/eurostat/statistics-explained/index.php?oldid=568499 https://ec.europa.eu/eurostat/statistics-explained/SEPDF/cache/50636.pdf

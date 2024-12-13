@@ -1,0 +1,105 @@
+---
+title: "Page 1"
+format: html
+editor: visual
+---
+
+# Prison European Union Statistics
+
+![](images/pandemic-has-opened-prisons-across-europe_62cca640330d2.png){width="613"}
+
+The European Union is a community of nations united by shared values, including respect for human rights, the rule of law, and social justice. Understanding prison statistics across member states offers a window into how these principles are implemented within justice systems, showcasing the diversity and commonalities in addressing crime, rehabilitation, and social reintegration.
+
+By comparing these prison statistics, we highlight how the EU works collaboratively to improve prison conditions, support criminal justice reforms, and ensure compliance with international human rights norms. This analysis underscores the broader mission of the EU to harmonize justice policies while respecting national sovereignty—a testament to its unique and dynamic governance model.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+```
+
+```{r}
+#| echo: FALSE
+
+CRI<- get_eurostat_data("crim_pris_cap")
+CIV<- get_eurostat_data("ilc_mddw03")
+
+ESNames <- read_csv("~/Desktop/JMU/POSC 644/Week 3/ESNames.csv", show_col_types = FALSE)
+
+```
+
+```{r}
+#| include: FALSE
+CRI_ESN <- CRI %>% 
+  left_join(ESNames, by=c("geo"="CODE"))
+
+head(CRI_ESN)
+```
+
+```{r}
+#| echo: FALSE
+
+CRI_ESN %>%
+filter(time=="2019" | time=="2020" | time=="2021" | time=="2022" | time== "2023", geo=="AT" | geo=="BE" | geo=="BG" | geo=="HR" | geo=="CY" | geo=="CZ" | geo=="DK" | geo=="EE" | geo=="FI" | geo=="FR" | geo=="DE" | geo=="EL" | geo=="HU" | geo=="IE" | geo=="IT" | geo=="LV" | geo=="LT" | geo=="LU" | geo=="MT" | geo=="NL" | geo=="PL" | geo=="PT" | geo=="RO" | geo=="SK" | geo=="SE" | geo=="ES") %>%
+ggplot(aes(x=time, y=values)) +
+geom_bar(stat="identity", fill="pink")+
+  facet_wrap(~countryname)+
+labs(title="Prison Population in the last five years in the EU", caption="Data from Eurostat")+
+guides(fill=guide_legend(title="Exponential amount of Persons in Prison"))+
+    theme_minimal()+
+  theme(plot.title=element_text(color="pink", size=12, face="bold"),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=5),
+        )
+```
+
+This graph shows the number of people incarcerated in the European Union over the last five years, illustrating trends in the prison populations of member states. While some countries show consistent numbers, others have significant fluctuations, reflecting diverse social, economic, and judicial systems. One critical factor influencing these differences is the size of the countries. Larger nations like Germany or France naturally have higher prison populations due to their greater number of inhabitants. In contrast, smaller countries like Luxembourg or Malta report lower absolute numbers, though their incarceration rates per capita may tell a different story as shown in the graph with the highest prisoner rates per 100 000 in the EU in 2022 being in Hungary (200), Poland (190), Czechia and Slovakia (181 both). The lowest rate was in Finland (52), followed by the Netherlands (64), and Slovenia (65).
+
+```{r}
+#| echo: FALSE
+
+CRI_ESN %>%
+filter(geo=="AT" | geo=="BE" | geo=="BG" | geo=="HR" | geo=="CY" | geo=="CZ" | geo=="DK" | geo=="EE" | geo=="FI" | geo=="FR" | geo=="DE" | geo=="EL" | geo=="HU" | geo=="IE" | geo=="IT" | geo=="LV" | geo=="LT" | geo=="LU" | geo=="MT" | geo=="NL" | geo=="PL" | geo=="PT" | geo=="RO" | geo=="SK" | geo=="SE" | geo=="ES") %>% 
+    ggplot(aes(x=time, y=values, fill=geo)) +
+  geom_bar(stat="identity", position="stack") +
+   labs(
+    title = "Amount of Prisoners Over Time in EU Countries",
+    caption = "Source: Eurostat",
+    x = "Time",
+    y = "Amount of Persons in Prison",
+    fill = "Country" 
+  ) +
+  scale_fill_viridis_d() + 
+  theme_minimal() + 
+  theme(
+    legend.position = "right",  
+    text = element_text(size = 12)  
+  )
+```
+
+
+This graph illustrates the trends in prison populations across the European Union from 2008 to 2022, showing a gradual increase in the number of individuals incarcerated. This growth reflects a combination of factors, including changing crime rates, judicial policies, and socioeconomic conditions across member states. Among the EU countries, Austria consistently recorded the highest number of persons in prison during this period, followed closely by Belgium. These nations' higher prison populations can be attributed to factors such as their larger urban centers, stricter sentencing laws, and challenges related to managing cross-border crimes due to their geographic locations.On the other end of the spectrum, Slovakia and Sweden have maintained the lowest prison populations. Sweden’s progressive approach to criminal justice, emphasizing rehabilitation and alternatives to imprisonment, contributes to its smaller numbers. Similarly, Slovakia's smaller overall population and judicial practices have kept its prison rates among the lowest in the EU.
+
+These disparities highlight the influence of national policies, societal attitudes, and demographic factors on prison populations. While the overall trend suggests an increase in incarceration across the EU, the rates and underlying causes vary significantly, reflecting the diversity of justice systems within the union.
+
+**Sources:**
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Prison_statistics#:\~:text=One%20prisoner%20per%20924%20inhabitants%20in%20the%20EU%20in%202022,-There%20was%20one&text=The%20highest%20prisoner%20rates%20per,%2C%20and%20Slovenia%20(65).
+
+https://wp.unil.ch/space/files/2023/07/Key-Findings_Probation-and-Prisons-in-Europe-2022_230705.pdf
+
+https://www.prisonstudies.org/country/austria
+
+https://www.prisonstudies.org/country/sweden
+
+[**`Poverty Rates in EU Countries`**](Harris%20Website%20Page2.html)
+[**Home Page**](HarrisWebsite.html)
+
+1

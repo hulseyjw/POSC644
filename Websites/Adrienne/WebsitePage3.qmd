@@ -1,0 +1,67 @@
+---
+title: "Femicide in the EU"
+format: html
+editor: visual
+---
+
+![](Domestic%20Violence.jpg)
+
+##### Image courtesy of [Fighter Law](https://www.fighterlaw.com/understanding-the-cycle-of-domestic-violence/).
+
+## Victimology
+
+##### As these graphs, based on [Eurostat data,](https://ec.europa.eu/eurostat/databrowser/view/crim_hom_vrel$defaultview/default/table?lang=en) will show, most of these women know their attackers and had a previous relationship with them. Often these crimes are preceded by domestic abuse that gradually escalates. These perpetrators are serial abusers who will not stop before the woman is either dead or they are in prison. That is why it is of the utmost importance that these crimes are given the appropriate attention and are prosecuted to the highest extent of the law. This is what the [Directive on Combating Violence Against Women and Domestic Violence](https://www.consilium.europa.eu/en/press/press-releases/2024/05/07/council-adopts-first-ever-eu-law-combating-violence-against-women/) is working towards. However, there is always more work to be done.
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+```{r}
+#| echo: FALSE
+
+INT <- get_eurostat_data("crim_hom_vrel")
+
+VIC <- get_eurostat_data("crim_hom_vage")
+```
+
+```{r}
+#| echo: FALSE
+INT %>%
+  filter(sex=="F", pers_cat=="FAM", unit=="P_HTHAB", time=="2022") %>%
+  ggplot(aes(x=geo, y=values)) +
+  geom_bar(stat="identity") +
+  labs(title="Crimes Committed by Relative against Female Victims in 2022",
+       x="Country",
+       y="Number") +
+  coord_flip()
+```
+
+```{r}
+#| echo: FALSE
+INT %>%
+  filter(sex=="F", pers_cat=="IPTN", unit=="NR") %>%
+  ggplot(aes(x=geo, y=values)) +
+  geom_bar(stat="identity") +
+  labs(title="Percentage of Perpetrators That Were an Intimate Partner",
+       x="Country",
+       y="Percentage") +
+  coord_flip()
+```
+
+###### Studies have found that a woman is killed every ten minutes by their intimate partner. As previously stated, this number may seem high but underreporting hides the reality of violence against women. According to the United Nations Regional Information Centre for Western Europe, "in Europe, 64% of femicides are committed by the woman’s intimate partner. This is the highest number globally."
+
+###### Works Cited:
+
+###### Eurostat. https://ec.europa.eu/eurostat/databrowser/product/page/CRIM_HOM_VAGE. (December 10, 2024).
+
+###### Eurostat. <https://ec.europa.eu/eurostat/databrowser/view/crim_hom_vrel$defaultview/default/table?lang=en>. (December 10, 2024).
+
+###### Nations, United. 2024. “Behind Closed Doors: The Deadly Reality of Femicide.” United Nations Western Europe. https://unric.org/en/behind-closed-doors-the-deadly-reality-of-femicide/ (November 26, 2024).
+
+###### Council of the European Union. 2024. Council adopts first-ever EU law combating violence against women - consilium. https://www.consilium.europa.eu/en/press/press-releases/2024/05/07/council-adopts-first-ever-eu-law-combating-violence-against-women/ (November 26, 2024).
+
+###### Feiter, Thomas. 2020. “Understanding the Cycle of Domestic Violence: Why Do People Abuse.” Fighter Law. https://www.fighterlaw.com/understanding-the-cycle-of-domestic-violence/ (November 27, 2024).

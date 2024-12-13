@@ -1,0 +1,69 @@
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+---
+title: ""
+format: html
+editor: visual
+---
+
+# **Comparing the Amount of Prisoners to Poverty Rates in EU Countries**
+
+![](images.jpg){width="495"}
+
+```{r}
+#| include: false
+#| warning: false
+
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+library(tidyverse)
+
+
+```
+
+```{r}
+#| include: false
+
+CRI<- get_eurostat_data("crim_pris_cap")
+POV<- get_eurostat_data("ilc_sbjp01")
+
+ESNames <-read_csv('https://raw.githubusercontent.com/hulseyjw/POSC644/refs/heads/main/Week3/ESNames.csv', col_types = "ffffnf")
+```
+
+```{r}
+#| include: false
+
+POV_CRI <- CRI %>% 
+  left_join(POV, by=c("geo"="geo", "time"="time"))
+
+head(POV_CRI)
+```
+
+```{r}
+#| echo: FALSE
+POV_CRI %>%
+filter(geo=="AT" | geo=="BE" | geo=="BG" | geo=="HR" | geo=="CY" | geo=="CZ" | geo=="DK" | geo=="EE" | geo=="FI" | geo=="FR" | geo=="DE" | geo=="EL" | geo=="HU" | geo=="IE" | geo=="IT" | geo=="LV" | geo=="LT" | geo=="LU" | geo=="MT" | geo=="NL" | geo=="PL" | geo=="PT" | geo=="RO" | geo=="SK" | geo=="SE" | geo=="ES", time=="2022", age== "TOTAL", sex=="M", indic_cr=="PRIS_ACT_CAP", unit.y== "PC", unit.x=="NR") %>%
+select(geo, sex, time, values.x, values.y) %>%
+ggplot(aes(x = values.x, y = values.y)) +
+geom_point(size = 2 , alpha = 0.8, color = "pink", position = position_jitter(width = 0.5, height = 0.5)) +
+geom_text(aes(label = geo), vjust = -1,hjust = 0.5, size = 3) +
+labs(title = "The Amount of Prisoners in each EU Country 
+     Compared to the Poverty Rate",
+x = "Amount of Prisoners",
+y = "Rate of Poverty") +
+theme_minimal() +
+theme(plot.title = element_text(size = 14),
+axis.text = element_text(size = 12))
+
+```
+
+The graph illustrates the relationship between the number of prisoners and the poverty rate across EU countries in 2022. Countries are plotted with one axis representing the total prison population and the other showing the percentage of the population living below the poverty line. The graph highlights potential correlations, such as whether higher incarceration rates align with increased poverty levels. For example, some countries with lower poverty rates might also exhibit lower incarceration rates, while others deviate from this trend. The graph may prove this wrong by showing that even though France has the most number of prisoners, they have almost the lowest poverty rate. This graph aims to explore socio-economic factors that may influence incarceration levels across the EU.
+
+[**Home Page**](HarrisWebsite.html)
+
+**Sources:** https://ec.europa.eu/eurostat/statistics-explained/index.php?oldid=486317 https://ec.europa.eu/eurostat/web/products-eurostat-news/w/ddn-20240429-3 https://ec.europa.eu/eurostat/statistics-explained/SEPDF/cache/107683.pdf

@@ -1,0 +1,77 @@
+---
+title: "Femicide in the EU"
+format: html
+editor: visual
+---
+
+## How Are Women Affected?
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+```{r}
+#| echo: FALSE
+
+INT <- get_eurostat_data("crim_hom_vrel")
+
+VIC <- get_eurostat_data("crim_hom_vage")
+```
+
+![](End%20Violence%20Against%20Women%20and%20Girls.png)
+
+###### Image courtesy of [European Women's Lobby](https://womenlobby.org/Violence-against-women-in-Europe).
+
+##### Violence is being perpetuated against women at a staggering rate. Physical and sexual violence often leads to the murder of the female which is referred to as "femicide." Most of these women know their attackers and had a previous relationship with them. Femicide is not a new phenomenon, and Europe is not excluded from this upsetting reality. It is time to implement policies to prevent this violence from occurring and appropriately prosecute the perpetrators.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+VIC %>%
+filter(sex=="F", iccs=="ICCS0302", unit=="P_HTHAB", age=="TOTAL", time=="2008"|time=="2010"|time=="2012"|time=="2014"|time=="2016"|time=="2018"|time=="2020"|time=="2022") %>% 
+  ggplot(aes(x=time, y=values, group=geo)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Sexual Exploitation Crimes of Females in European Countries Over Time",
+       x="Year",
+       y="Percentage") +
+  facet_wrap(~geo) +
+  theme(axis.title.y=element_blank(),
+  axis.ticks = element_blank()) +
+  guides(color="none")
+
+```
+
+```{r}
+#| echo: FALSE
+#| warning: false
+VIC %>%
+filter(sex=="F", iccs=="ICCS0101", unit=="P_HTHAB", time=="2008"|time=="2012" |time=="2016"|time=="2020", age=="TOTAL") %>% 
+  ggplot(aes(x=time, y=values, group=geo)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Intentional Homicide of Females in European Countries Over Time",
+       x="Year",
+       y="Percentage") +
+  facet_wrap(~geo) +
+  theme(axis.title.y=element_blank(),
+  axis.text.x = element_text(angle = 45),
+  axis.ticks = element_blank()) +
+  guides(color="none") 
+```
+
+##### As these graphs, based on [Eurostat data](https://ec.europa.eu/eurostat/databrowser/product/page/CRIM_HOM_VAGE), prove, violence against women has been a reoccurring issue within the EU over decades.The unit of measurement is the occurrence of the crime per every 100,000 people. This is to make it easier to understand how often the crime occurs and how many women are effected.
+
+##### Per Euro News, "their research has uncovered that since 2019, Greece, Slovenia, Germany and Italy saw significant increases in femicides. Greece had the highest increase in femicides in 2021 with an increase 187.5% from eight incidents in 2020 to 23 registered incidents in 2021." The news outlet also emphasizes the lack of data provided by countries as some do not even publish data on gender-based violence. Data is also slow to be updated. Until recently, the EU did nothing to address this issue. Thus, women all over Europe suffered.
+
+###### Works Cited:
+
+###### Eurostat. https://ec.europa.eu/eurostat/databrowser/product/page/CRIM_HOM_VAGE (December 10, 2024).
+
+###### “Violence against Women in Europe.” European Women’s Lobby. https://womenlobby.org/Violence-against-women-in-Europe (November 20, 2024).
+
+###### Khatsenkova, Sophia. 2023. “‘A Silent Epidemic’: Have Murders of Women Increased in Europe?” euronews. https://www.euronews.com/2023/03/08/a-silent-epidemic-have-murders-of-women-increased-in-europe (December 10, 2024).

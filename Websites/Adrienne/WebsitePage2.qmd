@@ -1,0 +1,71 @@
+---
+title: "Femicide in the EU"
+format: html
+editor: visual
+---
+
+# Why Must the European Union Be Involved?
+
+![](EU%20Women%20Violence.jpg)
+
+##### Image courtesy of [GK Today.](https://www.gktoday.in/eu-adopts-first-law-against-violence-towards-women/)
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+```{r}
+#| echo: FALSE
+
+INT <- get_eurostat_data("crim_hom_vrel")
+
+VIC <- get_eurostat_data("crim_hom_vage")
+```
+
+```{r}
+#| echo: FALSE
+INTF <- INT %>% filter(time=="2022", unit=="P_HTHAB", pers_cat=="FAM", sex=="F")
+```
+
+```{r}
+#| echo: FALSE
+VICF <- VIC %>% filter(time=="2022", sex=="F", unit=="P_HTHAB", age=="TOTAL", iccs=="ICCS0101")
+```
+
+```{r}
+#| echo: FALSE
+#| include: false
+INTF_VICF <- INTF %>%
+left_join(VICF, by = "geo")
+head(INTF_VICF)
+```
+
+```{r}
+#| echo: FALSE
+INTF_VICF %>%
+  ggplot(aes(x=values.x, y=values.y, label=geo)) +
+  geom_text(check_overlap = TRUE) +
+  labs(title="Comparing Homicide and Sexual Exploitation of Women in France",
+       x="Intentional Homicide",
+       y="Sexual Exploitation")
+```
+
+##### As presented in the above images and graphs, sexual exploitation crimes of females and intentional homicide of females are varying--but worrying nonetheless. With these rates across Europe, this can no longer be an issue that is only tackled by the member states, the European Union must be involved. An [investigation](https://www.europeandatajournalism.eu/cp_data_news/trapped-in-darkness-women-in-europe-remain-defenseless-against-gender-based-violence/) by the European Data Journalism Network which looked into crimes against women in Europe determined that these statistics may even be under-reported. So, women could be targeted and victimized at higher rates than we realize. This makes the EU's involvement all the more necessary.
+
+##### All European citizens are affected by this issue. The women suffering could be anyone's sister, daughter, mother, or aunt. So, this issue must be prioritized as if our mothers or sisters were the victims.
+
+##### Thankfully, a law combating this violence was passed by the EU Council in May. This new law ensures adequate punishment for perpetrators and support for victims. This new law criminalizes female genital mutilation, forced marriage, non-consensual sharing of intimate images, cyber stalking, cyber harrassment, and cyber incitement to hatred or violence. Anyone who is found guilty of these acts will be punished by a minimum of one to five years.
+
+###### Works Cited:
+
+###### Eurostat. https://ec.europa.eu/eurostat/databrowser/product/page/CRIM_HOM_VAGE (December 10, 2024).
+
+###### Anushka. 2024. “EU Adopts First Law against Violence towards Women.” *GKToday*. https://www.gktoday.in/eu-adopts-first-law-against-violence-towards-women/#google_vignette (November 20, 2024).
+
+###### “Trapped in Darkness: Women in Europe Remain Defenseless against Gender-Based Violence.” 2024. European Data Journalism Network - EDJNet. https://www.europeandatajournalism.eu/cp_data_news/trapped-in-darkness-women-in-europe-remain-defenseless-against-gender-based-violence/ (November 26, 2024).
+
+###### 

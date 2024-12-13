@@ -1,0 +1,75 @@
+---
+title: "Femicide in the EU"
+format: html
+editor: visual
+---
+
+# Public Opinion
+
+![](images/Public Opinion.png)
+
+###### Image courtesy of [Oxford Internet Institute](https://www.oii.ox.ac.uk/news-events/oxford-researchers-design-new-methods-for-tracking-changes-in-public-opinion/).
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr) 
+library(restatapi) 
+library(haven)
+```
+
+```{r}
+#| echo: FALSE
+EB <- read_dta("~/Documents/EUPS/POSC 644/Final Website/ZA6695_v2-0-0.dta")
+```
+
+```{r}
+#| echo: TRUE
+#| include: false
+
+EB_violence <- EB %>% 
+  select(isocntry, qb9_1) %>% 
+  mutate(qb9_1L = as_factor(qb9_1))
+  
+head(EB_violence)
+```
+
+```{r}
+#| echo: TRUE
+#| include: false
+
+summary(EB_violence$qb9_1L)
+summary(EB_violence$qb9_1)
+
+```
+
+```{r}
+#| echo: false
+
+ EB_violence %>% 
+  filter(qb9_1==1|qb9_1==2, isocntry=="AT"|isocntry=="IT"|isocntry=="FR") %>%
+  ggplot(aes(x = isocntry, fill = qb9_1L)) +
+  geom_bar(position = "fill")+
+    labs(title = "Women Make Up Claims of Rape or Abuse", x = "Country", y = "Percentage Responding")+
+    guides(fill=guide_legend(title="In my country..."))
+```
+
+```{r}
+#| echo: false
+
+  EB_violence %>% 
+  filter(isocntry=="AT"|isocntry=="IT"|isocntry=="FR") %>%
+  ggplot(aes(x = isocntry, fill = qb9_1L)) +
+  geom_bar(position = "fill")+
+    labs(title = "Women Make Up Claims of Rape or Abuse", x = "Country", y = "Percentage Responding")+
+    guides(fill=guide_legend(title="In my country..."))
+```
+
+##### With these results, based on a Gesis [dataset](https://search.gesis.org/research_data/ZA6695), it is clear to see that more work must be done. With the percentage of respondents agreeing that women exaggerate or lie about rape or abuse being in the double digits, it may be a while before the attitude towards femicide begins to shift. That does not mean hope is lost. As this website has mentioned previously, the European Union is taking active steps to reduce crimes against women and prosecute those who perpetrate it. With continued support from society growing, survivors being more open about their experiences, and governments changing their attitude towards legislation about this issue, the future looks bright. Femicide can only be eradicated with the effort of all working towards a common goal.
+
+###### Works Cited:
+
+###### “Suche.” *GESIS*. https://search.gesis.org/research_data/ZA6695 (December 10, 2024).
+
+###### “Oxford Researchers Design New Methods for Tracking Changes in Public Opinion.” 2021. *OII*. https://www.oii.ox.ac.uk/news-events/oxford-researchers-design-new-methods-for-tracking-changes-in-public-opinion/ (December 11, 2024). 
