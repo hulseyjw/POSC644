@@ -1,0 +1,155 @@
+---
+title: "Page 1: What is this policy area about?"
+name: "Carter Payne"
+format: html
+editor: visual
+---
+
+## Page 1: What is this policy area about?
+
+![](images/TN%20Tech%20Photo.jpeg)\
+TTU Grad School. 2022. “How to Land Your First Job After College.” College of Graduate Studies, Tennessee Tech. https://blogs.tntech.edu/graduate/2022/04/13/how-to-land-your-first-job-after-college/.
+
+This policy area studies levels of education and employment in different countries within the European Union. Specifically, this website studies employment levels of recent graduates as well as how employment rates have changed over time. It looks at the European Union as a whole as well as at individual countries in Europe.
+
+```{r}
+#| include: false
+library(tidyverse) 
+library(haven) 
+library(knitr)
+```
+
+```{r}
+#| include: false
+library(tidyverse) 
+library(haven) 
+library(knitr)
+```
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+```
+
+```{r}
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+#| include: false
+
+YoungPeopleinEduandTraining <- get_eurostat_data('edat_lfse_18') 
+```
+
+```{r}
+#| include: false
+
+dsdYoungPeopleinEduandTraining <-get_eurostat_dsd('edat_lfse_18', verbose=TRUE)
+```
+
+```{r}
+#| include: false
+summary(YoungPeopleinEduandTraining)
+```
+
+```{r}
+#| include: false
+
+EB <- read_dta("~/Documents/POSC 644/Week 7 Assignment/ZA8779_v1-0-0.dta") 
+```
+
+```{r}
+#| include: false
+
+EB_EUSituationEmploymentCountry <- EB %>% 
+  select(isocntry, qa1_6) %>% 
+  mutate(qa1_6 = as_factor(qa1_6))
+  
+head(EB_EUSituationEmploymentCountry)
+```
+
+```{r}
+#| include: false
+
+summary(EB_EUSituationEmploymentCountry$qa1_6)
+```
+
+```{r, fig.width=10, fig.height=6}
+#| echo: false
+
+  filter(EB_EUSituationEmploymentCountry, qa1_6=="Very good" | qa1_6=="Rather good" | qa1_6=="Rather bad" | qa1_6=="Very bad") %>% 
+  group_by(isocntry) %>%
+    ggplot(aes(x = isocntry, fill = qa1_6)) +
+  geom_bar(position = "fill")+
+    labs(title = "Employment Situation in European Countries", x = "Country", y = "Percentage Responding")+
+    guides(fill=guide_legend(title="I Think the Employment Situation in my Country is...")) + 
+    coord_flip() +
+    theme(plot.title = element_text(hjust=0.5))
+```
+
+This [dataset](https://search.gesis.org/variables/exploredata-ZA8779_Varqa1_6) measures how the population feels about the employment situation in different European countries. The graph is divided into columns, and each column represents a different country that is labeled with the country's abbreviation. After looking at the graph, viewers can see that most countries' populations believe the economic situation is either "rather good" or "rather bad".
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+```{r}
+#| include: false
+
+RecentGradEmploymentRates <- get_eurostat_data('tps00053') 
+```
+
+```{r}
+#| include: false
+
+dsdRecentGrad <-get_eurostat_dsd('tps00053', verbose=TRUE)
+```
+
+```{r}
+#| include: false
+summary(RecentGradEmploymentRates)
+```
+
+```{r, fig.width=10, fig.height=6}
+#| echo: false 
+filter(RecentGradEmploymentRates, time=="2012" | time=="2014" | time=="2016" | time=="2018" | time=="2020" | time=="2022") %>%
+group_by(geo) %>%
+  ggplot(aes(x=time, y=values, group=geo, cut=geo, fill=geo)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="Employment Rates of Recent Graduates",
+       x="Countries",
+       y="Percentage")+
+facet_wrap(~geo) +     
+  theme(axis.title.x=element_blank(), 
+          axis.title.y=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks = element_blank()
+        ) + 
+  theme(legend.position="none") +
+  theme(plot.title = element_text(hjust=0.5))
+```
+
+This [dataset](https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm) measures the employment rates of recent graduates in different European countries over the past decade. Each graph represents a different country, and it is labeled with the country's abbreviation. It looks at employment rates from 2012, 2014, 2016, 2018, 2020, and 2022. In many countries, the level of employment has stayed at relatively the same rate. However, some countries, such as Bulgaria (BG), Serbia (RS), and Romania (RO), have seen changes in their overall levels of employment. It is important to measure these changes in employment levels to see what could have caused these changes. By studying what has caused changes in employment levels, governments can also see what policies have been effective at increasing employment levels in other countries.
+
+Bibliography
+
+Eurostat. 2024. Employment Rates of Recent Graduates. Eurostat, the Statistical Office of the European Union. https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm.
+
+GESIS – Leibniz Institute for the Social Sciences. 2023. qa1_6 - SITUATION: EMPLOYMENT COUNTRY. GESIS – Leibniz Institute for the Social Sciences (Eurobarometer). https://search.gesis.org/variables/exploredata-ZA8779_Varqa1_6.
+
+TTU Grad School. 2022. “How to Land Your First Job After College.” College of Graduate Studies, Tennessee Tech. https://blogs.tntech.edu/graduate/2022/04/13/how-to-land-your-first-job-after-college/.
+
+[Return to Landing Page](/WebsiteLandingPage.html)

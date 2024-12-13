@@ -1,0 +1,88 @@
+---
+title: "Website Page 3"
+name: "Carter Payne"
+format: html
+editor: visual
+---
+
+## Page 3: What does this have to do with the European Union?
+
+```{r}
+#| include: false
+library(tidyverse) 
+library(haven) 
+library(knitr)
+```
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+```
+
+```{r}
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+```
+
+![](images/headine_enhancing_european_cooperation_002.png)
+
+European Centre for the Development of Vocational Training. 2020. "Planning the Next Steps for Vocational Education and Training in Europe." European Centre for the Development of Vocational Training. https://www.cedefop.europa.eu/en/news/planning-next-steps-vocational-education-and-training-europe.
+
+Employment rates across the European Union (EU) have been increasing, but this is not true for every country. By measuring employment rates as well as percentages of the population that have received education and training, policymakers will be able to determine what the best practices are for increasing education and training opportunities to increase employment rates within their country. Additionally, there are educational and training programs that exist at the EU-level, such as the Erasmus programs. By studying education and employment rates, the European Union can see what policies have been effective at the Member State-level and where it can provide more opportunities or guidance to help increase educational and training opportunities that will boost employment levels.
+
+```{r}
+#| include: false
+
+YoungPeopleinEduandTraining <- get_eurostat_data('edat_lfse_18') 
+```
+
+```{r}
+#| include: false
+
+dsdYoungPeopleinEduandTraining <-get_eurostat_dsd('edat_lfse_18', verbose=TRUE)
+```
+
+```{r}
+#| include: false
+summary(YoungPeopleinEduandTraining)
+```
+
+```{r, fig.width=10, fig.height=6}
+#| echo: false 
+filter(YoungPeopleinEduandTraining, time=="2022", sex=="T", unit=="PC") %>%
+group_by(geo) %>%
+  rename(Training = training) %>%
+  ggplot(aes(x=time, y=values, group=Training, cut=Training, fill=Training)) +
+  geom_bar(stat="identity", position="dodge") +
+    labs(title="Young People in Education and Training in 2022",
+       x="Training",
+       y="Percentage")+
+facet_wrap(~geo) +     
+  theme(axis.title.x=element_blank(), 
+          axis.title.y=element_blank(),
+          axis.text.x=element_blank(),
+  ) +
+  scale_fill_manual(
+    values = c("FE_NFE" = "#FF9999", "NO_FE_NO_NFE" = "#66B2FF"),  
+    labels = c("Formal and Non-Formal Education and Training", "Neither Formal nor Non-Formal Education or Training")
+  ) + 
+  theme(plot.title = element_text(hjust=0.5)) 
+```
+
+This [graph](https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm) studies the percentage of young people (aged 20 to 34) that had received education or training in 2022. The graphs measure the differences between the percentage of the population with formal and non-formal education and training versus the percentage of the population that has neither formal nor non-formal education or training. Each graph measures a different country, and it is labeled with the country's abbreviation. This graph allows viewers to see what the difference is between the percentage of the population with education and training versus the percentage that does not have any education and training. This will help when policymakers are measuring levels of employment and unemployment within a specific country because they can compare those numbers with the numbers from these graphs. They will be able to see if their is a correlation between the percentage of people who have education and training and employment rates within a country.
+
+Bibliography
+
+European Centre for the Development of Vocational Training. 2020. "Planning the Next Steps for Vocational Education and Training in Europe." European Centre for the Development of Vocational Training. https://www.cedefop.europa.eu/en/news/planning-next-steps-vocational-education-and-training-europe.
+
+Eurostat. 2024. Participation Rate of Young People in Education and Training by Sex, Age and Labour Status (incl. NEET rates). Eurostat, the Statistical Office of the European Union. https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm.
+
+[Return to Landing Page](/WebsiteLandingPage.html)

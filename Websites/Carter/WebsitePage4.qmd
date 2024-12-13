@@ -1,0 +1,99 @@
+---
+title: "Page 4 of Website"
+name: "Carter Payne"
+format: html
+editor: visual
+---
+
+## Page 4: Who is affected?
+
+```{r}
+#| include: false
+library(tidyverse) 
+library(haven) 
+library(knitr)
+```
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+```
+
+![](images/AdobeStock_266630729.jpeg)
+
+European Trade Union Committee for Education. 2024. "European Area of Skills and Qualifications." European Trade Union Committee for Education. https://www.csee-etuce.org/en/policy-issues/education-and-training/15-major-eu-education-and-training-policies/37-eropean-area-of-skills-and-qualifications.
+
+Everyone in the European Union (EU) is affected by education and employment rates. Younger generations could be negatively impacted by low employment rates within their country if it is difficult for them to find a job without education or training and if it is difficult to find a job even if they do have education and training. Additionally, all ages will be negatively impacted if employment levels begin to fall, and individuals are unable to find jobs to support themselves. This can have disastrous consequences for individuals and for society. By studying employment and education levels, governments can learn good policies to promote education and training within their country as well as how to raise employment levels to ensure that all citizens are able to find stable work.
+
+```{r}
+#| include: false 
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+```{r}
+#| include: false
+
+RecentGradEmploymentRates <- get_eurostat_data('tps00053') 
+```
+
+```{r}
+#| include: false
+
+YoungPeopleinEduandTraining <- get_eurostat_data('edat_lfse_18') 
+```
+
+```{r}
+#| echo: false
+YoungPeopleinEduandTrainingFiltered <- YoungPeopleinEduandTraining %>%
+  filter(age=="Y20-34", sex=="T", time=="2022", training=="FE_NFE" | training=="NO_FE_NO_NFE")
+```
+
+```{r}
+#| echo: false
+RecentGradEmploymentRatesFiltered <- RecentGradEmploymentRates %>%
+  filter(age=="Y20-34", sex=="T", time=="2022")
+```
+
+```{r}
+#| echo: false 
+EmploymentandRecentGradMerged <- YoungPeopleinEduandTrainingFiltered %>%
+  left_join(RecentGradEmploymentRatesFiltered, by = "geo") 
+```
+
+```{r}
+#| echo: false
+EmploymentandRecentGradMergedandFiltered <- EmploymentandRecentGradMerged %>%
+  filter(wstatus=="EMP", training=="FE_NFE")
+```
+
+```{r, fig.width=10, fig.height=6}
+#| echo: false
+#| warning: false 
+EmploymentandRecentGradMergedandFiltered %>%
+ggplot(aes(x = values.x, y = values.y, label= geo)) +
+  geom_text(check_overlap=TRUE) + 
+  labs(title="Employment Rates of Recent Graduates Compared to Young People in Education and Training in 2022 in Europe", 
+       x="Formal and Non-Formal Education and Training",
+       y="Employment Rates of Individuals 20-34 Years Old") +
+        theme(plot.title = element_text(hjust=0.5))
+```
+
+This dataset compares the [employment](https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm) rates of individuals between the ages of 20-34 years old with the [levels](https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm) of formal and non-formal education and training within a country. By looking at the graph, viewers can see that the Netherlands (NL) had both higher levels of formal and non-formal education and training as well as higher levels of employment rates of individuals aged 20-34 years. In contrast, Bosnia-Herzegovina (BA) has very low levels of formal and non-formal education and training and low levels of employment rates for individuals between the ages of 20-34. However, there are also several countries that have higher levels of employment for individuals between the ages of 20-34, but their levels of the population with formal and non-formal education and training are not as high. This includes Luxembourg (LU), Germany (DE), and Malta (MT).
+
+Bibliography
+
+European Trade Union Committee for Education. 2024. "European Area of Skills and Qualifications." European Trade Union Committee for Education. https://www.csee-etuce.org/en/policy-issues/education-and-training/15-major-eu-education-and-training-policies/37-eropean-area-of-skills-and-qualifications.
+
+Eurostat. 2024. Employment Rates of Recent Graduates. Eurostat, the Statistical Office of the European Union. https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm.
+
+Eurostat. 2024. Participation Rate of Young People in Education and Training by Sex, Age and Labour Status (incl. NEET rates). Eurostat, the Statistical Office of the European Union. https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm.
+
+[Return to Landing Page](/WebsiteLandingPage.html)

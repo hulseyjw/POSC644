@@ -1,0 +1,188 @@
+---
+title: "Landing Page"
+name: "Carter Payne"
+format: html
+editor: visual
+---
+
+## Landing Page
+
+![](images/EU%20FT%20Euro%20Money%20Photo.avif)
+
+Arnold, Martin, Fleming, Sam, & Claire Jones. 2024. "Can Europe’s economy ever hope to rival the US again?." FT Montage/Getty Images. https://www.ft.com/content/93f88255-787b-4c06-849c-f7722c83e8b6.
+
+This website will look at the levels of education and training within the European Union. It will measure different countries' levels of employment to see if there is a correlation between high levels of education and training and high levels of employment within a country.
+
+```{r}
+#| include: false
+library(tidyverse) 
+library(haven) 
+library(knitr)
+```
+
+```{r}
+#| include: false
+library(tidyverse) 
+library(haven) 
+library(knitr)
+```
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(giscoR)
+library(sf)
+library(RColorBrewer)
+```
+
+```{r}
+#| include: false
+
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+#| include: false
+
+YoungPeopleinEduandTraining <- get_eurostat_data('edat_lfse_18') 
+```
+
+```{r}
+#| include: false
+
+dsdYoungPeopleinEduandTraining <-get_eurostat_dsd('edat_lfse_18', verbose=TRUE)
+```
+
+```{r}
+#| include: false
+summary(YoungPeopleinEduandTraining)
+```
+
+```{r}
+#| echo: false 
+
+library(dplyr)
+```
+
+```{r}
+#| include: false 
+
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" 
+
+cntrys <- giscoR::gisco_get_countries(
+    year = "2020",
+    resolution = "3",
+    region = c("Europe", "Asia")
+) |>
+    sf::st_transform(crsLONGLAT)
+
+#names(cntrys)
+
+plot(sf::st_geometry(cntrys))
+```
+
+```{r}
+#| include: false
+
+YoungPeopleinEduandTraining1 <- YoungPeopleinEduandTraining %>% filter(time == 2022, training=="FE_NFE") 
+cntrys_YoungPeopleinEduandTraining1 <- cntrys %>%
+  left_join(YoungPeopleinEduandTraining1, by=c("CNTR_ID"="geo"))
+
+
+head(cntrys_YoungPeopleinEduandTraining1)
+```
+
+```{r}
+#| echo: false 
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(
+    sf::st_polygon(
+        list(
+            cbind(
+                c(
+                    xmin,
+                    xmax,
+                    xmax,
+                    xmin,
+                    xmin
+                ),
+                c(
+                    ymin,
+                    ymin,
+                    ymax,
+                    ymax,
+                    ymin
+                )
+            )
+        )
+    ), crs = 4326
+)
+
+lambert_bbox <- sf::st_transform(
+    bbox,
+    crs = crs_lambert
+)
+
+bb <- sf::st_bbox(lambert_bbox)
+```
+
+```{r, fig.width=10, fig.height=6}
+#| echo: false
+
+cntrys_YoungPeopleinEduandTraining1 %>% 
+  ggplot() +
+  geom_sf(data = cntrys_YoungPeopleinEduandTraining1,
+        mapping = aes(
+            fill = values
+        ),
+        color = "white",
+        size = 0.15
+    ) +
+    coord_sf(
+        crs = crs_lambert,
+        xlim = c(bb["xmin"], bb["xmax"]),
+        ylim = c(bb["ymin"], bb["ymax"]),
+    ) + 
+  scale_fill_gradientn(
+    name = "Percentage in 2022",
+    colors = brewer.pal(9, "RdPu"),
+    na.value = "grey80"
+  ) + labs(title="Percentage of Young People with Formal and Non-Formal Education and Training", caption="Source: Eurostat") + 
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5), 
+        legend.title = element_text(size = 9),
+        legend.text = element_text(size = 8),
+        axis.text = element_blank(),
+        axis.ticks = element_blank()
+        )
+```
+
+This [map](https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm) shows the percentage of young people with formal and non-formal education and training in 2022 in different European countries. The darker the color pink, the higher the percentage of the population that has formal and non-formal education and training. After looking at the map, we can see that Sweden and Finland have the highest percentages of people with formal and non-formal education and training. Eastern European countries, including Bulgaria and Bosnia-Herzegovina, have the lowest percentages of people with formal and non-formal education and training.
+
+Bibliography
+
+Arnold, Martin, Fleming, Sam, & Claire Jones. 2024. "Can Europe’s economy ever hope to rival the US again?." FT Montage/Getty Images. https://www.ft.com/content/93f88255-787b-4c06-849c-f7722c83e8b6.
+
+Eurostat. 2024. Participation Rate of Young People in Education and Training by Sex, Age and Labour Status (incl. NEET rates). Eurostat, the Statistical Office of the European Union. https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm.
+
+Menu
+
+The following links will redirect you to pages that provide more information on the topic.
+
+[Page 1](/WebsitePage1.html)
+
+[Page 2](/WebsitePage2.html)
+
+[Page 3](/WebsitePage3.html)
+
+[Page 4](/WebsitePage4.html)
