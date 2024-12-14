@@ -5,7 +5,7 @@ editor: visual
 ---
 
 ```{r}
-#| echo: false
+#| include: false
 library(tidyverse)
 library(haven)
 library(knitr)
@@ -116,12 +116,12 @@ The graphics above represent a recent poll of EU citizens across a significant n
 
 The Common Agricultural Policy (CAP) has far-reaching effects on public health, inflation, and climate change. By supporting sustainable farming practices, CAP ensures the production of healthier, more nutritious food while reducing the environmental impact of agriculture. This directly benefits consumers by providing access to safe, affordable food, helping to manage inflation in food prices. Additionally, CAP’s focus on emission reduction and environmental conservation contributes to the EU’s efforts to combat climate change, benefiting everyone by fostering a cleaner, greener future. Whether you're concerned about rising food prices, climate change, or the sustainability of your food choices, CAP is a crucial policy that impacts your everyday life and helps address the most pressing global challenges.
 
-[Home Page](/Landing.html)
+[Home Page](Landing.html)
 
-[What is the Common Agriculture Policy](/Page1.html)
+[What is the Common Agriculture Policy](Page1.html)
 
-[Why you Should Care](/Page2.html)
+[Why you Should Care](Page2.html)
 
-[CAP and the EU](/Page3.html)
+[CAP and the EU](Page3.html)
 
 Sources: “Common Agricultural Policy - Performance.” European Commission. https://commission.europa.eu/strategy-and-policy/eu-budget/performance-and-reporting/programme-performance-statements/common-agricultural-policy-performance_en.

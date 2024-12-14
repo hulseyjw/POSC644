@@ -5,7 +5,7 @@ editor: visual
 ---
 
 ```{r}
-#| echo: false
+#| include: false
 library(tidyverse)
 library(restatapi)
 library(knitr)
@@ -83,6 +83,7 @@ merged_data <- EUghg %>%
 
 ```{r}
 #| echo: false
+#| warning: false
 ggplot(merged_data, aes(x = time)) +  
   geom_point(aes(y = values.x, color = "GHG Emissions"), size = 3) +  
   geom_point(aes(y = values.y, color = "Utilized Farmland"), size = 3) +  
@@ -98,10 +99,10 @@ ggplot(merged_data, aes(x = time)) +
 
 The dot graph above illustrates that an increase in organic/carbon friendly farmland in the EU, supported by the Common Agricultural Policy, contributes to a reduction in agricultural greenhouse gas (GHG) emissions. Organic farming practices, which emphasize crop rotation, reduced synthetic chemical use, and enhanced soil health, can lead to lower emissions compared to conventional methods. While organic farming generally has a smaller carbon footprint, the full effect on GHG reductions is influenced by the scale of conversion and complementary policies.
 
-[Homepage](/Landing.html)
+[Homepage](Landing.html)
 
-[What is CAP About](/Page1.html)
+[What is CAP About](Page1.html)
 
-[Why you Should Care](/Page2.html)
+[Why you Should Care](Page2.html)
 
-[Who is Affected](/Page4.html)
+[Who is Affected](Page4.html)

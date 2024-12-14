@@ -16,12 +16,12 @@ Over the years, the CAP has evolved to address emerging challenges such as clima
 
 Today the CAP initiatives makes up less than 25% of the EU's annual budget but secures global supply chains, protects environmental standards, and reinforces the quality of life for EU citizens in both rural and urban areas.
 
-[Home Page](/Landing.html)
+[Home Page](Landing.html)
 
-[Why you Should Care](/Page2.html)
+[Why you Should Care](Page2.html)
 
-[CAP and the EU](/Page3.html)
+[CAP and the EU](Page3.html)
 
-[Who is Affected](/Page4.html)
+[Who is Affected](Page4.html)
 
 Sources: “Key Policy Objectives of the CAP 2023-27.” 2024. Agriculture and Rural Development. https://agriculture.ec.europa.eu/common-agricultural-policy/cap-overview/cap-2023-27/key-policy-objectives-cap-2023-27_en.

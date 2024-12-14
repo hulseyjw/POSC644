@@ -5,7 +5,7 @@ editor: visual
 ---
 
 ```{r}
-#| echo: false
+#| include: false
 library(tidyverse)
 library(restatapi)
 library(knitr)
@@ -74,12 +74,12 @@ EUghg %>%
 
 In this chart we have displayed only Methane and Nitrous Oxide emissions. These are the most prevalent gasses related to agricultural activity and have a disproportionate warming affect on the atmosphere and negative impact on public health. The above data represents a similar mitigating effect on emissions due to CAP initiatives. This shows the global reaching benefits of CAP beyond its immediate objectives.
 
-[Homepage](/Landing.html)
+[Homepage](Landing.html)
 
-[What is CAP About](/Page1.html)
+[What is CAP About](Page1.html)
 
-[CAP and the EU](/Page3.html)
+[CAP and the EU](Page3.html)
 
-[Who is Affected](/Page4.html)
+[Who is Affected](Page4.html)
 
 Sources: “Methane and Climate Change – Global Methane Tracker 2022 – Analysis - IEA.” IEA. https://www.iea.org/reports/global-methane-tracker-2022/methane-and-climate-change#.
