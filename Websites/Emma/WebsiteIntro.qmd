@@ -30,3 +30,22 @@ HUMAN <- get_eurostat_data("crim_thb_sex")
 TYPE <- get_eurostat_data("crim_thb_vexp")
 
 ```
+
+```{r}
+#| echo: false
+#| 
+CRIM %>%
+filter(time=="2022") %>%
+  ggplot(aes(x=geo, y=values, group=citizen, fill=citizen)) +
+  geom_bar(stat="identity", position="dodge")+
+  labs(title="Victims of trafficking in human beings by citizenship in 2022",
+       x="European Country",
+       y="Victims")
+    theme_minimal()
+```
+
+-   [What is Human Trafficking?](Page1.html)
+-   [Why is this Relevant?](Page2.html)
+-   [Why is Human Tracking a Problem?](Page3.html)
+-   [Who is Affected?](page4.html)
+

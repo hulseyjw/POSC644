@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-![](images/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques,_Paris_août_2014_(2).jpg)
+![](La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques,_Paris_août_2014_(2).jpg)
 
 ```{r}
 #| include: FALSE

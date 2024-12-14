@@ -4,8 +4,6 @@ format: html
 editor: visual
 ---
 
-![](images/2024%20Human%20Trafficking%20Update%20Size%20981.jpg)
-
 ```{r}
 #| include: FALSE
 
@@ -16,7 +14,10 @@ library(giscoR)
 library(sf)
 library(RColorBrewer)
 library(dplyr)
+
 ```
+
+![](download.jpeg)
 
 ```{r}
 #| include: FALSE
@@ -57,7 +58,6 @@ cntrys <- giscoR::gisco_get_countries( # this function gets the country-level ma
 ) |>
     sf::st_transform(crsLONGLAT)
 ```
-
 
 ```{r}
 #| include: FALSE
@@ -147,8 +147,8 @@ cntrys_CRIM %>%
   theme_minimal()
 
 ```
-It is imperative for the EU to address this issue of human trafficking because it directly impacts the citizens of its member states, particularly nations like France, Italy, and the Netherlands. A supranational institution has the proper resources to handle such an issue and the EU has proven to be the most influential and effective when addressing major crises particularly ones that span across many member states. 
 
+It is imperative for the EU to address this issue of human trafficking because it directly impacts the citizens of its member states, particularly nations like France, Italy, and the Netherlands. A supranational institution has the proper resources to handle such an issue and the EU has proven to be the most influential and effective when addressing major crises particularly ones that span across many member states.
 
 Bibliography
 
