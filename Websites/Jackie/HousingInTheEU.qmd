@@ -19,7 +19,7 @@ Explore this website to learn more about the affordable housing crisis in the EU
 
 [What does this have to do with the EU?](EU.html)
 
-[Who is affected](Who.html)
+[Who is affected?](Who.html)
 
 
 
