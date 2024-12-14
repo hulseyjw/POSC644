@@ -1,0 +1,29 @@
+---
+title: "Affordable Housing in the European Union"
+author: "Jackie Stein"
+---
+
+Member States across the EU are struggling with an affordable housing crisis. However, the EU has no competence to legislate in housing matters.
+
+```{r}
+#| echo: false
+knitr::include_graphics("EU HOMES.jpg")
+```
+
+
+Explore this website to learn more about the affordable housing crisis in the EU.
+
+[What is the Affordability Crisis?](AH%20Crisis.html)
+
+[Why should you care?](Why%20should%20we%20care.html)
+
+[What does this have to do with the EU?](EU.html)
+
+[Who is affected](Who.html)
+
+
+
+
+
+
+
