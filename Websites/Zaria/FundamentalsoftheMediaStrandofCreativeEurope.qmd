@@ -1,0 +1,182 @@
+---
+title: "Fundamentals of the Media Strand of Creative Europe"
+format: html
+editor: visual
+---
+
+## Four Clusters:
+
+The Media strand of Creative Europe is designed to support four types or 'clusters' of policies related to the audiovisual and film sector within European Union Member States.
+
+These clusters include:
+
+### Cluster One: Content
+
+-   promotes the creation and production of high quality content from the audiovisual industry and boosts cross-border cooperation among producers and content developers.
+
+### Cluster Two: Business
+
+-   promotes business innovation, scalability, and talents across the European audiovisual industry's value chain
+
+-   nurtures audiovisual talents with activities focused on mentoring, digital, and greening skills
+
+-   encourages business-to-business exchange across all of the value chain
+
+-   promotes transnational distribution of content across borders and platforms
+
+### Cluster Three: Audience
+
+-   connects European audiovisual works with their audiences
+
+-   supports audience development in and outside the EU
+
+-   supports audience growth across platforms
+
+### Cluster Four: Policy support
+
+-   consolidates the European audiovisual sector into a single market through a holistic approach considering:
+
+    -   the need for regulatory dialogues
+
+    -   the importance of sharing of analysis and data
+
+    -   the foresight of emerging trends
+
+    -   the regular consultation with relevant stakeholders
+
+    -   the promotion of industry outreach and activities
+
+## Major Public Problems of Concern
+
+The main problems of concern that the European Union seeks to address here are:
+
+1.  the rapid transformation of the film industry onto digital platforms
+
+2.  barriers to European film distribution
+
+The rapid and digital transformation of the film industry was put in motion through advancements like Video-On-Demand or streaming platforms such as Netflix. While the European film industry was once a comparable to the American industry, this rapid shift, accelerated by the COVID-19 pandemic, has made this gap between the two markets even wider. Consider the following graph that displays the market share of films distributed in the European Union in 2019.
+
+![](Screen Shot 2024-12-11 at 10.12.31 AM.png)
+
+As demonstrated above, American films dominate the EU market. Though European films remain a sizable chunk of the films distributed, the gap represents a failure of Member States to conserve the competitiveness of their domestic film production and distribution within the European Union.
+
+While there are multiple factors to take into account for the dominance of American media in the EU's market, including the prevalence of American culture as an exercise of soft power over the rest of the world, the European Union could boost the competitiveness of the domestic film industries of Member States by supporting initiatives that address the dynamics between foreign and national film distribution companies or the variations of cinemas adequately equipped with digital infrastructure.
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+
+
+```
+
+```{r}
+#| include=FALSE
+filmdistribution <-read.csv("~/Documents/POSC644/week8/DistributionofFeatureFilms.csv") 
+```
+
+```{r}
+#| echo: false
+filmdistribution %>%
+  filter(TIME == 2017, 
+         Country %in% c("Belgium", "Bulgaria", "Croatia","Denmark", "Estonia", "Finland", "Greece", "Hungary", "Latvia", "Netherlands", "Portugal", "Romania", "Slovakia", "Slovenia", "Sweden"), 
+         INDICATOR == "FPDC_FOCO"| INDICATOR == "FPDC_NACO") %>%
+ggplot(aes(x = Country, y = Value, fill = factor(INDICATOR))) +  
+  geom_bar(stat = "identity") +  
+  scale_fill_manual(values = c("FPDC_FOCO" = "steelblue", "FPDC_NACO" = "red"), 
+                    labels = c("FPDC_FOCO" = "% of Foreign Film Distribution Companies", 
+                               "FPDC_NACO" = "% of National Film Distribution Companies")) + 
+  labs(title = "Breakdown of Film Distribution Companies in the EU", 
+       x = "EU Countries", y = "% of Film Distribution Companies", , 
+       caption = "Data sourced from UNESCO") +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 10),
+        legend.key.size = unit(0.1, "cm"),
+        legend.text = element_text(size = 9)) +
+  guides(fill = guide_legend(title = NULL))
+```
+
+Though national film distribution companies make up the majority of distribution companies across most Member States represented, Latvia and Slovenia demonstrate a need for policy to boost domestic film distribution in order to remain on par with the other Member States.
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(restatapi)
+library(giscoR)
+library(sf)
+
+```
+
+```{r}
+#| include=FALSE
+digitalinstructure <-read.csv("~/Documents/POSC644/week8/Digitalinfrastructuredata.csv") 
+```
+
+```{r}
+#| include=FALSE
+filtereddigitalinfrastructure <-digitalinstructure %>%
+  filter(Country %in% c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Hungary", "Ireland", "Italy", "Latvia", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"), 
+         INDICATOR == "FPCIND_DIG")
+  
+```
+
+```{r message=FALSE, warning=FALSE}
+#| echo: false
+ggplot(data = filtereddigitalinfrastructure,  aes(x = Time, y = Value, group = Country, color = Country)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Percentage of Cinemas Equipped with Digital Infrastructure for the EU",
+       x = "Time",
+       y = "Number of Cinemas",
+       color = "Country",
+       caption = "Data sourced from UNESCO") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none") +
+  facet_wrap(~ Country, scales = "fixed") 
+```
+
+Likewise, this figure demonstrated that Estonia, Ireland, Slovenia, Slovakia, and Spain may need additional support to bolster their domestic cinema infrastructure.
+
+Above all though, both graphs illustrate a need for more accurate and up-to-date research, as well as greater data sharing capabilities across the Member States. Though the data was obtained from UNESCO's database, some countries failed to consistently report their data over the years, which makes cross-national comparisons more difficult.
+
+[**Back to Home**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/StepintotheSpotlight_ALookintotheMediaStrandofCreativeEurope.html)
+
+[**The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheDirectBenefitstoArtistsCreativesBusinessesandtheEveryDayIndividual.html)
+
+[**The Film and Audiovisual Industry as an Avenue for Social Cohesion**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html)
+
+[**Who *really* cares though?**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/WhoReallyCaresThough.html)
+
+Works Cited
+
+“Audience Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/audience-cluster (December 11, 2024).
+
+“Business Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/business-cluster (December 11, 2024).
+
+“Content Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/content-cluster (December 11, 2024).
+
+“Creative Europe \| EUR-Lex.” https://eur-lex.europa.eu/EN/legal-content/summary/creative-europe.html (December 11, 2024).
+
+“Creative Europe MEDIA Strand - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand (December 11, 2024).
+
+“Department for Culture, Media and Sport.” 2024. *GOV.UK*. https://www.gov.uk/government/organisations/department-for-culture-media-and-sport (December 11, 2024).
+
+“EU Film Industry: Market Share by Country of Origin.” *Statista*. https://www.statista.com/statistics/572603/film-industry-market-share-by-country-of-origin-eu/ (December 11, 2024).
+
+“Eurobarometer.” https://europa.eu/eurobarometer/screen/home (December 11, 2024).
+
+“Home - Eurostat.” https://ec.europa.eu/eurostat/en/ (December 11, 2024).
+
+“Policy Support Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/policy-support-cluster (December 11, 2024).
+
+“UIS Statistics.” https://data.uis.unesco.org/# (December 11, 2024).

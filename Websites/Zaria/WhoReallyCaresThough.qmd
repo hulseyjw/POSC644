@@ -1,0 +1,124 @@
+---
+title: "Who Really Cares Though??"
+format: html
+editor: visual
+---
+
+## The Importance of EUROBAROMETER
+
+EUROBAROMETER is a key tool for the European Union as it allows for interested parties to gauge public opinion on various topics. As a series of studies conducted by the European Commission, the data collected includes the public opinion on the views in favor of EU spending on education, culture, and media, as well as, on competition and on improving the EU's digital infrastructure.
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+
+
+```
+
+```{r}
+#| include=FALSE
+
+EUBudget <-read_dta("~/Documents/POSC644/week8/ZA7649_v2-1-0.dta")
+
+str(EUBudget)
+```
+
+```{r}
+#| echo: false
+
+EUCultureBudget <-EUBudget %>%
+  select(isocntry, qd3b_3, qd3b_5, qd2b_6)
+```
+
+```{r}
+#| echo: false
+
+EUCultureBudget %>%
+  filter(qd3b_3 == 0 | qd3b_3 == 1) %>% 
+  ggplot(aes(x = isocntry, fill = factor(qd3b_3))) +  
+  geom_bar(position = "fill") +  
+  labs(title = "Views in Favor of EU Spending on Education, Culture, and Media", 
+       x = "Country", y = "Percentage In Agreement",
+       caption = "Data Source: Eurobarometer") +
+  scale_fill_manual(values = c("0"= "lightblue", "1" = "darkblue"),
+                    labels = c("0"= "Not in Favor", "1"= "In Favor"),
+                    name = "Views...") +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 8)) 
+
+```
+
+```{r}
+#| echo: false
+
+EUCultureBudget %>%
+  filter(qd3b_5 == 0 | qd3b_5 == 1) %>% 
+  ggplot(aes(x = isocntry, fill = factor(qd3b_5))) +  
+  geom_bar(position = "fill") +  
+  labs(title = "Views in Favor of EU Spending on Competitiveness", 
+       x = "Country", y = "Percentage In Agreement",
+       caption = "Data Source: Eurobarometer") +
+  scale_fill_manual(values = c("0"= "lightblue", "1" = "darkblue"),
+                    labels = c("0"= "Not in Favor", "1"= "In Favor"),
+                    name = "Views...") +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 8)) 
+```
+
+```{r}
+#| echo: false
+
+EUCultureBudget %>%
+  filter(qd2b_6 == 0 | qd2b_6 == 1) %>% 
+  ggplot(aes(x = isocntry, fill = factor(qd2b_6))) +  
+  geom_bar(position = "fill") +  
+  labs(title = "Views in Favor of EU Spending on Digital Infrastructure", 
+       x = "Country", y = "Percentage In Agreement",
+       caption = "Data Source: Eurobarometer") + 
+  scale_fill_manual(values = c("0"= "lightblue", "1" = "darkblue"),
+                    labels = c("0"= "Not in Favor", "1"= "In Favor"),
+                    name = "Views...") +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 8)) 
+```
+
+Of the three topics explored, the EU public voiced greatest interest in the pursuance of EU culture, media and education policy. Though it cannot be stated that all respondents desire for EU policies on Education, Media, and Culture to be given equal attention in the EU, the significance of this level of support cannot be ignored. The EU should support policies that the general public expresses considerable interest in. While interest for EU spending on competition and on improving digital infrastructure pales in comparison to that for spending on education, culture, and media, the support for these policy areas would improve the MEDIA's ability to deliver benefits to not only the individuals, but the creators and distributors of the film industry.
+
+[**Back to Home**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/StepintotheSpotlight_ALookintotheMediaStrandofCreativeEurope.html)
+
+
+[**Fundamentals of the Media Strand of Creative Europe**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/FundamentalsoftheMediaStrandofCreativeEurope.html)
+
+
+[**The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheDirectBenefitstoArtistsCreativesBusinessesandtheEveryDayIndividual.html)
+
+[**The Film and Audiovisual Industry as an Avenue for Social Cohesion**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html)
+
+
+
+Works Cited
+
+
+“Audience Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/audience-cluster (December 11, 2024).
+
+“Business Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/business-cluster (December 11, 2024).
+
+“Content Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/content-cluster (December 11, 2024).
+
+“Creative Europe \| EUR-Lex.” https://eur-lex.europa.eu/EN/legal-content/summary/creative-europe.html (December 11, 2024).
+
+“Creative Europe MEDIA Strand - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand (December 11, 2024).
+
+“Department for Culture, Media and Sport.” 2024. *GOV.UK*. https://www.gov.uk/government/organisations/department-for-culture-media-and-sport (December 11, 2024).
+
+“EU Film Industry: Market Share by Country of Origin.” *Statista*. https://www.statista.com/statistics/572603/film-industry-market-share-by-country-of-origin-eu/ (December 11, 2024).
+
+“Eurobarometer.” https://europa.eu/eurobarometer/screen/home (December 11, 2024).
+
+“Home - Eurostat.” https://ec.europa.eu/eurostat/en/ (December 11, 2024).
+
+“Policy Support Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/policy-support-cluster (December 11, 2024).
+
+“UIS Statistics.” https://data.uis.unesco.org/# (December 11, 2024).

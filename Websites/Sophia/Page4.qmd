@@ -221,6 +221,8 @@ bb <- sf::st_bbox(lambert_bbox)
 ```
 
 ```{r}
+#| echo: false 
+
 cntrys_AWH1 %>%
   ggplot() +
   geom_sf(

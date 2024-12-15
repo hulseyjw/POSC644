@@ -1,0 +1,280 @@
+---
+title: "The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual"
+format: html
+editor: visual
+---
+
+## Benefits of MEDIA's support to Artists and Creatives
+
+Some of the biggest ways MEDIA provides support to artists and creatives in the film and audiovisual sector comes in the forms of the direct funding to emerging artists and creatives or through the appraisal of their works in competitions. Currently, MEDIA supports the development of over 400 European films, Tv series, documentaries and video games. In order to maximize its impact on the industry, MEDIA pursues a range of content development methods. For example, co-development projects enable the audiovisual projects to scale up in size and allow creatives and artists from different countries to work together easier. MEDIA provides funding through grants that are awarded following competitive calls for project proposals that are published in the EU's Funding and Tender opportunities portal.
+
+## Benefits to Businesses
+
+In addition to the support to the artists and creatives who lie at the heart of the industry, MEDIA provides support to the businesses involved in the development, production, and distribution of the audiovisual works produced. The lists below provides insight on the number of cinemas who can benefit from MEDIA's support to Member States.
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(restatapi)
+library(giscoR)
+library(sf)
+```
+
+```{r}
+#| include=FALSE
+digitalinstructure <-read.csv("~/Documents/POSC644/week8/Digitalinfrastructuredata.csv") 
+```
+
+```{r}
+#| include=FALSE
+numberofcinemas <-digitalinstructure %>%
+  filter(Country %in% c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Hungary", "Ireland", "Italy", "Latvia", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"), 
+         INDICATOR == "220174",
+         Time==2017)
+  
+```
+
+```{r}
+#| echo: false
+numberofcinemas %>%
+  select(Country, Value) %>%
+  kable(caption = "Number of Cinemas in Each EU Member State")
+```
+
+Though this list would insinuate that MEDIA would largely benefit with the least amount of cinemas, a look to the distribution of cinemas per capita within each Member State would suggest an entirely different conclusion.
+
+```{r}
+#| include=FALSE
+populationdata <-read.csv("~/Documents/POSC644/Final Policy Website/DEMO_DS_11122024054605664.csv")
+  
+```
+
+```{r}
+#| include=FALSE
+populationdata_F <-populationdata %>%
+  filter(Country %in% c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Hungary", "Ireland", "Italy", "Latvia", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"),
+         DEMO_IND == "200101",
+         Time == "2022")
+```
+
+```{r}
+#| include=FALSE
+cinemaspercapita <- populationdata_F %>%
+  left_join(numberofcinemas, by=c("Country"="Country")) %>%
+           mutate(cinemaspercapita = Value.y / Value.x)
+
+```
+
+```{r}
+#| echo: false
+cinemaspercapita %>%
+  select(Country, cinemaspercapita) %>%
+  rename("Cinemas per 100,000 people" = cinemaspercapita) %>%
+  kable(caption =  "Cinemas per capita in Each EU Member State")
+```
+
+Considering that the number of cinemas per capita in the US is 14 per 100,000, it is clear that the EU lacks necessary support to the businesses involved in the film industry. This is support that MEDIA can help provide through its support of policies that encourage European cinemas to be more competitive. This includes the financial support to build more cinemas to ensure that people are able to actually go out and watch the films produced domestically.
+
+## Benefits to the Everyday Individual
+
+By providing benefits to not only the creatives and artists involved in the development of film and audiovisual works, but also to the businesses who distribute these works the general public, MEDIA also presents benefits to the everyday individual by increasing the ability and desire to go to the cinema again.
+
+Consider for instance, the rate of cinema attendance between 2015 and 2022 displayed in the two graphs below.
+
+```{r}
+#| include=FALSE
+
+library(tidyverse)
+library(haven)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(restatapi)
+library(giscoR)
+library(sf)
+```
+
+```{r}
+#| include=FALSE
+participationdata <- get_eurostat_data("ilc_scp03")
+```
+
+```{r}
+#| include: false
+
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" # this creates a variable with information about the projection we want our map to be. 
+
+cntrys <- giscoR::gisco_get_countries( # this function gets the country-level maps from GISCO
+    year = "2020",
+    resolution = "3",
+    region = c("Europe", "Asia")
+) |>
+    sf::st_transform(crsLONGLAT) # this function transforms our new shape file into the projection we want.
+
+#names(cntrys)
+
+plot(sf::st_geometry(cntrys)) # this plots the shape file.
+
+```
+
+```{r}
+#| include: false
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(
+    sf::st_polygon(
+        list(
+            cbind(
+                c(
+                    xmin,
+                    xmax,
+                    xmax,
+                    xmin,
+                    xmin
+                ),
+                c(
+                    ymin,
+                    ymin,
+                    ymax,
+                    ymax,
+                    ymin
+                )
+            )
+        )
+    ), crs = 4326
+)
+
+lambert_bbox <- sf::st_transform(
+    bbox,
+    crs = crs_lambert
+)
+
+bb <- sf::st_bbox(lambert_bbox)
+
+```
+
+```{r}
+#| include=FALSE
+
+participationdata_F1 <- participationdata %>%
+  filter(frequenc == "GE1",acl00 == "AC521", time == "2015", sex == "T", geo == "BE"| geo =="BG"| geo =="CZ"| geo == "DK"| geo == "DE"| geo == "EE"| geo == "IE"| geo == "EL"| geo == "ES"| geo == "FR"| geo == "HR"| geo == "IT"| geo == "CY"| geo == "LV"| geo == "LT"| geo == "LU"| geo =="HU"| geo == "MT"| geo =="NL"| geo == "AT"| geo == "PL"| geo == "PT"| geo == "RO"| geo == "SI"| geo == "SK")
+
+participationdata_m11 <- cntrys %>%
+  left_join(participationdata_F1, 
+            by=c("CNTR_ID"="geo"))
+```
+
+```{r}
+#| echo: false
+participationdata_m11 %>%
+  ggplot() +
+  geom_sf(data = participationdata_m11,
+          mapping = aes(fill=values),
+          color = "white",
+          size = 0.15) +
+  coord_sf(
+        crs = crs_lambert,
+        xlim = c(bb["xmin"], bb["xmax"]),
+        ylim = c(bb["ymin"], bb["ymax"])
+    ) +
+  scale_fill_gradient(low = "lavender", high = "purple", 
+                  name = "Percentage",
+                  na.value = "grey70",
+                  limits = c(0,60)) +
+  theme_minimal() +
+  labs(title = "Reported Outings to the Cinema in 2015",
+       caption = "Data Source: EUROSTAT") +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 14),
+    legend.position = "bottom", 
+    legend.box = "horizontal",    
+    panel.grid.major = element_blank(),  
+    panel.grid.minor = element_blank()
+  )
+```
+
+```{r}
+#| include=FALSE
+
+participationdata_F <- participationdata %>%
+  filter(frequenc == "GE1",acl00 == "AC521", time == "2022", sex == "T", geo == "BE"| geo =="BG"| geo =="CZ"| geo == "DK"| geo == "DE"| geo == "EE"| geo == "IE"| geo == "EL"| geo == "ES"| geo == "FR"| geo == "HR"| geo == "IT"| geo == "CY"| geo == "LV"| geo == "LT"| geo == "LU"| geo =="HU"| geo == "MT"| geo =="NL"| geo == "AT"| geo == "PL"| geo == "PT"| geo == "RO"| geo == "SI"| geo == "SK")
+
+participationdata_m1 <- cntrys %>%
+  left_join(participationdata_F, 
+            by=c("CNTR_ID"="geo"))
+```
+
+```{r}
+#| echo: false
+participationdata_m1 %>%
+  ggplot() +
+  geom_sf(data = participationdata_m1,
+          mapping = aes(fill=values),
+          color = "white",
+          size = 0.15) +
+  coord_sf(
+        crs = crs_lambert,
+        xlim = c(bb["xmin"], bb["xmax"]),
+        ylim = c(bb["ymin"], bb["ymax"])
+    ) +
+  scale_fill_gradient(low = "lightblue", high = "blue", 
+                  name = "Percentage",
+                  na.value = "grey70",
+                  limits = c(0,60)) +
+  theme_minimal() +
+  labs(title = "Reported Outings to the Cinema in 2022",
+       caption = "Data Source: EUROSTAT") +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 14),
+    legend.position = "bottom", 
+    legend.box = "horizontal",    
+    panel.grid.major = element_blank(),  
+    panel.grid.minor = element_blank()
+  )
+```
+
+Though there may not appear to be much variation between the two graphs, they represent that there is a dedicated percentage of the population who is interested in perserving the existence of the film industry through cinemas. This dedicated proportion of the population is especially significant considering the low availability of cinemas across the EU. Thus, MEDIA serves to benefit the everday individual by supporting efforts to increase and perserve their access to the film industry.
+
+[**Back to Home**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/StepintotheSpotlight_ALookintotheMediaStrandofCreativeEurope.html)
+
+[**Fundamentals of the Media Strand of Creative Europe**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/FundamentalsoftheMediaStrandofCreativeEurope.html)
+
+[**The Film and Audiovisual Industry as an Avenue for Social Cohesion**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html)
+
+[**Who really cares though?**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/WhoReallyCaresThough.html)
+
+“Audience Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/audience-cluster (December 11, 2024).
+
+“Business Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/business-cluster (December 11, 2024).
+
+“Content Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/content-cluster (December 11, 2024).
+
+“Creative Europe \| EUR-Lex.” https://eur-lex.europa.eu/EN/legal-content/summary/creative-europe.html (December 11, 2024).
+
+“Creative Europe MEDIA Strand - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand (December 11, 2024).
+
+“Department for Culture, Media and Sport.” 2024. GOV.UK. https://www.gov.uk/government/organisations/department-for-culture-media-and-sport (December 11, 2024).
+
+“EU Film Industry: Market Share by Country of Origin.” Statista. https://www.statista.com/statistics/572603/film-industry-market-share-by-country-of-origin-eu/ (December 11, 2024).
+
+“Eurobarometer.” https://europa.eu/eurobarometer/screen/home (December 11, 2024).
+
+“Home - Eurostat.” https://ec.europa.eu/eurostat/en/ (December 11, 2024).
+
+“Policy Support Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/policy-support-cluster (December 11, 2024).
+
+“UIS Statistics.” https://data.uis.unesco.org/# (December 11, 2024).

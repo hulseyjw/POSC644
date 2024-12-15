@@ -30,7 +30,7 @@ library(ggplot2)
 ```{r}
 #| include: false
 
-EMP <- read_dta("~/Desktop/644 Website/ZA4984_v1-0-0.dta")
+EMP <- read_dta("ZA4984_v1-0-0.dta")
 
 ```
 
