@@ -48,13 +48,13 @@ In other words, the main goal of this program is to support policies from the Me
 
 Though Creative Europe addresses many of the aforementioned sectors, the Media strand of Creative Europe is specifically designed to **support policies relating to Europe's film and audiovisual sector**. To explore more, click on the following links below!
 
-[**Fundamentals of the Media Strand of Creative Europe**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/FundamentalsoftheMediaStrandofCreativeEurope.html)
+[**Fundamentals of the Media Strand of Creative Europe**](/FundamentalsoftheMediaStrandofCreativeEurope.html)
 
-[**The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheDirectBenefitstoArtistsCreativesBusinessesandtheEveryDayIndividual.qmd)
+[**The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual**](TheDirectBenefitstoArtistsCreativesBusinessesandtheEveryDayIndividual.html)
 
-[**The Film and Audiovisual Industry as an Avenue for Social Cohesion**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html)
+[**The Film and Audiovisual Industry as an Avenue for Social Cohesion**](TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html)
 
-[**Who *really* cares though?**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/WhoReallyCaresThough.html)
+[**Who *really* cares though?**](/WhoReallyCaresThough.html)
 
 Works Cited
 

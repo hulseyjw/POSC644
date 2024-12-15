@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -65,11 +65,11 @@ ul.task-list li input[type="checkbox"] {
 <section id="the-role-of-film-and-audiovisual-media-in-the-maintenance-of-social-cohesion" class="level2">
 <h2 class="anchored" data-anchor-id="the-role-of-film-and-audiovisual-media-in-the-maintenance-of-social-cohesion">The Role of Film and Audiovisual Media in the Maintenance of Social Cohesion</h2>
 <p>The links between social cohesion and the film and audiovisual sector are vast but difficult to represent through data or visualizations. Despite that though, it is still ever important to describe the role it plays in the promotion and maintenance of social cohesion. In very broad terms, creatives and artists in the film and audiovisual sector create cultural products, such as films, TV shows, online media, and video games, that shape social interactions, identities, and collective values. In recent years, it has become clear that audiovisual media possess the potential to promote social disunity and social fragmentation. However, this negative effect can be mitigated through careful and considerate actions that harness the sector’s ability to promote shared values and identity and foster empathy and understanding. This is not to say that we should be limiting artists and creatives in their ability to produce certain works, especially if they may be more provocative in nature. Rather, the industry needs help to support the appropriate avenues that facilitate discussions and dialogue about the impact that audiovisual media may or may not have on the broader public. Examples of these avenues include national and international film festivals, like the Berlin International Film Festival or Cannes Film Festival. Not only do these festivals promote dialogue, but they actively allow for a diverse group of filmmakers to attract a wider audience outside of their domestic or national markets. While these festivals are not usually meant for the wider general public and typically reserved for industry professionals, they do allow for limited attendance from the public. Though this limited attendance is not perfect, I argue that the digital transformation of the industry could allow for opportunities to expand the general public’s access to the appropriate channels for continued and meaningful conversations that can encourage social inclusion.</p>
-<p><a href="/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/StepintotheSpotlight_ALookintotheMediaStrandofCreativeEurope.html"><strong>Back to Home</strong></a></p>
-<p><a href="/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/FundamentalsoftheMediaStrandofCreativeEurope.html"><strong>Fundamentals of the Media Strand of Creative Europe</strong></a></p>
-<p><a href="/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/TheDirectBenefitstoArtistsCreativesBusinessesandtheEveryDayIndividual.html"><strong>The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual</strong></a></p>
-<p><a href="/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html"><strong>The Film and Audiovisual Industry as an Avenue for Social Cohesion</strong></a></p>
-<p><a href="/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/WhoReallyCaresThough.html"><strong>Who really cares though?</strong></a></p>
+<p><a href="StepintotheSpotlight_ALookintotheMediaStrandofCreativeEurope.html"><strong>Back to Home</strong></a></p>
+<p><a href="./FundamentalsoftheMediaStrandofCreativeEurope.html"><strong>Fundamentals of the Media Strand of Creative Europe</strong></a></p>
+<p><a href="TheDirectBenefitstoArtistsCreativesBusinessesandtheEveryDayIndividual.html"><strong>The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual</strong></a></p>
+<p><a href="TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html"><strong>The Film and Audiovisual Industry as an Avenue for Social Cohesion</strong></a></p>
+<p><a href="./WhoReallyCaresThough.html"><strong>Who <em>really</em> cares though?</strong></a></p>
 <p>“Audience Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/audience-cluster (December 11, 2024).</p>
 <p>“Business Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/business-cluster (December 11, 2024).</p>
 <p>“Content Cluster - Culture and Creativity.” https://culture.ec.europa.eu/creative-europe/creative-europe-media-strand/content-cluster (December 11, 2024).</p>
@@ -120,18 +120,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -163,7 +152,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -171,7 +182,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

@@ -56,7 +56,7 @@ The main problems of concern that the European Union seeks to address here are:
 
 The rapid and digital transformation of the film industry was put in motion through advancements like Video-On-Demand or streaming platforms such as Netflix. While the European film industry was once a comparable to the American industry, this rapid shift, accelerated by the COVID-19 pandemic, has made this gap between the two markets even wider. Consider the following graph that displays the market share of films distributed in the European Union in 2019.
 
-![](Screen Shot 2024-12-11 at 10.12.31 AM.png)
+![](Screen%20Shot%202024-12-11%20at%2010.12.31%20AM.png)
 
 As demonstrated above, American films dominate the EU market. Though European films remain a sizable chunk of the films distributed, the gap represents a failure of Member States to conserve the competitiveness of their domestic film production and distribution within the European Union.
 
@@ -149,13 +149,13 @@ Likewise, this figure demonstrated that Estonia, Ireland, Slovenia, Slovakia, an
 
 Above all though, both graphs illustrate a need for more accurate and up-to-date research, as well as greater data sharing capabilities across the Member States. Though the data was obtained from UNESCO's database, some countries failed to consistently report their data over the years, which makes cross-national comparisons more difficult.
 
-[**Back to Home**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/StepintotheSpotlight_ALookintotheMediaStrandofCreativeEurope.html)
+[**Back to Home**](/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/StepintotheSpotlight_ALookintotheMediaStrandofCreativeEurope.html)
 
-[**The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheDirectBenefitstoArtistsCreativesBusinessesandtheEveryDayIndividual.html)
+[**The Direct Benefits to Artists/ Creatives, Businesses, and the Every Day Individual**](/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/TheDirectBenefitstoArtistsCreativesBusinessesandtheEveryDayIndividual.html)
 
-[**The Film and Audiovisual Industry as an Avenue for Social Cohesion**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html)
+[**The Film and Audiovisual Industry as an Avenue for Social Cohesion**](/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/TheFilmandAudiovisualIndustryasanAvenueforSocialCohesion.html)
 
-[**Who *really* cares though?**](/Users/zariajohnson/Documents/POSC644/Final Policy Website/WhoReallyCaresThough.html)
+[**Who *really* cares though?**](/Users/zariajohnson/Documents/POSC644/Final%20Policy%20Website/WhoReallyCaresThough.html)
 
 Works Cited
 
