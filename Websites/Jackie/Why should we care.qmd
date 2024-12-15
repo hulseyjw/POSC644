@@ -1,0 +1,57 @@
+---
+title: "Why Should You Care?"
+format: html
+editor: visual
+---
+
+## Why should you care about affordable housing and how the EU handles this issue?
+
+-   Affordable housing is essential for fostering inclusive, healthy, and economically vibrant communities across Europe.
+
+-   The lack of affordable housing reduces individuals spending power, worsens living conditions, and forces people out of urban centers, limiting their access to jobs and services.
+
+-   Addressing affordable housing is essential to support stable, inclusive communities.
+
+-   The EU’s involvement strengthens national efforts and promotes consistent progress on affordable housing as a shared European priority.
+
+The free movement of people, goods, services, and capital across member states signficantly impacts access to affordable housing and housing prices can drastically vary from country to country.
+
+The chart below shows the housing price index for each EU member states in 2010 and 2023. The House Price Index (HPI) measures price changes of all residential properties purchased by households (flats, detached houses, terraced houses, etc.), both new and existing, independently of their final use and their previous owners.
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, error = FALSE)
+```
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(dplyr)
+library(restatapi)
+```
+
+```{r}
+#| echo: false
+HP <- get_eurostat_data("prc_hpi_a")
+```
+
+```{r}
+#| echo: false
+HP %>%
+  filter(
+    time %in% c("2010", "2023"),  # Filter for 2010 and 2023
+    geo %in% c("DE", "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI",
+               "FR", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", 
+               "PL", "PT", "RO", "SK", "SI", "ES", "SE"),
+    unit == "I15_A_AVG",
+    purchase == "TOTAL"
+  ) %>%
+  ggplot(aes(x = geo, y = values, fill = time)) +  # Fill by 'time' to distinguish 2010 and 2023
+  geom_bar(stat = "identity", position = "dodge") +  # 'dodge' puts bars side by side
+  labs(
+    title = "HPI in Each EU Member State (2010 and 2023)",
+    x = "Country",
+    y = "Housing Price Index (HPI)") +
+  theme_minimal()
+```
+
+The chart shows that across most countries, there is a noticeable increase in HPI from 2010 to 2023, reflecting rising housing prices over the 13-year period. Some countries show significant increases, such as Estonia (EE), Hungary (HU), and Luxembourg (LU).

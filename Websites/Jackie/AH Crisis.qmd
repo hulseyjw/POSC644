@@ -1,0 +1,61 @@
+---
+title: "The Affordable Housing Crisis"
+format: html
+editor: visual
+---
+
+## Housing Affordability in the EU
+
+There is an urgent need for safe, adequate, and reasonably priced homes for EU residents. With rising housing costs and limited availability in urban areas across member states, housing affordability has become a central issue affecting millions, especially low-income and vulnerable populations. 9% of the EU popultion is "housing cost-burdened", meaning a significant portion of their income goes toward housing.
+
+```{r}
+#| echo: false
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, error = FALSE)
+```
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(knitr)
+library(restatapi)
+```
+
+```{r}
+#| echo: false
+CB <- get_eurostat_data("tessi161")
+```
+
+```{r}
+#| echo: false
+CB %>%
+  filter(age == "Y18-64", 
+  time %in% c("2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"), 
+  geo== "EU27_2020") %>%
+  mutate(time = as.numeric(as.character(time)),  # Ensure time is numeric
+         geo = as.factor(geo)) %>%  # Ensure geo is a factor
+  ggplot(aes(x = time, y = values, group = geo, color = geo)) +
+  geom_line(aes(linetype = geo)) +  # Use linetype to distinguish lines
+  geom_point(aes(shape = geo)) +    # Use shape to distinguish points
+  scale_x_continuous(breaks = seq(2014, 2023, by = 1), labels = as.character(seq(2014, 2023))) + 
+  labs(x = "Year", y = "% of Cost-Burdened EU Adults fro 2014-2023", color = "Key", linetype = "Key", shape = "Key") + 
+  theme_minimal()
+```
+
+We have seen a decrease in the percentage of cost-burdened households across the EU since 2014. However, the percentage still holds just under 9% in 2023. **9% of the EU population is approximately 40.3 million people.**
+
+The dataset below examines the housing cost burden for adults (18+) in each EU member state in 2022.
+
+```{r}
+#| echo: false
+ CB%>%
+ filter(time== "2022", geo=="DE"| geo=="AT" | geo=="BE" | geo=="BG" | geo=="HR" | geo=="CY" | geo=="CZ" | geo=="DK" | geo=="EE" | geo=="FI"| geo=="FR"| geo=="DE" | geo=="GR"| geo=="HU"| geo=="IE"| geo=="IT" | geo=="LV" | geo=="LT" | geo=="LU" | geo=="MT"| geo=="NL"| geo=="PL" | geo=="PT"| geo=="RO"| geo=="SK" | geo=="SI" | geo=="ES" | geo=="SE", age== 	
+"Y18-64"
+)%>%
+  ggplot(aes(x=geo, y=values))+
+   geom_bar(stat="identity", position= "dodge")+
+  labs(title="Percentage of Housing Cost-Burdened Adults in the EU by Member State",
+       x="Country",
+       y="Percentage")
+```
+
+Based on the chart above, over 15 percent of adults in Luxembourg and Denmark are "housing cost-burdened." However, we can also see that there is a percentage of the population in each Member State that is identified as cost-burdened. Housing affordability is a crisis that all EU Member States are facing, though at different levels.
