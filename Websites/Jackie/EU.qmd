@@ -1,0 +1,65 @@
+---
+title: "What does this have to do with the EU?"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, error = FALSE)
+```
+
+```{r}
+#| echo: false
+library(dplyr)
+library(tidyverse)
+library(knitr)
+library(restatapi)
+library(ggplot2)
+```
+
+```{r}
+#| echo: false
+HP <- get_eurostat_data("prc_hpi_a")
+```
+
+## EU & Housing Affordability
+
+Affordable housing is a key issue for the European Union (EU) because it directly affects economic stability, social inclusion, and the well-being of EU citizens.
+
+It is not a current policy area that the EU has direct power over. However, in July 2024, Parliament elected Ursula von der Leyen for a second term as President of the European Commission. In a statement before the vote, von der Leyen announced housing as one of the EU’s priorities in the new term and stated that, for the first time, the EU would have a commissioner responsible for housing.
+
+```{r}
+#| echo: false
+knitr::include_graphics("pic.jpg")
+```
+
+**Dan Jørgensen, Commissioner-designate for Energy and Housing**
+
+This is a huge step for the EU towards handling the housing crisis, but the problem is only intensifying. It needs immediate governmental action and it is clear that Member States need the EU's help.
+
+The chart below compares housing costs in the most populated EU Member States since 2015.
+
+```{r}
+#| echo: false
+HP%>%
+  filter(unit== "I10_A_AVG", purchase== "TOTAL", geo %in% c("DE", "ES", "FR", "PL"), 
+         time %in% c("2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022")) %>%
+ mutate(time = as.numeric(as.character(time)),   # Ensure time is numeric
+         geo = as.factor(geo)) %>%  # Ensure geo is a factor
+  ggplot(aes(x = time, y = values, group = geo, color = geo)) +
+  geom_line(aes(linetype = geo)) +  # Use linetype to distinguish lines
+  geom_point(aes(shape = geo)) +    # Use shape to distinguish points
+  scale_x_discrete(breaks = as.character(seq(2015, 2022, by = 1))) + 
+  labs(x = "Year", y = "Housing Price Index") + 
+  theme_minimal()
+```
+
+Based on my two datasets, the first measuring the housing price index in EU member states from 2015 to 2022 and the second measuring their populations, I am examining the growth of Germany, Spain, France, and Poland's housing prices as they have the highest populations since 2015 to 2022. All four countries show an increase in the Housing Price Index, indicating that housing prices have generally been rising over the period. However, Germany and France have seen higher increases in housing than Spain and Poland. While a rising HPI may reflect a growing economy and greater purchasing power, it can also lead to affordability concerns, particularly for first-time buyers or lower-income households.
+
+Even the most wealthiest EU countries (Germany and France) struggle with the affordable housing crisis.
+
+```{r}
+#| echo: false
+knitr::include_graphics("107156759-1669290775056-GettyImages-143195253.webp")
+```
